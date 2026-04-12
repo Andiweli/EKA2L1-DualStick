@@ -47,4 +47,4 @@ Compatibility for games and software that can — and cannot — run on the emul
 
 For more information on the original EKA2L1, discussion and support, please visit these links:
 
-[**Homepage**](https://12l1.com/) | [**Emulator Wiki**](https://eka2l1.miraheze.org/wiki/Main_Page) | [**Discord server**](https://discord.gg/5Bm5SJ9)
+[**Homepage**](https://12l1.com/) | [**GitHub Project**](https://github.com/EKA2L1/EKA2L1) | [**Emulator Wiki**](https://eka2l1.miraheze.org/wiki/Main_Page) | [**Discord server**](https://discord.gg/5Bm5SJ9)
