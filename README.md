@@ -14,7 +14,7 @@ EKA2L1 emulates the Symbian OS / N-Gage kernel and reimplements many of its crit
 
 ---
 
-## About This Fork
+## 📱 About This Fork
 
 This fork is focused primarily on:
 
@@ -26,7 +26,7 @@ Unlike the broader upstream project, the main goal of this fork is not to cover 
 
 ---
 
-## Features / Compatibility
+## 🎮 Features / Compatibility
 
 At the moment the emulator supports:
 
@@ -40,7 +40,7 @@ Compatibility for games and software that can — and cannot — run on the emul
 
 ---
 
-## Copyright
+## ©️ Copyright
 
 *GIFs are provided by [**Stranno**](https://www.youtube.com/user/9esferas1)!*
 
