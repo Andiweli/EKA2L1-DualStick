@@ -7,6 +7,7 @@
 
 Android-focused fork of **EKA2L1**, the Symbian OS / N-Gage emulator written in **C++17**.
 
+> [!NOTE]
 > This fork focuses specifically on **Android** and on adding proper support for **two analog sticks**, with the goal of improving controls and playability for Symbian and N-Gage games on modern Android handhelds and devices.
 
 EKA2L1 emulates the Symbian OS / N-Gage kernel and reimplements many of its critical app servers and libraries in order to run games and applications on modern platforms.
