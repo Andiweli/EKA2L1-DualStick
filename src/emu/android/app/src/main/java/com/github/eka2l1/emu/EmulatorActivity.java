@@ -33,8 +33,10 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.os.Build;
 import android.os.Bundle;
+import android.util.LongSparseArray;
 import android.util.SparseIntArray;
 import android.view.Display;
+import android.view.InputDevice;
 import android.view.KeyEvent;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -66,6 +68,7 @@ import com.github.eka2l1.emu.overlay.FixedKeyboard;
 import com.github.eka2l1.emu.overlay.OverlayView;
 import com.github.eka2l1.emu.overlay.VirtualKeyboard;
 import com.github.eka2l1.settings.AppDataStore;
+import com.github.eka2l1.settings.InputBinding;
 import com.github.eka2l1.settings.KeyMapper;
 import com.github.eka2l1.util.LogUtils;
 import com.google.gson.Gson;
@@ -97,7 +100,9 @@ public class EmulatorActivity extends AppCompatActivity {
             new ActivityResultContracts.RequestMultiplePermissions(),
             this::onPermissionResult);
 
-    private Semaphore permissionsLauncherDone = new Semaphore(0);
+    private final Semaphore permissionsLauncherDone = new Semaphore(0);
+    private final LongSparseArray<Boolean> activeInputStates = new LongSparseArray<>();
+    private final SparseIntArray mappedKeyPressCounts = new SparseIntArray();
 
     private Toolbar toolbar;
     private OverlayView overlayView;
@@ -116,7 +121,8 @@ public class EmulatorActivity extends AppCompatActivity {
     @Override
     protected void onCreate(@Nullable Bundle savedInstanceState) {
         Intent intent = getIntent();
-        boolean externalIntent = intent.getBooleanExtra(KEY_APP_IS_SHORTCUT, false) || ACTION_LAUNCH_GAME.equals(intent.getAction())
+        boolean externalIntent = intent.getBooleanExtra(KEY_APP_IS_SHORTCUT, false)
+                || ACTION_LAUNCH_GAME.equals(intent.getAction())
                 || intent.getData() != null;
 
         boolean launchFromFile = intent.getData() != null;
@@ -135,8 +141,7 @@ public class EmulatorActivity extends AppCompatActivity {
         String deviceCode;
 
         if (intent.getData() != null) {
-            InputStream inputStream = null;
-
+            InputStream inputStream;
             try {
                 inputStream = getContentResolver().openInputStream(intent.getData());
             } catch (FileNotFoundException e) {
@@ -167,7 +172,6 @@ public class EmulatorActivity extends AppCompatActivity {
             Bundle extras;
             if (launchFromFile) {
                 extras = new Bundle();
-
                 extras.putLong(KEY_APP_UID, uid);
                 extras.putString(KEY_APP_NAME, name);
                 extras.putString(KEY_DEVICE_CODE, deviceCode);
@@ -189,6 +193,7 @@ public class EmulatorActivity extends AppCompatActivity {
         surfaceView.setWillNotDraw(true);
         surfaceView.setOnTouchListener(callbacks);
         surfaceView.setOnKeyListener(callbacks);
+        surfaceView.setOnGenericMotionListener(callbacks);
         surfaceView.getHolder().addCallback(callbacks);
         surfaceView.requestFocus();
 
@@ -202,14 +207,14 @@ public class EmulatorActivity extends AppCompatActivity {
         actionBarEnabled = dataStore.getBoolean(PREF_ACTIONBAR, false);
         statusBarEnabled = dataStore.getBoolean(PREF_STATUSBAR, false);
         if (!actionBarEnabled) {
-            getSupportActionBar().hide();
+            Objects.requireNonNull(getSupportActionBar()).hide();
         }
 
         Emulator.setContext(this);
         EmulatorCamera.setActivity(this);
 
         if (deviceCode != null) {
-            String []availableDevices = Emulator.getDeviceFirmwareCodes();
+            String[] availableDevices = Emulator.getDeviceFirmwareCodes();
             for (int id = 0; id < availableDevices.length; id++) {
                 if (availableDevices[id].compareToIgnoreCase(deviceCode) == 0) {
                     Emulator.setCurrentDevice(id, true);
@@ -238,9 +243,9 @@ public class EmulatorActivity extends AppCompatActivity {
 
         if (Build.VERSION.SDK_INT >= Build.VERSION_CODES.P) {
             getWindow().getAttributes().layoutInDisplayCutoutMode =
-                    params.screenShowNotch ?
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES :
-                    WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
+                    params.screenShowNotch
+                            ? WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_SHORT_EDGES
+                            : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
         }
 
         final boolean hasBackground = ProfilesManager.getBackgroundFile(configDir).exists();
@@ -250,6 +255,18 @@ public class EmulatorActivity extends AppCompatActivity {
                 hasBackground ? ProfilesManager.getBackgroundPath(configDir.getAbsolutePath()) : "",
                 Math.max(0.0f, Math.min(params.screenBackgroundImageOpacity / 100.0f, 1.0f)),
                 params.screenBackgroundImageKeepAspectRatio);
+    }
+
+    @Override
+    protected void onPause() {
+        releaseAllMappedInputs();
+        super.onPause();
+    }
+
+    @Override
+    protected void onDestroy() {
+        releaseAllMappedInputs();
+        super.onDestroy();
     }
 
     @Override
@@ -325,7 +342,8 @@ public class EmulatorActivity extends AppCompatActivity {
             inflater.inflate(R.menu.emulator_keys, menu);
         }
         actionScreenshot = menu.findItem(R.id.action_screenshot);
-        if (!getSupportActionBar().isShowing()) {
+        ActionBar actionBar = getSupportActionBar();
+        if (actionBar != null && !actionBar.isShowing()) {
             actionScreenshot.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
         }
         return super.onCreateOptionsMenu(menu);
@@ -371,7 +389,10 @@ public class EmulatorActivity extends AppCompatActivity {
         }
 
         SimpleDateFormat fileNameDateFormat = new SimpleDateFormat("yyyyMMdd-hhmmss");
-        String fileName = destDir + getString(R.string.screenshot) + "_" +  getSupportActionBar().getTitle() + "_" + fileNameDateFormat.format(new Date()) + ".png";
+        ActionBar actionBar = getSupportActionBar();
+        String title = actionBar == null ? "EKA2L1" : String.valueOf(actionBar.getTitle());
+        String fileName = destDir + getString(R.string.screenshot) + "_" + title + "_"
+                + fileNameDateFormat.format(new Date()) + ".png";
 
         if (Emulator.saveScreenshotTo(fileName)) {
             Toast.makeText(this, getString(R.string.take_screenshot_success, fileName), Toast.LENGTH_LONG).show();
@@ -383,16 +404,13 @@ public class EmulatorActivity extends AppCompatActivity {
     private void handleVkOptions(int id) {
         if (id == R.id.action_layout_edit_mode) {
             keyboard.setLayoutEditMode(VirtualKeyboard.LAYOUT_KEYS);
-            Toast.makeText(this, R.string.layout_edit_mode,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.layout_edit_mode, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_layout_scale_mode) {
             keyboard.setLayoutEditMode(VirtualKeyboard.LAYOUT_SCALES);
-            Toast.makeText(this, R.string.layout_scale_mode,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.layout_scale_mode, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_layout_edit_finish) {
             keyboard.setLayoutEditMode(VirtualKeyboard.LAYOUT_EOF);
-            Toast.makeText(this, R.string.layout_edit_finished,
-                    Toast.LENGTH_SHORT).show();
+            Toast.makeText(this, R.string.layout_edit_finished, Toast.LENGTH_SHORT).show();
         } else if (id == R.id.action_layout_switch) {
             showSetLayoutDialog();
         } else if (id == R.id.action_hide_buttons) {
@@ -422,7 +440,7 @@ public class EmulatorActivity extends AppCompatActivity {
         ActionBar actionBar = Objects.requireNonNull(getSupportActionBar());
         LinearLayout.LayoutParams layoutParams = (LinearLayout.LayoutParams) toolbar.getLayoutParams();
         actionBar.setTitle(title);
-        layoutParams.height = (int) (getToolBarHeight() / 1.5);
+        layoutParams.height = (int) (getToolBarHeight() / 1.5f);
     }
 
     private int getToolBarHeight() {
@@ -437,23 +455,19 @@ public class EmulatorActivity extends AppCompatActivity {
         int vkType = params.vkType;
         if (vkType == VirtualKeyboard.CUSTOMIZABLE_TYPE) {
             keyboard = new VirtualKeyboard(this);
-        } else if (vkType == VirtualKeyboard.PHONE_DIGITS_TYPE) {
-            keyboard = new FixedKeyboard(this);
         } else {
             keyboard = new FixedKeyboard(this);
         }
+
         keyboard.setHideDelay(params.vkHideDelay);
         keyboard.setHasHapticFeedback(params.vkFeedback);
         keyboard.setButtonShape(params.vkButtonShape);
 
-        File keyLayoutFile = new File(Emulator.getConfigsDir(),
-                appDirName + Emulator.APP_KEY_LAYOUT_FILE);
+        File keyLayoutFile = new File(Emulator.getConfigsDir(), appDirName + Emulator.APP_KEY_LAYOUT_FILE);
         if (keyLayoutFile.exists()) {
-            try {
-                FileInputStream fis = new FileInputStream(keyLayoutFile);
-                DataInputStream dis = new DataInputStream(fis);
+            try (FileInputStream fis = new FileInputStream(keyLayoutFile);
+                 DataInputStream dis = new DataInputStream(fis)) {
                 keyboard.readLayout(dis);
-                fis.close();
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -474,10 +488,10 @@ public class EmulatorActivity extends AppCompatActivity {
                 if (!parentFile.exists()) {
                     parentFile.mkdirs();
                 }
-                FileOutputStream fos = new FileOutputStream(keyLayoutFile);
-                DataOutputStream dos = new DataOutputStream(fos);
-                vk.writeLayout(dos);
-                fos.close();
+                try (FileOutputStream fos = new FileOutputStream(keyLayoutFile);
+                     DataOutputStream dos = new DataOutputStream(fos)) {
+                    vk.writeLayout(dos);
+                }
             } catch (IOException ioe) {
                 ioe.printStackTrace();
             }
@@ -504,8 +518,89 @@ public class EmulatorActivity extends AppCompatActivity {
         }
     }
 
-    private int convertAndroidKeyCode(int keyCode) {
-        return androidToSymbian.get(keyCode, Integer.MAX_VALUE);
+    private int convertAndroidInputCode(int inputCode) {
+        return androidToSymbian.get(inputCode, Integer.MAX_VALUE);
+    }
+
+    private long composeInputStateKey(int deviceId, int inputCode) {
+        return (((long) deviceId) << 32) ^ (inputCode & 0xFFFFFFFFL);
+    }
+
+    private boolean isInputActive(int deviceId, int inputCode) {
+        return Boolean.TRUE.equals(activeInputStates.get(composeInputStateKey(deviceId, inputCode)));
+    }
+
+    private void updateMappedInputState(int deviceId, int inputCode, boolean pressed) {
+        long stateKey = composeInputStateKey(deviceId, inputCode);
+        boolean wasPressed = Boolean.TRUE.equals(activeInputStates.get(stateKey));
+        if (wasPressed == pressed) {
+            return;
+        }
+
+        if (pressed) {
+            activeInputStates.put(stateKey, Boolean.TRUE);
+        } else {
+            activeInputStates.remove(stateKey);
+        }
+
+        int symbianKey = convertAndroidInputCode(inputCode);
+        if (symbianKey == Integer.MAX_VALUE) {
+            return;
+        }
+
+        int pressCount = mappedKeyPressCounts.get(symbianKey, 0);
+        if (pressed) {
+            mappedKeyPressCounts.put(symbianKey, pressCount + 1);
+            if (pressCount == 0) {
+                dispatchMappedKey(symbianKey, true);
+            }
+        } else if (pressCount <= 1) {
+            mappedKeyPressCounts.delete(symbianKey);
+            dispatchMappedKey(symbianKey, false);
+        } else {
+            mappedKeyPressCounts.put(symbianKey, pressCount - 1);
+        }
+    }
+
+    private void dispatchMappedKey(int symbianKey, boolean pressed) {
+        if (keyboard == null || !(pressed ? keyboard.keyPressed(symbianKey) : keyboard.keyReleased(symbianKey))) {
+            Emulator.pressKey(symbianKey, pressed ? 0 : 1);
+        }
+    }
+
+    private void releaseAllMappedInputs() {
+        for (int i = 0; i < mappedKeyPressCounts.size(); i++) {
+            dispatchMappedKey(mappedKeyPressCounts.keyAt(i), false);
+        }
+        mappedKeyPressCounts.clear();
+        activeInputStates.clear();
+    }
+
+    private boolean shouldSuppressDpadKeyEvent(KeyEvent event) {
+        int source = event.getSource();
+        boolean gamepadSource = ((source & InputDevice.SOURCE_JOYSTICK) == InputDevice.SOURCE_JOYSTICK)
+                || ((source & InputDevice.SOURCE_GAMEPAD) == InputDevice.SOURCE_GAMEPAD);
+        if (!gamepadSource) {
+            return false;
+        }
+
+        int deviceId = event.getDeviceId();
+        switch (event.getKeyCode()) {
+            case KeyEvent.KEYCODE_DPAD_UP:
+                return isInputActive(deviceId, InputBinding.INPUT_LEFT_STICK_UP)
+                        || isInputActive(deviceId, InputBinding.INPUT_RIGHT_STICK_UP);
+            case KeyEvent.KEYCODE_DPAD_DOWN:
+                return isInputActive(deviceId, InputBinding.INPUT_LEFT_STICK_DOWN)
+                        || isInputActive(deviceId, InputBinding.INPUT_RIGHT_STICK_DOWN);
+            case KeyEvent.KEYCODE_DPAD_LEFT:
+                return isInputActive(deviceId, InputBinding.INPUT_LEFT_STICK_LEFT)
+                        || isInputActive(deviceId, InputBinding.INPUT_RIGHT_STICK_LEFT);
+            case KeyEvent.KEYCODE_DPAD_RIGHT:
+                return isInputActive(deviceId, InputBinding.INPUT_LEFT_STICK_RIGHT)
+                        || isInputActive(deviceId, InputBinding.INPUT_RIGHT_STICK_RIGHT);
+            default:
+                return false;
+        }
     }
 
     private void onPermissionResult(Map<String, Boolean> status) {
@@ -517,11 +612,13 @@ public class EmulatorActivity extends AppCompatActivity {
         permissionsLauncherDone.acquire();
     }
 
-    private class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback, SurfaceHolder.Callback2, View.OnKeyListener {
+    private final class ViewCallbacks implements View.OnTouchListener, SurfaceHolder.Callback,
+            SurfaceHolder.Callback2, View.OnKeyListener, View.OnGenericMotionListener {
+
         private final View view;
         private final FrameLayout rootView;
 
-        public ViewCallbacks(View view) {
+        private ViewCallbacks(View view) {
             this.view = view;
             rootView = ((Activity) view.getContext()).findViewById(R.id.emulator_frame);
         }
@@ -549,6 +646,7 @@ public class EmulatorActivity extends AppCompatActivity {
 
         @Override
         public void surfaceDestroyed(SurfaceHolder holder) {
+            releaseAllMappedInputs();
             Emulator.surfaceDestroyed();
         }
 
@@ -556,35 +654,104 @@ public class EmulatorActivity extends AppCompatActivity {
         public boolean onKey(View v, int keyCode, KeyEvent event) {
             switch (event.getAction()) {
                 case KeyEvent.ACTION_DOWN:
-                    return onKeyDown(keyCode, event);
+                    return onMappedKeyDown(keyCode, event);
                 case KeyEvent.ACTION_UP:
-                    return onKeyUp(keyCode, event);
+                    return onMappedKeyUp(keyCode, event);
+                default:
+                    return false;
             }
-            return false;
         }
 
-        public boolean onKeyDown(int keyCode, KeyEvent event) {
-            keyCode = convertAndroidKeyCode(keyCode);
-            if (keyCode == Integer.MAX_VALUE) {
+        private boolean onMappedKeyDown(int keyCode, KeyEvent event) {
+            if (shouldSuppressDpadKeyEvent(event)) {
+                return true;
+            }
+
+            if (convertAndroidInputCode(keyCode) == Integer.MAX_VALUE) {
                 return false;
             }
+
             if (event.getRepeatCount() == 0) {
-                if (keyboard == null || !keyboard.keyPressed(keyCode)) {
-                    Emulator.pressKey(keyCode, 0);
-                }
+                updateMappedInputState(event.getDeviceId(), keyCode, true);
             }
             return true;
         }
 
-        public boolean onKeyUp(int keyCode, KeyEvent event) {
-            keyCode = convertAndroidKeyCode(keyCode);
-            if (keyCode == Integer.MAX_VALUE) {
+        private boolean onMappedKeyUp(int keyCode, KeyEvent event) {
+            if (shouldSuppressDpadKeyEvent(event)) {
+                return true;
+            }
+
+            if (convertAndroidInputCode(keyCode) == Integer.MAX_VALUE) {
                 return false;
             }
-            if (keyboard == null || !keyboard.keyReleased(keyCode)) {
-                Emulator.pressKey(keyCode, 1);
-            }
+
+            updateMappedInputState(event.getDeviceId(), keyCode, false);
             return true;
+        }
+
+        @Override
+        public boolean onGenericMotion(View v, MotionEvent event) {
+            if (event.getActionMasked() != MotionEvent.ACTION_MOVE || !InputBinding.isJoystickMotionEvent(event)) {
+                return false;
+            }
+
+            int deviceId = event.getDeviceId();
+
+            handleAnalogAxis(deviceId,
+                    InputBinding.INPUT_LEFT_STICK_LEFT,
+                    InputBinding.INPUT_LEFT_STICK_RIGHT,
+                    InputBinding.getLeftStickX(event));
+
+            handleAnalogAxis(deviceId,
+                    InputBinding.INPUT_LEFT_STICK_UP,
+                    InputBinding.INPUT_LEFT_STICK_DOWN,
+                    InputBinding.getLeftStickY(event));
+
+            handleAnalogAxis(deviceId,
+                    InputBinding.INPUT_RIGHT_STICK_LEFT,
+                    InputBinding.INPUT_RIGHT_STICK_RIGHT,
+                    InputBinding.getRightStickX(event));
+
+            handleAnalogAxis(deviceId,
+                    InputBinding.INPUT_RIGHT_STICK_UP,
+                    InputBinding.INPUT_RIGHT_STICK_DOWN,
+                    InputBinding.getRightStickY(event));
+
+            handleDigitalAxis(deviceId,
+                    KeyEvent.KEYCODE_DPAD_LEFT,
+                    KeyEvent.KEYCODE_DPAD_RIGHT,
+                    InputBinding.getDpadHatX(event),
+                    InputBinding.DPAD_HAT_THRESHOLD);
+
+            handleDigitalAxis(deviceId,
+                    KeyEvent.KEYCODE_DPAD_UP,
+                    KeyEvent.KEYCODE_DPAD_DOWN,
+                    InputBinding.getDpadHatY(event),
+                    InputBinding.DPAD_HAT_THRESHOLD);
+
+            return true;
+        }
+
+        private boolean handleAnalogAxis(int deviceId, int negativeInputCode, int positiveInputCode, float value) {
+            boolean negativePressed = value <= -InputBinding.ANALOG_DIRECTION_THRESHOLD;
+            boolean positivePressed = value >= InputBinding.ANALOG_DIRECTION_THRESHOLD;
+
+            updateMappedInputState(deviceId, negativeInputCode, negativePressed);
+            updateMappedInputState(deviceId, positiveInputCode, positivePressed);
+
+            return negativePressed || positivePressed;
+        }
+
+        private boolean handleDigitalAxis(int deviceId, int negativeInputCode, int positiveInputCode,
+                                          float value, float threshold) {
+            boolean negativePressed = value <= -threshold;
+            boolean positivePressed = value >= threshold;
+
+            updateMappedInputState(deviceId, negativeInputCode, negativePressed);
+            updateMappedInputState(deviceId, positiveInputCode, positivePressed);
+
+            return negativePressed || positivePressed;
         }
 
         @Override
@@ -600,9 +767,9 @@ public class EmulatorActivity extends AppCompatActivity {
                     int id = event.getPointerId(index);
                     float x = event.getX(index);
                     float y = event.getY(index);
-                    float z = event.getPressure(index) * 0x7FFFFFFF;    // Max pressure
+                    float z = event.getPressure(index) * 0x7FFFFFFF;
                     if ((keyboard == null || !keyboard.pointerPressed(id, x, y)) && params.touchInput) {
-                        Emulator.touchScreen((int) x, (int) y, (int)z, 0, id);
+                        Emulator.touchScreen((int) x, (int) y, (int) z, 0, id);
                     }
                     break;
                 case MotionEvent.ACTION_MOVE:
@@ -613,9 +780,9 @@ public class EmulatorActivity extends AppCompatActivity {
                             id = event.getPointerId(p);
                             x = event.getHistoricalX(p, h);
                             y = event.getHistoricalY(p, h);
-                            z = event.getHistoricalPressure(p, h) * 0x7FFFFFFF;    // Max pressure
+                            z = event.getHistoricalPressure(p, h) * 0x7FFFFFFF;
                             if ((keyboard == null || !keyboard.pointerDragged(id, x, y)) && params.touchInput) {
-                                Emulator.touchScreen((int) x, (int) y, (int)z, 1, id);
+                                Emulator.touchScreen((int) x, (int) y, (int) z, 1, id);
                             }
                         }
                     }
@@ -623,9 +790,9 @@ public class EmulatorActivity extends AppCompatActivity {
                         id = event.getPointerId(p);
                         x = event.getX(p);
                         y = event.getY(p);
-                        z = event.getPressure(p) * 0x7FFFFFFF;    // Max pressure
+                        z = event.getPressure(p) * 0x7FFFFFFF;
                         if ((keyboard == null || !keyboard.pointerDragged(id, x, y)) && params.touchInput) {
-                            Emulator.touchScreen((int) x, (int) y, (int)z, 1, id);
+                            Emulator.touchScreen((int) x, (int) y, (int) z, 1, id);
                         }
                     }
                     break;
@@ -639,7 +806,7 @@ public class EmulatorActivity extends AppCompatActivity {
                     x = event.getX(index);
                     y = event.getY(index);
                     if ((keyboard == null || !keyboard.pointerReleased(id, x, y)) && params.touchInput) {
-                        Emulator.touchScreen((int) x, (int) y, (int)0, 2, id);
+                        Emulator.touchScreen((int) x, (int) y, 0, 2, id);
                     }
                     break;
                 default:

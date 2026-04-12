@@ -43,6 +43,7 @@ public class AboutDialogFragment extends DialogFragment {
                 .append(getText(R.string.about_website))
                 .append(getText(R.string.about_github))
                 .append(getText(R.string.about_crowdin))
+                .append(getText(R.string.about_dualstick_modification))
                 .append(getText(R.string.about_copyright))
                 .append(getText(R.string.about_icon_by))
                 .append(getText(R.string.about_icon_author));
