@@ -22,6 +22,11 @@ This fork is focused primarily on:
 - Proper handling of **two analog sticks**
 - Improving controller usability for Symbian OS and **N-Gage** games on Android devices
 
+<p align="center">
+<img width="640" height="360" alt="screenshot-eka2l1" src="https://github.com/user-attachments/assets/94702763-75a1-4873-937f-c47b491354b5" /><br/>
+(FPS controls with dual-sticks for ASHEN)
+</p>
+
 Unlike the broader upstream project, the main goal of this fork is not to cover every supported platform equally, but to improve the Android experience with a stronger focus on modern handheld-style controls.
 
 ---
