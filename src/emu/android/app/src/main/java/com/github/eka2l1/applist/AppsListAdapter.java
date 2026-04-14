@@ -45,7 +45,12 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
     private List<AppItem> filteredList;
     private final LayoutInflater layoutInflater;
     private final AppFilter appFilter;
-    private boolean gridDisplay;
+    public static final int VIEW_MODE_LIST = 0;
+    public static final int VIEW_MODE_LIST_2 = 1;
+    public static final int VIEW_MODE_LIST_3 = 2;
+    public static final int VIEW_MODE_GRID = 3;
+
+    private int viewMode = VIEW_MODE_LIST;
 
     public AppsListAdapter(Context context) {
         this.list = new ArrayList<>();
@@ -79,7 +84,16 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
 
     @Override
     public int getItemViewType(final int position) {
-        return gridDisplay ? R.layout.listitem_detail_icon_grid : R.layout.listitem_detail_icon;
+        switch (viewMode) {
+            case VIEW_MODE_LIST_2:
+            case VIEW_MODE_LIST_3:
+                return R.layout.listitem_detail_icon_multicolumn;
+            case VIEW_MODE_GRID:
+                return R.layout.listitem_detail_icon_grid;
+            case VIEW_MODE_LIST:
+            default:
+                return R.layout.listitem_detail_icon;
+        }
     }
 
     public void setItems(List<AppItem> items) {
@@ -93,7 +107,11 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
     }
 
     public void setDisplay(boolean isGridDisplay) {
-        gridDisplay = isGridDisplay;
+        setDisplayMode(isGridDisplay ? VIEW_MODE_GRID : VIEW_MODE_LIST);
+    }
+
+    public void setDisplayMode(int mode) {
+        viewMode = mode;
 
         if (list != null) {
             notifyDataSetChanged();

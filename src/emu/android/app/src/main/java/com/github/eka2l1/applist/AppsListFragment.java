@@ -32,9 +32,13 @@ import android.graphics.Canvas;
 import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
+import android.text.SpannableString;
+import android.text.style.ForegroundColorSpan;
+import android.text.style.RelativeSizeSpan;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.util.Log;
+import android.util.TypedValue;
 import android.view.LayoutInflater;
 import android.view.Menu;
 import android.view.MenuInflater;
@@ -51,6 +55,7 @@ import androidx.annotation.Nullable;
 import androidx.appcompat.app.ActionBar;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.appcompat.widget.SearchView;
+import androidx.core.content.ContextCompat;
 import androidx.core.content.pm.ShortcutInfoCompat;
 import androidx.core.content.pm.ShortcutManagerCompat;
 import androidx.core.graphics.drawable.IconCompat;
@@ -78,6 +83,7 @@ import com.google.gson.GsonBuilder;
 
 import java.io.File;
 import java.io.FileNotFoundException;
+import java.io.FileOutputStream;
 import java.io.FileWriter;
 import java.io.IOException;
 import java.io.InputStream;
@@ -85,6 +91,9 @@ import java.io.OutputStream;
 import java.io.OutputStreamWriter;
 import java.io.Writer;
 import java.util.ArrayList;
+import java.text.SimpleDateFormat;
+import java.util.Date;
+import java.util.Locale;
 import java.util.concurrent.TimeUnit;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
@@ -112,6 +121,10 @@ public class AppsListFragment extends Fragment {
     private DividerItemDecoration dividerItemDecoration;
     private boolean restartNeeded;
     private AppItem pendingAppItem;
+    private int currentViewMode = AppsListAdapter.VIEW_MODE_LIST;
+
+    private static final int MIN_WIDTH_DP_FOR_2_COL = 600;
+    private static final int MIN_WIDTH_DP_FOR_3_COL = 840;
     private final ActivityResultLauncher<String[]> openSisLauncher = registerForActivityResult(
             FileUtils.getFilePicker(),
             this::onSisResult);
@@ -125,6 +138,9 @@ public class AppsListFragment extends Fragment {
     private final ActivityResultLauncher<String[]> openPreconfiguredPackZIPLauncher = registerForActivityResult(
             FileUtils.getFilePicker(),
             this::onPreconfiguredPackZIPResult);
+    private final ActivityResultLauncher<Void> pickPreconfiguredPackExportDirectory = registerForActivityResult(
+            FileUtils.getDirPicker(true),
+            this::onPreconfiguredPackExportDirectoryResult);
     private final ActivityResultLauncher pickLaunchFileDirectory = registerForActivityResult(
             FileUtils.getDirPicker(true),
             this::onLaunchFileDirPickResult);
@@ -158,11 +174,10 @@ public class AppsListFragment extends Fragment {
 
         registerForContextMenu(rvApplist);
 
-        AppDataStore store = AppDataStore.getAndroidStore();
-        boolean isGrid = store.getBoolean(PREF_GRID_APP_LIST, true);
+        currentViewMode = loadViewMode();
 
         rvApplist.setAdapter(adapter);
-        setDisplay(view, isGrid);
+        applyViewMode(view, currentViewMode);
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -183,31 +198,94 @@ public class AppsListFragment extends Fragment {
         fab.setOnClickListener(v -> openSisLauncher.launch(new String[]{".sis", ".sisx"}));
     }
 
-    private void setDisplay(View view, boolean isGrid) {
+    private int resolveDefaultViewMode() {
+        int widthDp = getResources().getConfiguration().screenWidthDp;
+
+        if (widthDp >= MIN_WIDTH_DP_FOR_3_COL) {
+            return AppsListAdapter.VIEW_MODE_LIST_3;
+        }
+        if (widthDp >= MIN_WIDTH_DP_FOR_2_COL) {
+            return AppsListAdapter.VIEW_MODE_LIST_2;
+        }
+        return AppsListAdapter.VIEW_MODE_LIST;
+    }
+
+    private int loadViewMode() {
+        AppDataStore store = AppDataStore.getAndroidStore();
+
+        if (store.contains(PREF_APP_LIST_VIEW_MODE)) {
+            return store.getInt(PREF_APP_LIST_VIEW_MODE, resolveDefaultViewMode());
+        }
+
+        if (store.contains(PREF_GRID_APP_LIST)) {
+            return store.getBoolean(PREF_GRID_APP_LIST, false)
+                    ? AppsListAdapter.VIEW_MODE_GRID
+                    : AppsListAdapter.VIEW_MODE_LIST;
+        }
+
+        return resolveDefaultViewMode();
+    }
+
+    private void saveViewMode(int mode) {
+        AppDataStore store = AppDataStore.getAndroidStore();
+        store.putInt(PREF_APP_LIST_VIEW_MODE, mode);
+        store.save();
+    }
+
+    private int getViewModeTitleResId(int viewMode) {
+        switch (viewMode) {
+            case AppsListAdapter.VIEW_MODE_LIST_2:
+                return R.string.list_app_list_mode_2;
+            case AppsListAdapter.VIEW_MODE_LIST_3:
+                return R.string.list_app_list_mode_3;
+            case AppsListAdapter.VIEW_MODE_GRID:
+                return R.string.grid_app_list_mode;
+            case AppsListAdapter.VIEW_MODE_LIST:
+            default:
+                return R.string.list_app_list_mode;
+        }
+    }
+
+    private void applyViewMode(@Nullable View view, int viewMode) {
         if (view == null) {
             view = getView();
         }
 
-        Context context = view.getContext();
+        Context context = (view != null) ? view.getContext() : requireContext();
 
-        rvApplist.setPadding(0, 0, 0, isGrid ? 200 : 0);
+        rvApplist.setPadding(0, 0, 0, viewMode == AppsListAdapter.VIEW_MODE_GRID ? 200 : 0);
         rvApplist.requestLayout();
 
-        if (isGrid) {
-            rvApplist.setLayoutManager(new GridLayoutManager(context, 4));
-            if (dividerItemDecoration != null) {
-                rvApplist.removeItemDecoration(dividerItemDecoration);
-            }
-        } else {
-            if (dividerItemDecoration == null) {
-                dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
-            }
-
-            rvApplist.setLayoutManager(new LinearLayoutManager(context));
-            rvApplist.addItemDecoration(dividerItemDecoration);
+        if (dividerItemDecoration != null) {
+            rvApplist.removeItemDecoration(dividerItemDecoration);
         }
 
-        adapter.setDisplay(isGrid);
+        switch (viewMode) {
+            case AppsListAdapter.VIEW_MODE_LIST:
+                if (dividerItemDecoration == null) {
+                    dividerItemDecoration = new DividerItemDecoration(context, DividerItemDecoration.VERTICAL);
+                }
+
+                rvApplist.setLayoutManager(new LinearLayoutManager(context));
+                rvApplist.addItemDecoration(dividerItemDecoration);
+                break;
+
+            case AppsListAdapter.VIEW_MODE_LIST_2:
+                rvApplist.setLayoutManager(new GridLayoutManager(context, 2));
+                break;
+
+            case AppsListAdapter.VIEW_MODE_LIST_3:
+                rvApplist.setLayoutManager(new GridLayoutManager(context, 3));
+                break;
+
+            case AppsListAdapter.VIEW_MODE_GRID:
+            default:
+                rvApplist.setLayoutManager(new GridLayoutManager(context, 4));
+                break;
+        }
+
+        currentViewMode = viewMode;
+        adapter.setDisplayMode(viewMode);
     }
 
     private void switchToDeviceList() {
@@ -397,15 +475,77 @@ public class AppsListFragment extends Fragment {
         }
     }
 
-    private void setToggleGridIconStatus(MenuItem item, boolean isGrid) {
-        item.setChecked(isGrid);
-        if (isGrid) {
-            item.setIcon(R.drawable.ic_list_white);
-            item.setTitle(R.string.list_app_list_mode);
-        } else {
-            item.setIcon(R.drawable.ic_grid_white);
-            item.setTitle(R.string.grid_app_list_mode);
+    private void setViewModeMenuStatus(MenuItem item, int viewMode) {
+        item.setIcon(R.drawable.ic_grid_white);
+        item.setTitle(getViewModeTitleResId(viewMode));
+    }
+
+    private void showViewModeDialog(MenuItem item) {
+        final int[] modes = new int[] {
+                AppsListAdapter.VIEW_MODE_LIST,
+                AppsListAdapter.VIEW_MODE_LIST_2,
+                AppsListAdapter.VIEW_MODE_LIST_3,
+                AppsListAdapter.VIEW_MODE_GRID
+        };
+
+        final String[] labels = new String[] {
+                getString(R.string.list_app_list_mode),
+                getString(R.string.list_app_list_mode_2),
+                getString(R.string.list_app_list_mode_3),
+                getString(R.string.grid_app_list_mode)
+        };
+
+        int checkedItem = 0;
+        for (int i = 0; i < modes.length; i++) {
+            if (modes[i] == currentViewMode) {
+                checkedItem = i;
+                break;
+            }
         }
+
+        new AlertDialog.Builder(requireContext())
+                .setTitle(R.string.select_app_list_mode)
+                .setSingleChoiceItems(labels, checkedItem, (dialog, which) -> {
+                    int selectedMode = modes[which];
+                    saveViewMode(selectedMode);
+                    applyViewMode(null, selectedMode);
+                    setViewModeMenuStatus(item, selectedMode);
+                    dialog.dismiss();
+                })
+                .show();
+    }
+
+    private void styleMenuHeader(MenuItem item, int color) {
+        if (item == null || item.getTitle() == null) {
+            return;
+        }
+
+        SpannableString title = new SpannableString(item.getTitle());
+        title.setSpan(new ForegroundColorSpan(color), 0, title.length(), 0);
+        title.setSpan(new RelativeSizeSpan(0.88f), 0, title.length(), 0);
+        item.setTitle(title);
+    }
+
+    private CharSequence createSubMenuHeaderTitle(CharSequence title, int color) {
+        if (title == null) {
+            return null;
+        }
+
+        SpannableString headerTitle = new SpannableString(title);
+        headerTitle.setSpan(new ForegroundColorSpan(color), 0, headerTitle.length(), 0);
+        return headerTitle;
+    }
+
+    private int resolveThemeColor(int attrId, int fallbackColorResId) {
+        TypedValue typedValue = new TypedValue();
+        if (requireContext().getTheme().resolveAttribute(attrId, typedValue, true)) {
+            if (typedValue.resourceId != 0) {
+                return ContextCompat.getColor(requireContext(), typedValue.resourceId);
+            }
+            return typedValue.data;
+        }
+
+        return ContextCompat.getColor(requireContext(), fallbackColorResId);
     }
 
     @SuppressLint("CheckResult")
@@ -498,6 +638,118 @@ public class AppsListFragment extends Fragment {
         openPreconfiguredPackZIPLauncher.launch(new String[] { "*.zip" });
     }
 
+    private void openPreconfiguredPackExportDirectoryPicker() {
+        pickPreconfiguredPackExportDirectory.launch(null);
+    }
+
+    private String createPreconfiguredPackFileName() {
+        SimpleDateFormat dateFormat = new SimpleDateFormat("yyyyMMdd-HHmm", Locale.US);
+        return "eka2l1-preconfigured-" + dateFormat.format(new Date()) + ".zip";
+    }
+
+    @SuppressLint("CheckResult")
+    private void exportPreconfiguredPack(String destinationPath) {
+        if (destinationPath == null) {
+            return;
+        }
+
+        Context context = requireContext();
+        AppCompatActivity activity = (AppCompatActivity) requireActivity();
+        File dataFolder = new File(Emulator.getEmulatorDir(), "data");
+        if (!dataFolder.exists() || !dataFolder.isDirectory()) {
+            Toast.makeText(context, R.string.fail_to_export_preconfigured_pack, Toast.LENGTH_LONG).show();
+            return;
+        }
+
+        String fileName = createPreconfiguredPackFileName();
+
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.processing));
+        dialog.show();
+
+        Single<String> exportPackSingle = Single.create(emitter -> {
+            OutputStream outputStream = null;
+
+            try {
+                if (destinationPath.startsWith("/")) {
+                    File destinationDirectory = new File(destinationPath);
+                    if (!destinationDirectory.exists() && !destinationDirectory.mkdirs()) {
+                        throw new IOException("Failed to create destination directory: " + destinationPath);
+                    }
+
+                    File destinationFile = new File(destinationDirectory, fileName);
+                    outputStream = new FileOutputStream(destinationFile, false);
+                } else {
+                    Uri persistableUri = Uri.parse(destinationPath);
+                    activity.getContentResolver().takePersistableUriPermission(persistableUri,
+                            Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+
+                    DocumentFile rootFile = DocumentFile.fromTreeUri(context, persistableUri);
+                    if (rootFile == null) {
+                        throw new IOException("Unable to access destination directory");
+                    }
+
+                    DocumentFile existingFile = rootFile.findFile(fileName);
+                    if (existingFile != null) {
+                        existingFile.delete();
+                    }
+
+                    DocumentFile zipFile = rootFile.createFile("application/zip", fileName);
+                    if (zipFile == null) {
+                        throw new IOException("Unable to create destination zip file");
+                    }
+
+                    outputStream = activity.getContentResolver().openOutputStream(zipFile.getUri(), "w");
+                    if (outputStream == null) {
+                        throw new IOException("Unable to open output stream for destination zip file");
+                    }
+                }
+
+                ZipUtils.zipDirectoryToStream(dataFolder, outputStream, "data");
+                emitter.onSuccess(fileName);
+            } catch (Exception exception) {
+                emitter.onError(exception);
+            } finally {
+                if (outputStream != null) {
+                    try {
+                        outputStream.close();
+                    } catch (IOException ignored) {
+                    }
+                }
+            }
+        });
+
+        exportPackSingle.subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>() {
+                    @Override
+                    public void onSuccess(@NonNull String exportedFileName) {
+                        Toast.makeText(context,
+                                getString(R.string.export_preconfigured_pack_success, exportedFileName),
+                                Toast.LENGTH_LONG).show();
+                        dialog.cancel();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        Toast.makeText(context, R.string.fail_to_export_preconfigured_pack,
+                                Toast.LENGTH_LONG).show();
+                        dialog.cancel();
+                    }
+                });
+    }
+
+    private void onPreconfiguredPackExportDirectoryResult(String destinationPath) {
+        if (destinationPath == null) {
+            return;
+        }
+
+        exportPreconfiguredPack(destinationPath);
+    }
+
     @Override
     public void onCreateOptionsMenu(@NonNull Menu menu, @NonNull MenuInflater inflater) {
         super.onCreateOptionsMenu(menu, inflater);
@@ -525,23 +777,27 @@ public class AppsListFragment extends Fragment {
                 .subscribe(charSequence -> adapter.getFilter().filter(charSequence));
         compositeDisposable.add(searchViewDisposable);
 
-        AppDataStore store = AppDataStore.getAndroidStore();
-        boolean isGrid = store.getBoolean(PREF_GRID_APP_LIST, true);
-
-        final MenuItem gridModeItem = menu.findItem(R.id.action_toggle_grid);
-
-        setToggleGridIconStatus(gridModeItem, isGrid);
-        gridModeItem.setOnMenuItemClickListener(item -> {
-            boolean gridEnabled = !item.isChecked();
-
-            store.putBoolean(PREF_GRID_APP_LIST, gridEnabled);
-            store.save();
-
-            setDisplay(null, gridEnabled);
-            setToggleGridIconStatus(item, gridEnabled);
-
+        final MenuItem viewModeItem = menu.findItem(R.id.action_toggle_grid);
+        setViewModeMenuStatus(viewModeItem, currentViewMode);
+        viewModeItem.setOnMenuItemClickListener(item -> {
+            showViewModeDialog(item);
             return true;
         });
+
+        int secondaryMenuColor = resolveThemeColor(android.R.attr.textColorSecondary, R.color.dark_color_text_secondary);
+
+        MenuItem systemManagementItem = menu.findItem(R.id.action_devices_management);
+        if (systemManagementItem != null && systemManagementItem.getSubMenu() != null) {
+            systemManagementItem.getSubMenu().setHeaderTitle(
+                    createSubMenuHeaderTitle(systemManagementItem.getTitle(), secondaryMenuColor));
+        }
+
+        MenuItem nGageItem = menu.findItem(R.id.action_ngage_menu);
+        if (nGageItem != null && nGageItem.getSubMenu() != null) {
+            nGageItem.getSubMenu().setHeaderTitle(
+                    createSubMenuHeaderTitle(nGageItem.getTitle(), secondaryMenuColor));
+        }
+
     }
 
     @Override
@@ -562,7 +818,7 @@ public class AppsListFragment extends Fragment {
                     .replace(R.id.container, packageListFragment)
                     .addToBackStack(null)
                     .commit();
-        } else if (itemId == R.id.action_devices) {
+        } else if (itemId == R.id.action_devices || itemId == R.id.action_devices_overflow) {
             switchToDeviceList();
         } else if (itemId == R.id.action_mount_sd) {
             openSDCardLauncher.launch(null);
@@ -584,9 +840,8 @@ public class AppsListFragment extends Fragment {
             openNGageGameLauncher.launch(null);
         } else if (itemId == R.id.action_install_preconfigured_pack) {
             openPreconfiguredZIPFilePicker();
-        } else if (itemId == R.id.action_switch_devices) {
-            SwitchDevicesAlert.newInstance()
-                    .show(getParentFragmentManager(), "alert_switch_devices");
+        } else if (itemId == R.id.action_export_preconfigured_pack) {
+            openPreconfiguredPackExportDirectoryPicker();
         }
         return super.onOptionsItemSelected(item);
     }
@@ -594,7 +849,7 @@ public class AppsListFragment extends Fragment {
     private void addAppShortcut(AppItem item) {
         // Get current device code
         int currentDeviceId = Emulator.getCurrentDevice();
-        String []deviceCode = Emulator.getDeviceFirmwareCodes();
+        String[] deviceCode = Emulator.getDeviceFirmwareCodes();
 
         if (currentDeviceId >= deviceCode.length) {
             return;

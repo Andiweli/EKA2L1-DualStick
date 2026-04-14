@@ -21,9 +21,7 @@ package com.github.eka2l1.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -36,29 +34,23 @@ public class AboutDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        StringBuilder message = new StringBuilder().append(getText(R.string.version))
-                .append(BuildConfig.VERSION_NAME)
-                .append('-')
-                .append(BuildConfig.GIT_HASH)
+        String versionText = getString(R.string.version) + BuildConfig.VERSION_NAME + '-' + BuildConfig.GIT_HASH;
+        String bodyHtml = new StringBuilder()
                 .append(getText(R.string.about_website))
                 .append(getText(R.string.about_github))
                 .append(getText(R.string.about_crowdin))
                 .append(getText(R.string.about_dualstick_modification))
                 .append(getText(R.string.about_copyright))
                 .append(getText(R.string.about_icon_by))
-                .append(getText(R.string.about_icon_author));
-        TextView tv = new TextView(getActivity());
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(Html.fromHtml(message.toString()));
-        tv.setTextSize(16);
-        float density = getResources().getDisplayMetrics().density;
-        int paddingHorizontal = (int) (density * 20);
-        int paddingVertical = (int) (density * 14);
-        tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+                .append(getText(R.string.about_icon_author))
+                .toString();
+
+        View contentView = AboutDialogHelper.createAboutContentView(requireContext(), versionText, bodyHtml);
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(R.string.app_name)
                 .setIcon(R.mipmap.ic_ducky)
-                .setView(tv)
+                .setView(contentView)
                 .setPositiveButton(R.string.about_special_thanks_title, (d, w) -> {
                     SpecialThanksDialogFragment specialThanksFragment = new SpecialThanksDialogFragment();
                     specialThanksFragment.show(getParentFragmentManager(), "specialThanks");

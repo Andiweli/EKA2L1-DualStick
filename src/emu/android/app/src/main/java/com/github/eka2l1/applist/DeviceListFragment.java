@@ -36,6 +36,7 @@ import android.widget.ArrayAdapter;
 import android.widget.Button;
 import android.widget.EditText;
 import android.widget.LinearLayout;
+import android.widget.RadioGroup;
 import android.widget.Spinner;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -68,11 +69,16 @@ public class DeviceListFragment extends Fragment {
 
     private INSTALL_MODE mode;
     private LinearLayout llRpkg;
-    private TextView tvRawDump;
+    private LinearLayout llFirmware;
+    private LinearLayout llRom;
     private TextView tvRPKG;
     private TextView tvROM;
     private TextView tvVPL;
     private TextView tvRPKGNote;
+
+    private String selectedRpkgPath = "";
+    private String selectedRomPath = "";
+    private String selectedVplPath = "";
 
     private boolean firmwareSet, rpkgSet, romSet, needRpkg;
     private ArrayAdapter<String> deviceAdapter;
@@ -102,8 +108,8 @@ public class DeviceListFragment extends Fragment {
         actionBar.setDisplayHomeAsUpEnabled(true);
         actionBar.setTitle(R.string.devices);
 
-        LinearLayout llFirmware = view.findViewById(R.id.ll_firmware);
-        LinearLayout llRom = view.findViewById(R.id.ll_rom);
+        llFirmware = view.findViewById(R.id.ll_firmware);
+        llRom = view.findViewById(R.id.ll_rom);
         llRpkg = view.findViewById(R.id.ll_rpkg);
 
         tvVPL = view.findViewById(R.id.tv_firmware);
@@ -178,29 +184,15 @@ public class DeviceListFragment extends Fragment {
                 getText(R.string.wiki_link);
         tvWikiInfo.setText(Html.fromHtml(message));
 
-        Spinner spInstallMethod = view.findViewById(R.id.sp_device_install_method);
-        spInstallMethod.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
-            @Override
-            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
-                if (position == 0) {
-                    mode = INSTALL_MODE.DEVICE_DUMP;
-                    tvRPKGNote.setVisibility(View.VISIBLE);
-                    llRom.setVisibility(View.VISIBLE);
-                    llFirmware.setVisibility(View.GONE);
-                    llFirmware.setVisibility(View.GONE);
-                } else {
-                    mode = INSTALL_MODE.FIRMWARE;
-                    tvRPKGNote.setVisibility(View.GONE);
-                    llFirmware.setVisibility(View.VISIBLE);
-                    llRpkg.setVisibility(View.GONE);
-                    llRom.setVisibility(View.GONE);
-                }
-            }
-
-            @Override
-            public void onNothingSelected(AdapterView<?> parent) {
+        RadioGroup rgInstallMethod = view.findViewById(R.id.rg_install_method);
+        rgInstallMethod.setOnCheckedChangeListener((group, checkedId) -> {
+            if (checkedId == R.id.rb_firmware) {
+                setInstallMode(INSTALL_MODE.FIRMWARE);
+            } else {
+                setInstallMode(INSTALL_MODE.DEVICE_DUMP);
             }
         });
+        setInstallMode(INSTALL_MODE.DEVICE_DUMP);
 
         Button btRPKG = view.findViewById(R.id.bt_rpkg);
         btRPKG.setOnClickListener(v -> openRpkgLauncher.launch(new String[]{".RPKG", ".rpkg"}));
@@ -220,7 +212,8 @@ public class DeviceListFragment extends Fragment {
         if (path == null) {
             return;
         }
-        tvVPL.setText(path);
+        selectedVplPath = path;
+        tvVPL.setText(getDisplayNameForPath(path));
         firmwareSet = true;
     }
 
@@ -244,7 +237,8 @@ public class DeviceListFragment extends Fragment {
         if (paths.size() > 0) {
             AlertDialog builder = new AlertDialog.Builder(requireContext())
                     .setItems(names.toArray(new String[0]), (dialogInterface, i) -> {
-                        tvVPL.setText(paths.get(i));
+                        selectedVplPath = paths.get(i);
+                        tvVPL.setText(names.get(i));
                         firmwareSet = true;
                     })
                     .create();
@@ -256,7 +250,8 @@ public class DeviceListFragment extends Fragment {
         if (path == null) {
             return;
         }
-        tvRPKG.setText(path);
+        selectedRpkgPath = path;
+        tvRPKG.setText(getDisplayNameForPath(path));
         rpkgSet = true;
     }
 
@@ -264,7 +259,8 @@ public class DeviceListFragment extends Fragment {
         if (path == null) {
             return;
         }
-        tvROM.setText(path);
+        selectedRomPath = path;
+        tvROM.setText(getDisplayNameForPath(path));
         romSet = true;
 
         if (Emulator.doesRomNeedRPKG(path)) {
@@ -274,6 +270,54 @@ public class DeviceListFragment extends Fragment {
             needRpkg = false;
             llRpkg.setVisibility(View.GONE);
         }
+    }
+
+
+    private void setInstallMode(INSTALL_MODE installMode) {
+        mode = installMode;
+
+        if (installMode == INSTALL_MODE.DEVICE_DUMP) {
+            tvRPKGNote.setVisibility(View.VISIBLE);
+            llRom.setVisibility(View.VISIBLE);
+            llFirmware.setVisibility(View.GONE);
+            llRpkg.setVisibility(needRpkg ? View.VISIBLE : View.GONE);
+        } else {
+            tvRPKGNote.setVisibility(View.GONE);
+            llFirmware.setVisibility(View.VISIBLE);
+            llRom.setVisibility(View.GONE);
+            llRpkg.setVisibility(View.GONE);
+        }
+    }
+
+    private String getDisplayNameForPath(String path) {
+        if (path == null || path.isEmpty()) {
+            return "";
+        }
+
+        try {
+            Uri uri = Uri.parse(path);
+            String scheme = uri.getScheme();
+            if (scheme != null) {
+                DocumentFile documentFile = DocumentFile.fromSingleUri(requireContext(), uri);
+                if (documentFile != null && documentFile.getName() != null) {
+                    return documentFile.getName();
+                }
+            }
+        } catch (Exception ignored) {
+        }
+
+        String decodedPath = Uri.decode(path);
+        int slashIndex = Math.max(decodedPath.lastIndexOf('/'), decodedPath.lastIndexOf('\\'));
+        if (slashIndex >= 0 && slashIndex + 1 < decodedPath.length()) {
+            return decodedPath.substring(slashIndex + 1);
+        }
+
+        int colonIndex = decodedPath.lastIndexOf(':');
+        if (colonIndex >= 0 && colonIndex + 1 < decodedPath.length()) {
+            return decodedPath.substring(colonIndex + 1);
+        }
+
+        return decodedPath;
     }
 
     private void updateDeviceList() {
@@ -299,12 +343,9 @@ public class DeviceListFragment extends Fragment {
         dialog.show();
         Completable completable;
         if (mode == INSTALL_MODE.DEVICE_DUMP) {
-            String rpkg = tvRPKG.getText().toString();
-            String rom = tvROM.getText().toString();
-            completable = Emulator.subscribeInstallDevice(rpkg, rom, true);
+            completable = Emulator.subscribeInstallDevice(selectedRpkgPath, selectedRomPath, needRpkg);
         } else {
-            String vplPath = tvVPL.getText().toString();
-            completable = Emulator.subscribeInstallDevice("", vplPath, false);
+            completable = Emulator.subscribeInstallDevice("", selectedVplPath, false);
         }
         completable.subscribeOn(Schedulers.io())
                 .observeOn(AndroidSchedulers.mainThread())

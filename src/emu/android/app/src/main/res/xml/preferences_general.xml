@@ -2,11 +2,13 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <SwitchPreferenceCompat
         android:defaultValue="true"
+        android:icon="@drawable/ic_pref_filter"
         android:key="enable-nearest-neighbor-filter"
         android:title="@string/pref_general_utilities_nearest_neighbor_filtering_msg" />
     <SwitchPreferenceCompat
         android:id="@+id/switchPreferenceCompat"
         android:defaultValue="true"
+        android:icon="@drawable/ic_pref_hide_apps"
         android:key="hide-system-apps"
         android:title="@string/hide_system_apps" />
     <SwitchPreferenceCompat
@@ -14,6 +16,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:defaultValue="false"
+        android:icon="@drawable/ic_pref_logging"
         android:key="extensive-logging"
         android:title="@string/extensive_logging" />
 </PreferenceScreen>

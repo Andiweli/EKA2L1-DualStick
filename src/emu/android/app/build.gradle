@@ -28,8 +28,8 @@ android {
         applicationId 'com.github.eka2l1.dualstick'
         minSdk 21
         targetSdk 34
-        versionCode 12
-        versionName '0.1.0-dualstick'
+        versionCode 13
+        versionName '0.1.1-dualstick'
         ndkVersion '25.1.8937393'
         buildConfigField 'String', 'GIT_HASH', "\"${getGitHash()}\""
 

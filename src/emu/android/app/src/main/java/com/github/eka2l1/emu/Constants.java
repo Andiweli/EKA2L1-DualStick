@@ -64,5 +64,6 @@ public class Constants {
     public static final String PREF_BT_NETPLAY_PORT_OFFSET = "btnet-port-offset";
     public static final String PREF_BT_NETPLAY_PASSWORD = "btnet-password";
     public static final String PREF_GRID_APP_LIST = "grid-applist";
+    public static final String PREF_APP_LIST_VIEW_MODE = "app-list-view-mode";
     public static final String PREF_LAUNCH_FILE_DIR = "launch-file-dir";
 }

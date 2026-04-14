@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
+    <string name="app_name" translatable="false">EKA2L1 Dual Stick</string>
     <string name="error">Помилка</string>
     <string name="no_data">Немає даних</string>
     <string name="search">Пошук</string>
@@ -24,7 +25,7 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">Застосунок потребує OpenGL ES 3.0+.</string>
     <string name="warning">Попередження</string>
-    <string name="scoped_storage_warning">Ваші дані користувача зберігаються в місці, яке <b>буде видалено</b>, коли ви видалите застосунок:\n</string>
+    <string name="scoped_storage_warning">Ваші дані користувача зберігаються в місці, яке буде видалено, коли ви видалите застосунок:\n</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -32,19 +33,22 @@
     <string name="mounted_mmc_ok_and_use_id_in_folder_name">Completed! Using MMC ID found in folder name.</string>
     <string name="ng1_menu_title">N-Gage</string>
     <string name="ng2_menu_title">N-Gage 2.0</string>
-    <string name="install_preconfigured_pack">Install preconfigured pack</string>
-    <string name="delete_existing_data_title">Delete existing data</string>
-    <string name="delete_existing_data">Do you want to delete existing emulator data (devices, apps, games,...)?</string>
-    <string name="fail_to_install_preconfigured_pack">Failed to install preconfigured pack!</string>
-    <string name="fail_to_install_preconfigured_pack_and_rollback">Failed to install preconfigured pack! Rollback-ed to old data!</string>
-    <string name="choose_installation_type">Choose installation type</string>
-    <string name="choose_installation_type_instruction">Use an existing data pack to quickly settle in, or start afresh by installing a new device using its ROM/firmware.</string>
-    <string name="preconfigured_pack">Preconfigured pack</string>
+    <string name="install_preconfigured_pack">Встановити попередньо налаштований пакет</string>
+    <string name="delete_existing_data_title">Видалити наявні дані</string>
+    <string name="delete_existing_data">Ви хочете видалити наявні дані емулятора (пристрої, програми, ігри, ...)?</string>
+    <string name="fail_to_install_preconfigured_pack">Не вдалося встановити попередньо налаштований пакет!</string>
+    <string name="fail_to_install_preconfigured_pack_and_rollback">Не вдалося встановити попередньо налаштований пакет! Виконано відкат до старих даних!</string>
+    <string name="fail_to_export_preconfigured_pack">Не вдалося експортувати попередньо налаштований пакет!</string>
+    <string name="choose_installation_type">Виберіть тип встановлення</string>
+    <string name="choose_installation_type_instruction">Використайте наявний пакет даних, щоб швидко почати, або почніть із нуля, встановивши новий пристрій за допомогою його ROM/прошивки.</string>
+    <string name="preconfigured_pack">Попередньо налаштований пакет</string>
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Установити</string>
     <string name="rescan_devices">Пересканувати пристрої</string>
     <string name="device_dump">Дамп пристрою</string>
+    <string name="rpkg" translatable="false">RPKG</string>
+    <string name="rom" translatable="false">ROM</string>
     <string name="path_to_rpkg">Шлях до RPKG</string>
     <string name="path_to_rom">Шлях до ROM</string>
     <string name="firmware">Прошивка</string>
@@ -53,10 +57,11 @@
     <string name="enter_new_name">Уведіть нове ім\'я</string>
     <string name="mode">Режим</string>
     <string name="no_device_dialog_title">Жодного пристрою не встановлено!</string>
-    <string name="no_device_installed">Будь ласка, встановіть пристрій. Для встановлення потрібні файли та ПЗП (ROM) пристрою Symbian.\n\n<b>Примітка:</b> Кожному застосунку для запуску знадобиться відповідний пристрій Symbian.</string>
+    <string name="no_device_installed">Будь ласка, встановіть пристрій. Для встановлення потрібні файли та ПЗП (ROM) пристрою Symbian.\n\nПримітка: Кожному застосунку для запуску знадобиться відповідний пристрій Symbian.</string>
     <string name="install_device_note_may_need_rpkg">Для пристроїв S60v2 чи вище вам може знадобитися надати додатковий файл під назвою RPKG. Засіб вибору шляху з\'явиться, якщо встановник виявить необхідність у ньому.</string>
     <string name="recommended_devices_to_install">Рекомендовані пристрої для встановлення</string>
     <string name="wiki_info">Для отримання додаткової інформації про встановлення пристроїв, будь ласка, відвідайте нашу вікі:</string>
+    <string name="wiki_link" translatable="false"> &lt;a href="https://eka2l1.miraheze.org/wiki/Official_Links"&gt;eka2l1.miraheze.org&lt;/a&gt;</string>
     <string name="install_rpkg_corrupt">Наданий RPKG файл пошкоджений!</string>
     <string name="install_rpkg_file_not_found">Зазначений файл RPKG не можна відкрити!</string>
     <string name="install_raw_dump_fail_to_copy">Не вдалося скопіювати файли необробленого дампу до цільового місця призначення!</string>
@@ -70,6 +75,7 @@
     <string name="install_device_fpsx_corrupt_msg">Файл FPSX пошкоджений!</string>
     <string name="pref_general_title">Загальні</string>
     <string name="pref_system_title">Системні</string>
+    <string name="pref_android_title" translatable="false">Android</string>
     <string name="pref_control_key_binding_sect_title">Призначення клавіш</string>
     <string name="pref_theme">Тема</string>
     <string name="pref_theme_light">Світла</string>
@@ -90,10 +96,13 @@
     <string name="pref_system_real_time_accuracy_level_name_high">Висока</string>
     <string name="pref_system_time_delay_option_name">Час затримки</string>
     <string name="pref_system_setting_inheritance_option_name">Успадкування налаштувань</string>
+    <string name="pref_hal_imei_option_name" translatable="false">IMEI</string>
+    <string name="pref_mmc_id" translatable="false">MMC ID</string>
     <string name="emulated_screen_rotation_item_name">Поворот екрана</string>
     <string name="emulated_screen_refresh_rate_item_name">Частота оновлення</string>
     <string name="pref_device_display_name">Phone name</string>
     <string name="hide_system_apps">Приховати системні застосунки</string>
+    <string name="pref_bt_netplay" translatable="false">Bluetooth Netplay</string>
     <string name="pref_bt_netplay_direct_ips_manager">Менеджер прямих IP-адрес</string>
     <string name="enter_address">Уведіть адресу</string>
     <string name="address">Адреса</string>
@@ -133,6 +142,7 @@
     <string name="pref_vk_back">Кнопки</string>
     <string name="pref_vk_fore">Позначки</string>
     <string name="pref_vk_outline">Обвід</string>
+    <string name="pref_color_hint" translatable="false">RGB</string>
     <string name="pref_vk_alpha">Непрозорість: </string>
     <string name="pref_vk_hide_delay">Затримка приховування: </string>
     <string name="pref_unit_ms">мс</string>
@@ -179,6 +189,27 @@
     <string name="set_default_profile_description">Виберіть цей профіль як стандартні налаштування для всіх застосунків, які буде встановлено пізніше</string>
     <string name="error_name_exists">Уже існує, введіть іншу назву</string>
     <string name="extensive_logging">Extensive logging</string>
+    <string name="virtual_key_left_soft" translatable="false">L</string>
+    <string name="virtual_key_right_soft" translatable="false">R</string>
+    <string name="virtual_key_d" translatable="false">D</string>
+    <string name="virtual_key_c" translatable="false">C</string>
+    <string name="virtual_key_left" translatable="false">←</string>
+    <string name="virtual_key_right" translatable="false">→</string>
+    <string name="virtual_key_up" translatable="false">↑</string>
+    <string name="virtual_key_down" translatable="false">↓</string>
+    <string name="virtual_key_f" translatable="false">F</string>
+    <string name="virtual_key_1" translatable="false">1</string>
+    <string name="virtual_key_2" translatable="false">2</string>
+    <string name="virtual_key_3" translatable="false">3</string>
+    <string name="virtual_key_4" translatable="false">4</string>
+    <string name="virtual_key_5" translatable="false">5</string>
+    <string name="virtual_key_6" translatable="false">6</string>
+    <string name="virtual_key_7" translatable="false">7</string>
+    <string name="virtual_key_8" translatable="false">8</string>
+    <string name="virtual_key_9" translatable="false">9</string>
+    <string name="virtual_key_0" translatable="false">0</string>
+    <string name="virtual_key_star" translatable="false">*</string>
+    <string name="virtual_key_pound" translatable="false">#</string>
     <string name="mapping_dialog_title">Натисніть кнопку</string>
     <string name="mapping_dialog_message" formatted="false">Поточне зіставлення: %1$s</string>
     <string name="reset_mapping">Скинути</string>
@@ -192,14 +223,38 @@
     <string name="force_close_confirmation">Примусове закриття застосунку може призвести до втрати даних або навіть до повного виведення його з ладу!\nПродовжити?</string>
     <string name="log_saved">Лог збережено</string>
     <string name="enter_text">Уведіть текст</string>
+    <string name="about_website" translatable="false">&lt;BR&gt;Website: &lt;a href="https://eka2l1.github.io"&gt;eka2l1.github.io&lt;/a&gt;</string>
+    <string name="about_github" translatable="false">&lt;BR&gt;GitHub: &lt;a href="https://github.com/EKA2L1/EKA2L1"&gt;github.com/EKA2L1/EKA2L1&lt;/a&gt;</string>
+    <string name="about_crowdin" translatable="false">&lt;BR&gt;Crowdin(translation): &lt;a href="https://crowdin.com/project/EKA2L1"&gt;crowdin.com/project/EKA2L1&lt;/a&gt;</string>
+    <string name="about_copyright" translatable="false">&lt;BR&gt;&lt;BR&gt;Copyright 2018-2024 EKA2L1 Team</string>
+    <string name="about_icon_author" translatable="false">dmolina007 &amp; Frenesi</string>
     <string name="about_icon_by">&lt;BR&gt;Іконка від: </string>
     <string name="about_special_thanks_title">Special thanks</string>
     <string name="about_special_thanks_content">  - nikita36078 for publishing the Android version on Play Store and for his help!&lt;BR&gt;  - Symbian/N-Gage OG sceners: BinPDA, pSyGAGE, Engage, zg, eskMaemo, BodyZ, Ilya Dianov, iCodeRUS, huellif, … for wonderful contributions!&lt;BR&gt;  - Phone manufacturers for creating wonderful Symbian devices: Nokia, Sony Ericsson, Samsung, Siemens, ...&lt;BR&gt;  - The N-Gage Discord community&lt;BR&gt;  - vk.com/Symbian_zone community&lt;BR&gt;  - EKA2L1 Discord community</string>
     <string name="about_translator">Translators</string>
+    <string name="about_translator_content" translatable="false">- PhantomHorror (Українська, Беларуская, Русский)&lt;BR&gt;  - Federico Dispinzeri (ca0ss) (Italiano)&lt;BR&gt;  - Faalagorn (Polski)&lt;BR&gt;  - Nikita Shakarun (nikita36078) (Русский)&lt;BR&gt;  - Rex_sa (rex07) (العربية)&lt;BR&gt;  - Walisson Silva (w_alisson_gostoso) (português brasileiro)&lt;BR&gt;  - Allen Merlin (ShadowDumb) (简体中文)&lt;BR&gt;  - heydootdoot (Bahasa Indonesia)&lt;BR&gt;  - Ar1 (Ary404) (Bahasa Indonesia, 日本語)&lt;BR&gt;  - enriqueyair (FrenesiGG) (Español)&lt;BR&gt;  - නාමල් ජයසිංහ (nimnaya) (සිංහල)&lt;BR&gt;  - Patrick Mates (patmat99) (Deutsch, Français, Español)&lt;BR&gt;  - I HAVE GOT THE POWER (rimbado) (Azərbaycanca, Türkçe)&lt;BR&gt;  - Tauhid Alam Rifty (ChildishRifty7) (বাংলা)&lt;BR&gt;  - Div, mix (reymo.az) (Azərbaycanca, Türkçe)&lt;BR&gt;  - João (Sefhriloff) (Español, português brasileiro)&lt;BR&gt;  - Alexis Jhon Gaspar (Lucss21a) (Wikang Filipino, Bahasa Indonesia)&lt;BR&gt;  - Nokia64 (Español)&lt;BR&gt;  - Jaakko Saarikko (styxnix) (Suomi)&lt;BR&gt;  - Alonso Neto (AlonsoNeto) (português brasileiro)&lt;BR&gt;  - GiorgioHerbie (Italiano)&lt;BR&gt;  - Hafiz Mohamed (Apihplays) (Bahasa Melayu)&lt;BR&gt;  - ShahinF27 (Khan27) (Azərbaycanca)&lt;BR&gt;  - Alain Teulet (niala6433) (Français)&lt;BR&gt;  - Daichi (Daichix) (Français)&lt;BR&gt;  - Peter Tissen (Bigpet) (Deutsch)&lt;BR&gt;  - Reiju (Rejiu) (Polski, Română, Deutsch)&lt;BR&gt;  - Jeremy Belpois (JeremyBelpois) (Bahasa Indonesia)&lt;BR&gt;  - Steven Felix (stevenfelix505) (Bahasa Indonesia)&lt;BR&gt;  - OguzHans (symbianware) (Türkçe)&lt;BR&gt;  - mvenhaikal (Bahasa Indonesia)&lt;BR&gt;  - JCC (johncarreon2012) (简体中文)&lt;BR&gt;  - Huaji Nishikino (sky0hjh) (简体中文)&lt;BR&gt;  - Fire_Head (Українська)&lt;BR&gt;  - oqzhnyldz (Türkçe)&lt;BR&gt;  - sakirasci (Türkçe)&lt;BR&gt;  - zixing (zixing131) (简体中文)&lt;BR&gt;  - Aaron Feng (AaronFeng753) (简体中文)&lt;BR&gt;  - Никита Пикалов (keXa2008) (Русский)&lt;BR&gt;  - literalmente-game (português brasileiro)&lt;BR&gt;  - Osanosa (Українська)&lt;BR&gt;  - Arthur de Castro Silva (arthurion) (português brasileiro)&lt;BR&gt;  - Marco Steinhaeuser (kermie) (Deutsch)&lt;BR&gt;  - Trinh Manh Viet (manhviet) (Tiếng Việt)&lt;BR&gt;  - Foysal Bhuiyan (foysalbhuyian008) (简体中文)&lt;BR&gt;  - zesty (简体中文)&lt;BR&gt;  - sony_rich (sonyrich) (Tiếng Việt)&lt;BR&gt;  - artem78 (Русский)&lt;BR&gt;  - Văn Heo Quay Nguyễn (FDERROR) (Tiếng Việt)&lt;BR&gt;  - Cetaceaqua (简体中文)&lt;BR&gt;  - mp107 (Polski)&lt;BR&gt;  - Hiago Cardoso de Melo (bearusumyo) (português brasileiro)&lt;BR&gt;  - gwmgdemj (简体中文)&lt;BR&gt;  - Quakeman 0 (williampaiva021) (português brasileiro)&lt;BR&gt;  - Dede Kurniawan (CraX_Dev) (Bahasa Indonesia)&lt;BR&gt;  - NinPhi (Русский)&lt;BR&gt;  - Florin9doi (Română)&lt;BR&gt;  - artemka 333 (artemka333) (Беларуская)&lt;BR&gt;  - Korteks Korta (kortex.343434) (Türkçe)&lt;BR&gt;  - 123456sdfft (简体中文)&lt;BR&gt;  - crisanto valler (vallercrisanto) (Wikang Filipino)&lt;BR&gt;  - Saqala Bilaabayso (Saqala) (Polski)&lt;BR&gt;  - 115190 (Italiano)&lt;BR&gt;  - Олександр Лапин (maliar2014) (Русский)&lt;BR&gt;  - Huck Jones (huckleberrypie) (Wikang Filipino)&lt;BR&gt;  - Rachel Wang (rwang4064) (简体中文)&lt;BR&gt;  - Никита Шустол (QsFvn5bA4v) (Беларуская)&lt;BR&gt;  - Serkan Ağdeve (usta_serkan_06) (Türkçe)&lt;BR&gt;  - REMOVED_USER (Deutsch)&lt;BR&gt;  - Бато Батоболотов (Just_Bato) (Русский)&lt;BR&gt;  - හෙළබස සමූහය (HelaBasa) (සිංහල)&lt;BR&gt;  - Trần Nam Hải (E.GMR) (Tiếng Việt)&lt;BR&gt;  - GG Snake (dnfcf524) (简体中文)&lt;BR&gt;  - Khoirul Anam (Anam31) (Bahasa Indonesia)&lt;BR&gt;  - where where (wherewhere) (简体中文)&lt;BR&gt;  - XheroxJS (Español)&lt;BR&gt;  - Nicolas Augustin (nicolasaugustin.atlantis) (Français)&lt;BR&gt;  - Juan Ortiz (Kloido) (Español)&lt;BR&gt;  - mauricio toxqui citalan (mauriciotoxquicitalan) (Español)&lt;BR&gt;  - Sen Esguerra (videogameboy0783) (Wikang Filipino)&lt;BR&gt;  - Shahril Shahril (shahrilshahril609) (Bahasa Indonesia)&lt;BR&gt;  - Serkan Agdeve (serkanagdeve10) (Türkçe)&lt;BR&gt;  - Raziel Benjamin Zapata (razielben1504) (Español)&lt;BR&gt;  - Indra Saragosa (indrasaragosa946) (Bahasa Indonesia)&lt;BR&gt;  - My Talking Tom 2 Smash Hit Mod [No Pay 2 Win] (ctnhanhuy) (Tiếng Việt)&lt;BR&gt;  - CIssnei - (cissnei112) (简体中文)&lt;BR&gt;  - леонид поляков (leon412) (Русский)&lt;BR&gt;  - Johny19 Jonius19 (joniusjohny18) (Bahasa Melayu)&lt;BR&gt;  - 孙福玥 (sun2839266) (简体中文)&lt;BR&gt;  - Rumia (bagregsidoel) (Bahasa Indonesia)&lt;BR&gt;  - igor macedo (igor3891344467) (português brasileiro)&lt;BR&gt;  - Trong Thu Do (fewdspuckrito) (Tiếng Việt)&lt;BR&gt;</string>
     <string name="version">Версія: </string>
-    <string name="recommended_devices_note"><b>Примітка:</b> Рекомендовано використовувати прошивку для встановлення пристроїв від S60v3 і вище.</string>
+    <string name="recommended_devices_note">Примітка: Рекомендовано використовувати прошивку для встановлення пристроїв від S60v3 і вище.</string>
+    <string name="recommended_devices_s60v1" translatable="false">S60v1: N-Gage</string>
+    <string name="recommended_devices_s60v2" translatable="false">S60v2: Nokia N70</string>
+    <string name="recommended_devices_s60v3" translatable="false">S60v3: Nokia 5320 XpressMusic, Nokia E5</string>
+    <string name="recommended_devices_s60v5" translatable="false">S60v5: Nokia 5800 XpressMusic, Nokia 5230</string>
+    <string name="recommended_devices_s3_belle" translatable="false">S^3, Belle: Nokia C7-00, Nokia X7-00</string>
     <string name="install_ng_game_cant_find_data_folder">Can\'t find the game data folder!</string>
     <string name="install_ng_game_more_than_one_game">There is more than one game in the given card game folder!</string>
     <string name="install_ng_game_no_game_info_file">Файлу інформації про гру не існує в теці з ігровою карткою!</string>
     <string name="install_ng_game_corrupted_game_info">The game information file has been corrupted. Please check your data\'s validity!</string>
+    <string name="select_app_list_mode">Choose view</string>
+    <string name="list_app_list_mode_2">2-column list</string>
+    <string name="list_app_list_mode_3">3-column list</string>
+    <string name="devices_management_menu">System management</string>
+    <string name="end_devices_menu">End device</string>
+    <string name="system_menu_title">System</string>
+    <string name="profiles_menu_title">Profiles</string>
+    <string name="install_preconfigured_pack_menu">Install preconfigured pack</string>
+    <string name="export_preconfigured_pack_menu">Експортувати наявні дані</string>
+    <string name="export_preconfigured_pack_success">Попередньо налаштований пакет експортовано: %1$s</string>
+    <string name="install_ng_game_menu">Install N-Gage Game</string>
+    <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
+    <string name="save_log_menu">Save log</string>
 </resources>

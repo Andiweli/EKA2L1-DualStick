@@ -1,13 +1,19 @@
 <resources xmlns:tools="http://schemas.android.com/tools">
     <!-- Base application theme. -->
     <style name="AppTheme" parent="Theme.AppCompat">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/dark_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_color_primary_dark</item>
         <item name="colorAccent">@color/dark_color_accent</item>
         <item name="android:colorBackground">@color/dark_color_background</item>
         <item name="android:windowBackground">@color/dark_color_background</item>
         <item name="buttonStyle">@style/ButtonStyle</item>
+
+        <!-- Popup / overflow menu -->
+        <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="popupMenuStyle">@style/AppTheme.PopupMenu</item>
+        <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge</item>
 
         <!--custom theme attrs-->
         <item name="bg_config_card">@drawable/bg_config_card_dark</item>
@@ -18,13 +24,19 @@
     </style>
 
     <style name="AppTheme.Light" parent="Theme.AppCompat.Light.DarkActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_color_primary</item>
         <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
         <item name="colorAccent">@color/light_color_accent</item>
         <item name="android:colorBackground">@color/light_color_background</item>
         <item name="android:windowBackground">@color/light_color_background</item>
         <item name="buttonStyle">@style/ButtonStyle.Light</item>
+
+        <!-- Popup / overflow menu -->
+        <item name="actionOverflowMenuStyle">@style/AppTheme.Light.OverflowMenu</item>
+        <item name="popupMenuStyle">@style/AppTheme.Light.PopupMenu</item>
+        <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader.Light</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall.Light</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge.Light</item>
 
         <!--custom theme attrs-->
         <item name="bg_config_card">@drawable/bg_config_card_light</item>
@@ -34,10 +46,10 @@
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/dark_color_primary</item>
         <item name="colorPrimaryDark">@color/dark_color_primary</item>
         <item name="actionOverflowMenuStyle">@style/AppTheme.OverflowMenu</item>
+        <item name="popupMenuStyle">@style/AppTheme.PopupMenu</item>
         <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader</item>
         <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall</item>
         <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge</item>
@@ -49,8 +61,23 @@
         <item name="overlapAnchor">false</item>
     </style>
 
+    <style name="AppTheme.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/dark_color_primary_dark</item>
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <style name="AppTheme.Light.OverflowMenu" parent="@style/Widget.AppCompat.PopupMenu.Overflow">
+        <item name="android:popupBackground">@color/light_color_background</item>
+        <item name="overlapAnchor">false</item>
+    </style>
+
+    <style name="AppTheme.Light.PopupMenu" parent="@style/Widget.AppCompat.PopupMenu">
+        <item name="android:popupBackground">@color/light_color_background</item>
+        <item name="overlapAnchor">false</item>
+    </style>
+
     <style name="PopupMenuTextAppearanceHeader" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header">
-        <item name="android:textColor">@color/dark_color_text_primary</item>
+        <item name="android:textColor">@color/dark_color_text_secondary</item>
     </style>
 
     <style name="PopupMenuTextAppearanceSmall" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
@@ -61,10 +88,26 @@
         <item name="android:textColor">@color/dark_color_text_primary</item>
     </style>
 
+    <style name="PopupMenuTextAppearanceHeader.Light" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Header">
+        <item name="android:textColor">@color/light_color_text_secondary</item>
+    </style>
+
+    <style name="PopupMenuTextAppearanceSmall.Light" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Small">
+        <item name="android:textColor">@color/light_color_text_primary</item>
+    </style>
+
+    <style name="PopupMenuTextAppearanceLarge.Light" parent="@style/TextAppearance.AppCompat.Widget.PopupMenu.Large">
+        <item name="android:textColor">@color/light_color_text_primary</item>
+    </style>
+
     <style name="AppTheme.Light.NoActionBar" parent="Theme.AppCompat.Light.NoActionBar">
-        <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_color_primary</item>
         <item name="colorPrimaryDark">@color/light_color_primary_dark</item>
+        <item name="actionOverflowMenuStyle">@style/AppTheme.Light.OverflowMenu</item>
+        <item name="popupMenuStyle">@style/AppTheme.Light.PopupMenu</item>
+        <item name="textAppearancePopupMenuHeader">@style/PopupMenuTextAppearanceHeader.Light</item>
+        <item name="textAppearanceSmallPopupMenu">@style/PopupMenuTextAppearanceSmall.Light</item>
+        <item name="textAppearanceLargePopupMenu">@style/PopupMenuTextAppearanceLarge.Light</item>
     </style>
 
     <style name="FilePickerTheme" parent="NNF_BaseTheme">
@@ -132,6 +175,20 @@
 
     <style name="ButtonStyle.Light" parent="ButtonStyle.Base">
         <item name="android:background">@drawable/bg_button_light</item>
+    </style>
+
+
+    <style name="InstallFileButtonStyle" parent="Widget.AppCompat.Button">
+        <item name="android:background">@drawable/bg_install_file_button</item>
+        <item name="backgroundTint">@null</item>
+        <item name="android:stateListAnimator">@null</item>
+        <item name="android:elevation" tools:ignore="NewApi">0dp</item>
+        <item name="android:minHeight">0dp</item>
+        <item name="android:minWidth">0dp</item>
+        <item name="android:paddingLeft">14dp</item>
+        <item name="android:paddingRight">14dp</item>
+        <item name="android:paddingTop">10dp</item>
+        <item name="android:paddingBottom">10dp</item>
     </style>
 
     <style name="ImageButtonStyle" parent="Widget.AppCompat.ImageButton">

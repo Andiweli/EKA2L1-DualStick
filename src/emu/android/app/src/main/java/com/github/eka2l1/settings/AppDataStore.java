@@ -81,6 +81,10 @@ public class AppDataStore extends PreferenceDataStore {
         return new AppDataStore(file);
     }
 
+    public boolean contains(String key) {
+        return configMap.containsKey(key);
+    }
+
     @Override
     public boolean getBoolean(String key, boolean defValue) {
         Boolean v = (Boolean) configMap.get(key);

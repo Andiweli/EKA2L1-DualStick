@@ -6,29 +6,36 @@
         android:defaultValue="light"
         android:entries="@array/pref_theme_entries"
         android:entryValues="@array/pref_theme_values"
+        android:icon="@drawable/ic_pref_theme"
         android:key="theme"
         android:title="@string/pref_theme" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_pref_actionbar"
         android:key="enable-actionbar"
         android:title="@string/pref_enable_actionbar" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_pref_statusbar"
         android:key="enable-statusbar"
         android:title="@string/pref_enable_statusbar" />
     <SwitchPreferenceCompat
         android:defaultValue="false"
+        android:icon="@drawable/ic_pref_wakelock"
         android:key="enable-wakelock"
         android:title="@string/pref_wakelock" />
     <SwitchPreferenceCompat
         android:defaultValue="true"
+        android:icon="@drawable/ic_pref_vibration"
         android:key="enable-vibration"
         android:title="@string/pref_enable_vibration" />
     <Preference
+        android:icon="@drawable/ic_pref_folder"
         android:key="emulator-dir"
         android:title="@string/pref_emulator_dir"
         tools:summary="/sdcard/EKA2L1" />
     <Preference
+        android:icon="@drawable/ic_pref_folder_launch"
         android:key="launch-file-dir"
         android:title="@string/pref_launch_file_dir"
         tools:summary="/sdcard/EKA2L1" />

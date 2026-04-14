@@ -2,24 +2,29 @@
 <PreferenceScreen xmlns:android="http://schemas.android.com/apk/res/android">
     <ListPreference
         android:defaultValue="-1"
+        android:icon="@drawable/ic_pref_language"
         android:key="language"
         android:title="@string/pref_system_language_option_name" />
     <ListPreference
         android:defaultValue="mid"
         android:entries="@array/pref_system_real_time_accuracy_entries"
         android:entryValues="@array/pref_system_real_time_accuracy_values"
+        android:icon="@drawable/ic_pref_accuracy"
         android:key="rtos-level"
         android:title="@string/pref_system_real_time_accuracy_str" />
     <EditTextPreference
         android:defaultValue="540806859904945"
+        android:icon="@drawable/ic_pref_imei"
         android:key="imei"
         android:title="@string/pref_hal_imei_option_name" />
     <EditTextPreference
         android:defaultValue="00000000-00000000-00000000-00000000"
+        android:icon="@drawable/ic_pref_mmc"
         android:key="mmc-id"
         android:title="@string/pref_mmc_id" />
     <EditTextPreference
         android:defaultValue="EKA2L1"
+        android:icon="@drawable/ic_pref_device_name"
         android:key="device-display-name"
         android:title="@string/pref_device_display_name" />
 </PreferenceScreen>

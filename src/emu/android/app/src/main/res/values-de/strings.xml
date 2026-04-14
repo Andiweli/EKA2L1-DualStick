@@ -1,5 +1,6 @@
-<?xml version="1.0" encoding="utf-8"?>
+<?xml version='1.0' encoding='utf-8'?>
 <resources>
+    <string name="app_name" translatable="false">EKA2L1 Dual Stick</string>
     <string name="error">Fehler</string>
     <string name="no_data">Keine Daten</string>
     <string name="search">Suchen</string>
@@ -7,56 +8,60 @@
     <string name="settings">Einstellungen</string>
     <string name="packages">Pakete</string>
     <string name="devices">Endgeräte</string>
-    <string name="switch_devices">Switch devices</string>
-    <string name="profiles">Profiles</string>
+    <string name="switch_devices">Geräte wechseln</string>
+    <string name="profiles">Profile</string>
     <string name="processing">Verarbeitung läuft...</string>
     <string name="completed">Erledigt!</string>
-    <string name="cancelled">Cancelled</string>
+    <string name="cancelled">Abgebrochen</string>
     <string name="remove">Entfernen</string>
     <string name="mount_sd">MMC/SD-Karte mounten</string>
     <string name="no_devices_found">Keine Geräte gefunden</string>
     <string name="exit">Verlassen</string>
     <string name="rename">Umbenennen</string>
     <string name="save_log">Protokoll speichern</string>
-    <string name="take_screenshot">Take screenshot</string>
+    <string name="take_screenshot">Screenshot aufnehmen</string>
     <string name="screenshot">Screenshot</string>
-    <string name="take_screenshot_success">Screenshot saved to %s!</string>
-    <string name="take_screenshot_fail">Failed to take screenshot!</string>
-    <string name="opengl_required">The app requires OpenGL ES 3.0+.</string>
-    <string name="warning">Warning</string>
-    <string name="scoped_storage_warning">Your user data is stored in a location which <b>will be deleted</b> when you uninstall the app:\n</string>
-    <string name="install_ng_game">Install N-Gage game</string>
-    <string name="notify_dialog_title">Notification</string>
-    <string name="grid_app_list_mode">Grid mode</string>
-    <string name="list_app_list_mode">List mode</string>
-    <string name="mounted_mmc_ok_and_use_id_in_folder_name">Completed! Using MMC ID found in folder name.</string>
+    <string name="take_screenshot_success">Screenshot gespeichert unter %s!</string>
+    <string name="take_screenshot_fail">Screenshot konnte nicht aufgenommen werden!</string>
+    <string name="opengl_required">Die App benötigt OpenGL ES 3.0+.</string>
+    <string name="warning">Warnung</string>
+    <string name="scoped_storage_warning">Ihre Benutzerdaten werden an einem Ort gespeichert, der &lt;b&gt;gelöscht wird&lt;/b&gt;, wenn Sie die App deinstallieren:\nwill be deleted when you uninstall the app:\n</string>
+    <string name="install_ng_game">N-Gage-Spiel installieren</string>
+    <string name="notify_dialog_title">Benachrichtigung</string>
+    <string name="grid_app_list_mode">Rastermodus</string>
+    <string name="list_app_list_mode">Listenmodus</string>
+    <string name="mounted_mmc_ok_and_use_id_in_folder_name">Erledigt! Die im Ordnernamen gefundene MMC-ID wird verwendet.</string>
     <string name="ng1_menu_title">N-Gage</string>
     <string name="ng2_menu_title">N-Gage 2.0</string>
-    <string name="install_preconfigured_pack">Install preconfigured pack</string>
-    <string name="delete_existing_data_title">Delete existing data</string>
-    <string name="delete_existing_data">Do you want to delete existing emulator data (devices, apps, games,...)?</string>
-    <string name="fail_to_install_preconfigured_pack">Failed to install preconfigured pack!</string>
-    <string name="fail_to_install_preconfigured_pack_and_rollback">Failed to install preconfigured pack! Rollback-ed to old data!</string>
-    <string name="choose_installation_type">Choose installation type</string>
-    <string name="choose_installation_type_instruction">Use an existing data pack to quickly settle in, or start afresh by installing a new device using its ROM/firmware.</string>
-    <string name="preconfigured_pack">Preconfigured pack</string>
+    <string name="install_preconfigured_pack">Vorkonfiguriertes Paket installieren</string>
+    <string name="delete_existing_data_title">Vorhandene Daten löschen</string>
+    <string name="delete_existing_data">Möchten Sie vorhandene Emulator-Daten (Geräte, Apps, Spiele, ...) löschen?</string>
+    <string name="fail_to_install_preconfigured_pack">Vorkonfiguriertes Paket konnte nicht installiert werden!</string>
+    <string name="fail_to_install_preconfigured_pack_and_rollback">Vorkonfiguriertes Paket konnte nicht installiert werden! Auf die alten Daten wurde zurückgesetzt!</string>
+    <string name="fail_to_export_preconfigured_pack">Vorkonfiguriertes Paket konnte nicht exportiert werden!</string>
+    <string name="choose_installation_type">Installationstyp wählen</string>
+    <string name="choose_installation_type_instruction">Verwenden Sie ein vorhandenes Datenpaket für einen schnellen Start oder beginnen Sie neu, indem Sie ein neues Gerät über seine ROM/Firmware installieren.</string>
+    <string name="preconfigured_pack">Vorkonfiguriertes Paket</string>
     <string name="rom_or_firmware">ROM/Firmware</string>
-    <string name="save_launch_file_success">Launch file saved as %s!</string>
+    <string name="save_launch_file_success">Startdatei wurde als %s gespeichert!</string>
     <string name="install">Installieren</string>
     <string name="rescan_devices">Geräte neu scannen</string>
-    <string name="device_dump">Dumping des Geräts</string>
+    <string name="device_dump">ROM-Dump</string>
+    <string name="rpkg" translatable="false">RPKG</string>
+    <string name="rom" translatable="false">ROM</string>
     <string name="path_to_rpkg">Pfad zu RPKG</string>
     <string name="path_to_rom">Pfad zu ROM</string>
     <string name="firmware">Firmware</string>
     <string name="path_to_firmware">Pfad zum VPL</string>
     <string name="install_method">Installationsmethode</string>
     <string name="enter_new_name">Neuen Namen eingeben</string>
-    <string name="mode">Mode</string>
+    <string name="mode">Modus</string>
     <string name="no_device_dialog_title">Kein Gerät installiert!</string>
-    <string name="no_device_installed">Bitte installieren Sie ein Gerät. Dateien und ROM eines Symbian-Gerätes werden für die Installation benötigt.\n\n<b>Hinweis:</b> Jede App benötigt ein geeignetes Symbian-Gerät, um zu laufen.</string>
+    <string name="no_device_installed">Bitte installieren Sie ein Gerät. Dateien und ROM eines Symbian-Gerätes werden für die Installation benötigt.\n\nHinweis: Jede App benötigt ein geeignetes Symbian-Gerät, um zu laufen.</string>
     <string name="install_device_note_may_need_rpkg">Für S60v2-Geräte oder höher müssen Sie möglicherweise eine zusätzliche Datei namens RPKG bereitstellen. Die Pfadauswahl wird angezeigt, wenn das Installationsprogramm die Notwendigkeit dafür feststellt.</string>
     <string name="recommended_devices_to_install">Empfohlene Geräte zur Installation</string>
     <string name="wiki_info">Für weitere Informationen zur Geräteinstallation schauen Sie sich bitte unser Wiki an:</string>
+    <string name="wiki_link" translatable="false"> &lt;a href="https://eka2l1.miraheze.org/wiki/Official_Links"&gt;eka2l1.miraheze.org&lt;/a&gt;</string>
     <string name="install_rpkg_corrupt">Diese RPKG-Datei ist beschädigt!</string>
     <string name="install_rpkg_file_not_found">Diese RPKG-Datei kann nicht geöffnet werden!</string>
     <string name="install_raw_dump_fail_to_copy">Kopieren der rohen Dump-Datei zum Zielort fehlgeschlagen!</string>
@@ -70,6 +75,7 @@
     <string name="install_device_fpsx_corrupt_msg">Die FPSX-Datei ist beschädigt!</string>
     <string name="pref_general_title">Allgemein</string>
     <string name="pref_system_title">System</string>
+    <string name="pref_android_title" translatable="false">Android</string>
     <string name="pref_control_key_binding_sect_title">Tastenbelegung</string>
     <string name="pref_theme">Design</string>
     <string name="pref_theme_light">Hell</string>
@@ -79,9 +85,9 @@
     <string name="pref_enable_statusbar">Statusleiste einschalten</string>
     <string name="pref_wakelock">Bildschirm eingeschaltet lassen</string>
     <string name="pref_enable_vibration">Vibration einschalten</string>
-    <string name="pref_emulator_dir">Working directory</string>
-    <string name="pref_launch_file_dir">Launch file directory</string>
-    <string name="pref_emulator_dir_cant_change">The working directory can\'t be changed!</string>
+    <string name="pref_emulator_dir">Arbeitsverzeichnis</string>
+    <string name="pref_launch_file_dir">Startdatei-Verzeichnis</string>
+    <string name="pref_emulator_dir_cant_change">Das Arbeitsverzeichnis kann nicht geändert werden!</string>
     <string name="pref_general_utilities_nearest_neighbor_filtering_msg">Aktivieren der Nächste-Nachbarn-Filterung</string>
     <string name="pref_system_language_option_name">Sprache</string>
     <string name="pref_system_real_time_accuracy_str">Echtzeit-Genauigkeit</string>
@@ -90,95 +96,120 @@
     <string name="pref_system_real_time_accuracy_level_name_high">Hoch</string>
     <string name="pref_system_time_delay_option_name">Zeitverzögerung</string>
     <string name="pref_system_setting_inheritance_option_name">Vererbung einstellen</string>
+    <string name="pref_hal_imei_option_name" translatable="false">IMEI</string>
+    <string name="pref_mmc_id" translatable="false">MMC ID</string>
     <string name="emulated_screen_rotation_item_name">Bildschirmausrichtung</string>
     <string name="emulated_screen_refresh_rate_item_name">Bildwiederholrate</string>
-    <string name="pref_device_display_name">Phone name</string>
-    <string name="hide_system_apps">Hide system applications</string>
-    <string name="pref_bt_netplay_direct_ips_manager">Direct IPs manager</string>
-    <string name="enter_address">Enter address</string>
-    <string name="address">Address</string>
+    <string name="pref_device_display_name">Gerätename</string>
+    <string name="hide_system_apps">Systemanwendungen ausblenden</string>
+    <string name="pref_bt_netplay" translatable="false">Bluetooth Netplay</string>
+    <string name="pref_bt_netplay_direct_ips_manager">Verwaltung direkter IPs</string>
+    <string name="enter_address">Adresse eingeben</string>
+    <string name="address">Adresse</string>
     <string name="port">Port</string>
-    <string name="pref_bt_netplay_mode_off">Off</string>
-    <string name="pref_bt_netplay_mode_direct_ip">Direct IP</string>
+    <string name="pref_bt_netplay_mode_off">Aus</string>
+    <string name="pref_bt_netplay_mode_direct_ip">Direkte IP</string>
     <string name="pref_bt_netplay_mode_lan">LAN</string>
     <string name="pref_bt_netplay_mode_server">Server</string>
-    <string name="pref_bt_netplay_enable_upnp">Enable UPnP (for IPv4 public play)</string>
-    <string name="pref_bt_netplay_server_address">Server address</string>
-    <string name="pref_bt_netplay_password">Password</string>
-    <string name="pref_bt_netplay_port_offset">Port offset</string>
+    <string name="pref_bt_netplay_enable_upnp">UPnP aktivieren (für öffentliches IPv4-Spiel)</string>
+    <string name="pref_bt_netplay_server_address">Serveradresse</string>
+    <string name="pref_bt_netplay_password">Passwort</string>
+    <string name="pref_bt_netplay_port_offset">Port-Offset</string>
     <string name="action_context_delete">Löschen</string>
     <string name="action_context_rename">Umbenennen</string>
-    <string name="action_context_shortcut">Create shortcut</string>
-    <string name="action_context_launch_file">Create launch file</string>
-    <string name="start">Start</string>
-    <string name="reset_settings">Reset settings</string>
-    <string name="reset_layout">Reset keylayout</string>
-    <string name="load_profile">Load profile</string>
-    <string name="save_profile">Save profile</string>
-    <string name="pref_screen_options">Screen options</string>
-    <string name="pref_scale_ratio">Scale(%)</string>
-    <string name="pref_background">Background</string>
-    <string name="pref_background_image">Background image</string>
+    <string name="action_context_shortcut">Verknüpfung erstellen</string>
+    <string name="action_context_launch_file">Startdatei erstellen</string>
+    <string name="start">Starten</string>
+    <string name="reset_settings">Einstellungen zurücksetzen</string>
+    <string name="reset_layout">Tastenlayout zurücksetzen</string>
+    <string name="load_profile">Profil laden</string>
+    <string name="save_profile">Profil speichern</string>
+    <string name="pref_screen_options">Bildschirmoptionen</string>
+    <string name="pref_scale_ratio">Skalierung (%)</string>
+    <string name="pref_background">Hintergrund</string>
+    <string name="pref_background_image">Hintergrundbild</string>
     <string name="pref_background_image_view">Ansicht</string>
-    <string name="pref_background_image_empty">Not set</string>
-    <string name="pref_background_image_clear">Clear</string>
-    <string name="pref_background_image_fail_to_set">Fail to set background image!</string>
-    <string name="background_image">Background image</string>
-    <string name="background_image_opacity">BG image opacity</string>
-    <string name="background_image_keep_aspect_ratio">Keep BG image aspect ratio</string>
-    <string name="pref_virtual_keyboard_options">Virtual keyboard</string>
-    <string name="pref_vk_show">Show keyboard</string>
-    <string name="pref_vk_feedback">Haptic feedback</string>
-    <string name="pref_touch_input">Touch input</string>
-    <string name="pref_vk_back">Buttons</string>
-    <string name="pref_vk_fore">Labels</string>
-    <string name="pref_vk_outline">Outline</string>
-    <string name="pref_vk_alpha">Opacity: </string>
-    <string name="pref_vk_hide_delay">Hide delay: </string>
+    <string name="pref_background_image_empty">Nicht festgelegt</string>
+    <string name="pref_background_image_clear">Löschen</string>
+    <string name="pref_background_image_fail_to_set">Hintergrundbild konnte nicht gesetzt werden!</string>
+    <string name="background_image">Hintergrundbild</string>
+    <string name="background_image_opacity">Deckkraft des Hintergrundbilds</string>
+    <string name="background_image_keep_aspect_ratio">Seitenverhältnis des Hintergrundbilds beibehalten</string>
+    <string name="pref_virtual_keyboard_options">Virtuelle Tastatur</string>
+    <string name="pref_vk_show">Tastatur anzeigen</string>
+    <string name="pref_vk_feedback">Haptisches Feedback</string>
+    <string name="pref_touch_input">Touch-Eingabe</string>
+    <string name="pref_vk_back">Tasten</string>
+    <string name="pref_vk_fore">Beschriftungen</string>
+    <string name="pref_vk_outline">Umrandung</string>
+    <string name="pref_color_hint" translatable="false">RGB</string>
+    <string name="pref_vk_alpha">Deckkraft: </string>
+    <string name="pref_vk_hide_delay">Ausblendverzögerung: </string>
     <string name="pref_unit_ms">ms</string>
-    <string name="pref_vk_sel_fore">Labels (P)</string>
-    <string name="pref_vk_sel_back">Buttons (P)</string>
-    <string name="pref_sys_props">System properties</string>
-    <string name="pref_orientation">Screen orientation</string>
-    <string name="pref_orientation_default">Default</string>
-    <string name="pref_orientation_auto">Auto</string>
-    <string name="pref_orientation_port">Portrait</string>
-    <string name="pref_orientation_land">Landscape</string>
-    <string name="pref_vk_type">Keyboard type</string>
-    <string name="pref_vk_type_custom">Custom</string>
-    <string name="pref_vk_type_phone">Phone</string>
-    <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
-    <string name="pref_vk_hide_hint">disabled</string>
-    <string name="pref_button_shape_title">Button shape</string>
+    <string name="pref_vk_sel_fore">Beschriftungen (P)</string>
+    <string name="pref_vk_sel_back">Tasten (P)</string>
+    <string name="pref_sys_props">Systemeigenschaften</string>
+    <string name="pref_orientation">Bildschirmausrichtung</string>
+    <string name="pref_orientation_default">Standard</string>
+    <string name="pref_orientation_auto">Automatisch</string>
+    <string name="pref_orientation_port">Hochformat</string>
+    <string name="pref_orientation_land">Querformat</string>
+    <string name="pref_vk_type">Tastaturtyp</string>
+    <string name="pref_vk_type_custom">Benutzerdefiniert</string>
+    <string name="pref_vk_type_phone">Telefon</string>
+    <string name="pref_vk_type_phone_arrows">Telefon (Pfeile)</string>
+    <string name="pref_vk_hide_hint">deaktiviert</string>
+    <string name="pref_button_shape_title">Tastenform</string>
     <string name="pref_button_shape_oval">Oval</string>
-    <string name="pref_button_shape_rect">Rectangle</string>
-    <string name="pref_button_shape_round">Rounded rectangle</string>
-    <string name="pref_input_devices_title">Input devices</string>
-    <string name="pref_screen_gravity">Screen gravity</string>
-    <string name="pref_screen_gravity_bottom">Bottom</string>
-    <string name="pref_screen_gravity_center">Center</string>
-    <string name="pref_screen_gravity_left">Left</string>
-    <string name="pref_screen_gravity_right">Right</string>
-    <string name="pref_screen_gravity_top">Top</string>
-    <string name="pref_screen_scale_type">Scale type</string>
-    <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
-    <string name="pref_screen_scale_type_fit">Fit to window</string>
-    <string name="pref_screen_scale_type_none">As is</string>
-    <string name="pref_screen_use_notch">Use notch</string>
-    <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
-    <string name="pref_screen_upscale_shader">Upscale shader</string>
-    <string name="pref_screen_default_shader">Default</string>
-    <string name="default_label">"%s (default)"</string>
-    <string name="not_saved_exists">Already exists</string>
-    <string name="error_name">Enter name!</string>
-    <string name="set_as_default">Set as default</string>
-    <string name="edit">Edit</string>
+    <string name="pref_button_shape_rect">Rechteck</string>
+    <string name="pref_button_shape_round">Abgerundetes Rechteck</string>
+    <string name="pref_input_devices_title">Eingabegeräte</string>
+    <string name="pref_screen_gravity">Bildschirmposition</string>
+    <string name="pref_screen_gravity_bottom">Unten</string>
+    <string name="pref_screen_gravity_center">Mitte</string>
+    <string name="pref_screen_gravity_left">Links</string>
+    <string name="pref_screen_gravity_right">Rechts</string>
+    <string name="pref_screen_gravity_top">Oben</string>
+    <string name="pref_screen_scale_type">Skalierungstyp</string>
+    <string name="pref_screen_scale_type_fill">Fenster füllen (Seitenverhältnis ignorieren)</string>
+    <string name="pref_screen_scale_type_fit">An Fenster anpassen</string>
+    <string name="pref_screen_scale_type_none">Unverändert</string>
+    <string name="pref_screen_use_notch">Notch verwenden</string>
+    <string name="pref_screen_scale_use_shader">Shader für Hochskalierung verwenden</string>
+    <string name="pref_screen_upscale_shader">Hochskalierungs-Shader</string>
+    <string name="pref_screen_default_shader">Standard</string>
+    <string name="default_label">"%s (Standard)"</string>
+    <string name="not_saved_exists">Bereits vorhanden</string>
+    <string name="error_name">Namen eingeben!</string>
+    <string name="set_as_default">Als Standard festlegen</string>
+    <string name="edit">Bearbeiten</string>
     <string name="add">Hinzufügen</string>
-    <string name="add_profile_description">Create new profile</string>
-    <string name="enter_name">Enter name</string>
-    <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
-    <string name="error_name_exists">Already exists, enter other name</string>
-    <string name="extensive_logging">Extensive logging</string>
+    <string name="add_profile_description">Neues Profil erstellen</string>
+    <string name="enter_name">Namen eingeben</string>
+    <string name="set_default_profile_description">Dieses Profil als Standard für alle Apps verwenden, die später installiert werden</string>
+    <string name="error_name_exists">Bereits vorhanden, bitte einen anderen Namen eingeben</string>
+    <string name="extensive_logging">Erweiterte Protokollierung</string>
+    <string name="virtual_key_left_soft" translatable="false">L</string>
+    <string name="virtual_key_right_soft" translatable="false">R</string>
+    <string name="virtual_key_d" translatable="false">D</string>
+    <string name="virtual_key_c" translatable="false">C</string>
+    <string name="virtual_key_left" translatable="false">←</string>
+    <string name="virtual_key_right" translatable="false">→</string>
+    <string name="virtual_key_up" translatable="false">↑</string>
+    <string name="virtual_key_down" translatable="false">↓</string>
+    <string name="virtual_key_f" translatable="false">F</string>
+    <string name="virtual_key_1" translatable="false">1</string>
+    <string name="virtual_key_2" translatable="false">2</string>
+    <string name="virtual_key_3" translatable="false">3</string>
+    <string name="virtual_key_4" translatable="false">4</string>
+    <string name="virtual_key_5" translatable="false">5</string>
+    <string name="virtual_key_6" translatable="false">6</string>
+    <string name="virtual_key_7" translatable="false">7</string>
+    <string name="virtual_key_8" translatable="false">8</string>
+    <string name="virtual_key_9" translatable="false">9</string>
+    <string name="virtual_key_0" translatable="false">0</string>
+    <string name="virtual_key_star" translatable="false">*</string>
+    <string name="virtual_key_pound" translatable="false">#</string>
     <string name="mapping_dialog_title">Drücken Sie eine Taste</string>
     <string name="mapping_dialog_message" formatted="false">Aktuelle Zuordnung: %1$s</string>
     <string name="reset_mapping">Zurücksetzen</string>
@@ -191,15 +222,39 @@
     <string name="confirmation_required">Bestätigung erforderlich</string>
     <string name="force_close_confirmation">Ein erzwungenes Schließen der Anwendung kann zu Datenverlusten führen oder sie sogar komplett zerstören!\nFortfahren?</string>
     <string name="log_saved">Das Protokoll wurde gespeichert</string>
-    <string name="enter_text">Enter the text</string>
+    <string name="enter_text">Text eingeben</string>
+    <string name="about_website" translatable="false">&lt;BR&gt;Website: &lt;a href="https://eka2l1.github.io"&gt;eka2l1.github.io&lt;/a&gt;</string>
+    <string name="about_github" translatable="false">&lt;BR&gt;GitHub: &lt;a href="https://github.com/EKA2L1/EKA2L1"&gt;github.com/EKA2L1/EKA2L1&lt;/a&gt;</string>
+    <string name="about_crowdin" translatable="false">&lt;BR&gt;Crowdin(translation): &lt;a href="https://crowdin.com/project/EKA2L1"&gt;crowdin.com/project/EKA2L1&lt;/a&gt;</string>
+    <string name="about_copyright" translatable="false">&lt;BR&gt;&lt;BR&gt;Copyright 2018-2024 EKA2L1 Team</string>
+    <string name="about_icon_author" translatable="false">dmolina007 &amp; Frenesi</string>
     <string name="about_icon_by">&lt;BR&gt;Icon von: </string>
-    <string name="about_special_thanks_title">Special thanks</string>
-    <string name="about_special_thanks_content">  - nikita36078 for publishing the Android version on Play Store and for his help!&lt;BR&gt;  - Symbian/N-Gage OG sceners: BinPDA, pSyGAGE, Engage, zg, eskMaemo, BodyZ, Ilya Dianov, iCodeRUS, huellif, … for wonderful contributions!&lt;BR&gt;  - Phone manufacturers for creating wonderful Symbian devices: Nokia, Sony Ericsson, Samsung, Siemens, ...&lt;BR&gt;  - The N-Gage Discord community&lt;BR&gt;  - vk.com/Symbian_zone community&lt;BR&gt;  - EKA2L1 Discord community</string>
-    <string name="about_translator">Translators</string>
+    <string name="about_special_thanks_title">Besonderer Dank</string>
+    <string name="about_special_thanks_content">  - nikita36078 für die Veröffentlichung der Android-Version im Play Store und für die Hilfe!&lt;BR&gt;  - Symbian/N-Gage-OG-Scener: BinPDA, pSyGAGE, Engage, zg, eskMaemo, BodyZ, Ilya Dianov, iCodeRUS, huellif, … für wunderbare Beiträge!&lt;BR&gt;  - Die Telefonhersteller für die Entwicklung großartiger Symbian-Geräte: Nokia, Sony Ericsson, Samsung, Siemens, ...&lt;BR&gt;  - Die N-Gage-Discord-Community&lt;BR&gt;  - Die vk.com/Symbian_zone-Community&lt;BR&gt;  - Die EKA2L1-Discord-Community</string>
+    <string name="about_translator">Übersetzer</string>
+    <string name="about_translator_content" translatable="false">- PhantomHorror (Українська, Беларуская, Русский)&lt;BR&gt;  - Federico Dispinzeri (ca0ss) (Italiano)&lt;BR&gt;  - Faalagorn (Polski)&lt;BR&gt;  - Nikita Shakarun (nikita36078) (Русский)&lt;BR&gt;  - Rex_sa (rex07) (العربية)&lt;BR&gt;  - Walisson Silva (w_alisson_gostoso) (português brasileiro)&lt;BR&gt;  - Allen Merlin (ShadowDumb) (简体中文)&lt;BR&gt;  - heydootdoot (Bahasa Indonesia)&lt;BR&gt;  - Ar1 (Ary404) (Bahasa Indonesia, 日本語)&lt;BR&gt;  - enriqueyair (FrenesiGG) (Español)&lt;BR&gt;  - නාමල් ජයසිංහ (nimnaya) (සිංහල)&lt;BR&gt;  - Patrick Mates (patmat99) (Deutsch, Français, Español)&lt;BR&gt;  - I HAVE GOT THE POWER (rimbado) (Azərbaycanca, Türkçe)&lt;BR&gt;  - Tauhid Alam Rifty (ChildishRifty7) (বাংলা)&lt;BR&gt;  - Div, mix (reymo.az) (Azərbaycanca, Türkçe)&lt;BR&gt;  - João (Sefhriloff) (Español, português brasileiro)&lt;BR&gt;  - Alexis Jhon Gaspar (Lucss21a) (Wikang Filipino, Bahasa Indonesia)&lt;BR&gt;  - Nokia64 (Español)&lt;BR&gt;  - Jaakko Saarikko (styxnix) (Suomi)&lt;BR&gt;  - Alonso Neto (AlonsoNeto) (português brasileiro)&lt;BR&gt;  - GiorgioHerbie (Italiano)&lt;BR&gt;  - Hafiz Mohamed (Apihplays) (Bahasa Melayu)&lt;BR&gt;  - ShahinF27 (Khan27) (Azərbaycanca)&lt;BR&gt;  - Alain Teulet (niala6433) (Français)&lt;BR&gt;  - Daichi (Daichix) (Français)&lt;BR&gt;  - Peter Tissen (Bigpet) (Deutsch)&lt;BR&gt;  - Reiju (Rejiu) (Polski, Română, Deutsch)&lt;BR&gt;  - Jeremy Belpois (JeremyBelpois) (Bahasa Indonesia)&lt;BR&gt;  - Steven Felix (stevenfelix505) (Bahasa Indonesia)&lt;BR&gt;  - OguzHans (symbianware) (Türkçe)&lt;BR&gt;  - mvenhaikal (Bahasa Indonesia)&lt;BR&gt;  - JCC (johncarreon2012) (简体中文)&lt;BR&gt;  - Huaji Nishikino (sky0hjh) (简体中文)&lt;BR&gt;  - Fire_Head (Українська)&lt;BR&gt;  - oqzhnyldz (Türkçe)&lt;BR&gt;  - sakirasci (Türkçe)&lt;BR&gt;  - zixing (zixing131) (简体中文)&lt;BR&gt;  - Aaron Feng (AaronFeng753) (简体中文)&lt;BR&gt;  - Никита Пикалов (keXa2008) (Русский)&lt;BR&gt;  - literalmente-game (português brasileiro)&lt;BR&gt;  - Osanosa (Українська)&lt;BR&gt;  - Arthur de Castro Silva (arthurion) (português brasileiro)&lt;BR&gt;  - Marco Steinhaeuser (kermie) (Deutsch)&lt;BR&gt;  - Trinh Manh Viet (manhviet) (Tiếng Việt)&lt;BR&gt;  - Foysal Bhuiyan (foysalbhuyian008) (简体中文)&lt;BR&gt;  - zesty (简体中文)&lt;BR&gt;  - sony_rich (sonyrich) (Tiếng Việt)&lt;BR&gt;  - artem78 (Русский)&lt;BR&gt;  - Văn Heo Quay Nguyễn (FDERROR) (Tiếng Việt)&lt;BR&gt;  - Cetaceaqua (简体中文)&lt;BR&gt;  - mp107 (Polski)&lt;BR&gt;  - Hiago Cardoso de Melo (bearusumyo) (português brasileiro)&lt;BR&gt;  - gwmgdemj (简体中文)&lt;BR&gt;  - Quakeman 0 (williampaiva021) (português brasileiro)&lt;BR&gt;  - Dede Kurniawan (CraX_Dev) (Bahasa Indonesia)&lt;BR&gt;  - NinPhi (Русский)&lt;BR&gt;  - Florin9doi (Română)&lt;BR&gt;  - artemka 333 (artemka333) (Беларуская)&lt;BR&gt;  - Korteks Korta (kortex.343434) (Türkçe)&lt;BR&gt;  - 123456sdfft (简体中文)&lt;BR&gt;  - crisanto valler (vallercrisanto) (Wikang Filipino)&lt;BR&gt;  - Saqala Bilaabayso (Saqala) (Polski)&lt;BR&gt;  - 115190 (Italiano)&lt;BR&gt;  - Олександр Лапин (maliar2014) (Русский)&lt;BR&gt;  - Huck Jones (huckleberrypie) (Wikang Filipino)&lt;BR&gt;  - Rachel Wang (rwang4064) (简体中文)&lt;BR&gt;  - Никита Шустол (QsFvn5bA4v) (Беларуская)&lt;BR&gt;  - Serkan Ağdeve (usta_serkan_06) (Türkçe)&lt;BR&gt;  - REMOVED_USER (Deutsch)&lt;BR&gt;  - Бато Батоболотов (Just_Bato) (Русский)&lt;BR&gt;  - හෙළබස සමූහය (HelaBasa) (සිංහල)&lt;BR&gt;  - Trần Nam Hải (E.GMR) (Tiếng Việt)&lt;BR&gt;  - GG Snake (dnfcf524) (简体中文)&lt;BR&gt;  - Khoirul Anam (Anam31) (Bahasa Indonesia)&lt;BR&gt;  - where where (wherewhere) (简体中文)&lt;BR&gt;  - XheroxJS (Español)&lt;BR&gt;  - Nicolas Augustin (nicolasaugustin.atlantis) (Français)&lt;BR&gt;  - Juan Ortiz (Kloido) (Español)&lt;BR&gt;  - mauricio toxqui citalan (mauriciotoxquicitalan) (Español)&lt;BR&gt;  - Sen Esguerra (videogameboy0783) (Wikang Filipino)&lt;BR&gt;  - Shahril Shahril (shahrilshahril609) (Bahasa Indonesia)&lt;BR&gt;  - Serkan Agdeve (serkanagdeve10) (Türkçe)&lt;BR&gt;  - Raziel Benjamin Zapata (razielben1504) (Español)&lt;BR&gt;  - Indra Saragosa (indrasaragosa946) (Bahasa Indonesia)&lt;BR&gt;  - My Talking Tom 2 Smash Hit Mod [No Pay 2 Win] (ctnhanhuy) (Tiếng Việt)&lt;BR&gt;  - CIssnei - (cissnei112) (简体中文)&lt;BR&gt;  - леонид поляков (leon412) (Русский)&lt;BR&gt;  - Johny19 Jonius19 (joniusjohny18) (Bahasa Melayu)&lt;BR&gt;  - 孙福玥 (sun2839266) (简体中文)&lt;BR&gt;  - Rumia (bagregsidoel) (Bahasa Indonesia)&lt;BR&gt;  - igor macedo (igor3891344467) (português brasileiro)&lt;BR&gt;  - Trong Thu Do (fewdspuckrito) (Tiếng Việt)&lt;BR&gt;</string>
     <string name="version">Version: </string>
-    <string name="recommended_devices_note"><b>Hinweis:</b> Es wird empfohlen, die Firmware für die Installation von Geräten ab S60v3 und höher zu verwenden.</string>
-    <string name="install_ng_game_cant_find_data_folder">Can\'t find the game data folder!</string>
-    <string name="install_ng_game_more_than_one_game">There is more than one game in the given card game folder!</string>
-    <string name="install_ng_game_no_game_info_file">The game information file does not exist in the card game folder!</string>
-    <string name="install_ng_game_corrupted_game_info">The game information file has been corrupted. Please check your data\'s validity!</string>
+    <string name="recommended_devices_note">Hinweis: Es wird empfohlen, die Firmware für die Installation von Geräten ab S60v3 und höher zu verwenden.</string>
+    <string name="recommended_devices_s60v1" translatable="false">S60v1: N-Gage</string>
+    <string name="recommended_devices_s60v2" translatable="false">S60v2: Nokia N70</string>
+    <string name="recommended_devices_s60v3" translatable="false">S60v3: Nokia 5320 XpressMusic, Nokia E5</string>
+    <string name="recommended_devices_s60v5" translatable="false">S60v5: Nokia 5800 XpressMusic, Nokia 5230</string>
+    <string name="recommended_devices_s3_belle" translatable="false">S^3, Belle: Nokia C7-00, Nokia X7-00</string>
+    <string name="install_ng_game_cant_find_data_folder">Der Spiel-Datenordner konnte nicht gefunden werden!</string>
+    <string name="install_ng_game_more_than_one_game">Im angegebenen Karten-Spielordner befindet sich mehr als ein Spiel!</string>
+    <string name="install_ng_game_no_game_info_file">Die Spielinformationsdatei existiert im Karten-Spielordner nicht!</string>
+    <string name="install_ng_game_corrupted_game_info">Die Spielinformationsdatei ist beschädigt. Bitte prüfen Sie die Gültigkeit Ihrer Daten!</string>
+    <string name="select_app_list_mode">Ansicht wählen</string>
+    <string name="list_app_list_mode_2">2-spaltiger Kachelmodus</string>
+    <string name="list_app_list_mode_3">3-spaltiger Kachelmodus</string>
+    <string name="devices_management_menu">System-Management</string>
+    <string name="end_devices_menu">Endgeräte</string>
+    <string name="system_menu_title">System</string>
+    <string name="profiles_menu_title">Profile</string>
+    <string name="install_preconfigured_pack_menu">Vorkonfigurierte Daten installieren</string>
+    <string name="export_preconfigured_pack_menu">Vorhandene Daten exportieren</string>
+    <string name="export_preconfigured_pack_success">Vorkonfiguriertes Paket exportiert: %1$s</string>
+    <string name="install_ng_game_menu">N-Gage Spiel installieren</string>
+    <string name="mount_sd_menu">Mounte N-Gage MMC/SD</string>
+    <string name="save_log_menu">Protokoll speichern</string>
 </resources>

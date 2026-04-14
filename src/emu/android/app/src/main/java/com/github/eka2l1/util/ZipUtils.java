@@ -5,6 +5,8 @@ import java.io.FileNotFoundException;
 import java.io.FileOutputStream;
 import java.io.IOException;
 import java.io.InputStream;
+import java.io.OutputStream;
+import java.util.zip.ZipOutputStream;
 import java.util.zip.ZipEntry;
 import java.util.zip.ZipInputStream;
 
@@ -38,6 +40,71 @@ public class ZipUtils {
             }
         } finally {
             zis.close();
+        }
+    }
+
+    public static void zipDirectoryToStream(File sourceDirectory, OutputStream outputStream,
+                                            String rootDirectoryName) throws IOException {
+        ZipOutputStream zos = new ZipOutputStream(outputStream);
+        try {
+            if ((sourceDirectory == null) || !sourceDirectory.exists() || !sourceDirectory.isDirectory()) {
+                throw new FileNotFoundException("Source directory is invalid: " + sourceDirectory);
+            }
+
+            String normalizedRootName = rootDirectoryName;
+            if ((normalizedRootName == null) || normalizedRootName.isEmpty()) {
+                normalizedRootName = sourceDirectory.getName();
+            }
+
+            if (!normalizedRootName.endsWith("/")) {
+                normalizedRootName += "/";
+            }
+
+            ZipEntry rootEntry = new ZipEntry(normalizedRootName);
+            rootEntry.setTime(sourceDirectory.lastModified());
+            zos.putNextEntry(rootEntry);
+            zos.closeEntry();
+
+            zipDirectoryRecursive(sourceDirectory, normalizedRootName, zos);
+        } finally {
+            zos.finish();
+            zos.flush();
+        }
+    }
+
+    private static void zipDirectoryRecursive(File directory, String entryPrefix,
+                                              ZipOutputStream zos) throws IOException {
+        File[] children = directory.listFiles();
+        if (children == null || children.length == 0) {
+            return;
+        }
+
+        byte[] buffer = new byte[8192];
+        for (File child : children) {
+            String childEntryName = entryPrefix + child.getName();
+            if (child.isDirectory()) {
+                ZipEntry dirEntry = new ZipEntry(childEntryName + "/");
+                dirEntry.setTime(child.lastModified());
+                zos.putNextEntry(dirEntry);
+                zos.closeEntry();
+                zipDirectoryRecursive(child, childEntryName + "/", zos);
+                continue;
+            }
+
+            ZipEntry fileEntry = new ZipEntry(childEntryName);
+            fileEntry.setTime(child.lastModified());
+            zos.putNextEntry(fileEntry);
+
+            InputStream fis = new java.io.FileInputStream(child);
+            try {
+                int count;
+                while ((count = fis.read(buffer)) != -1) {
+                    zos.write(buffer, 0, count);
+                }
+            } finally {
+                fis.close();
+                zos.closeEntry();
+            }
         }
     }
 }

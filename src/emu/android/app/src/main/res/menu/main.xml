@@ -9,57 +9,84 @@
         android:title="@string/search"
         app:actionViewClass="androidx.appcompat.widget.SearchView"
         app:showAsAction="always" />
+
     <item
         android:id="@+id/action_toggle_grid"
-        android:checkable="true"
         android:icon="@drawable/ic_grid_white"
-        android:title="@string/grid_app_list_mode"
+        android:title="@string/select_app_list_mode"
         app:showAsAction="always" />
-    <item
-        android:id="@+id/action_switch_devices"
-        android:icon="@drawable/ic_mobile_white"
-        android:title="@string/switch_devices"
-        app:showAsAction="always" />
+
     <item
         android:id="@+id/action_about"
         android:title="@string/about"
         app:showAsAction="never" />
+
     <item
         android:id="@+id/action_settings"
+        android:icon="@drawable/ic_pref_settings"
         android:title="@string/settings"
         app:showAsAction="never" />
+
     <item
-        android:id="@+id/action_packages"
-        android:title="@string/packages"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_devices"
-        android:title="@string/devices"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_save_log"
-        android:title="@string/save_log"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_profiles"
-        android:title="@string/profiles"
-        app:showAsAction="never" />
-    <item
-        android:id="@+id/action_install_preconfigured_pack"
-        android:title="@string/install_preconfigured_pack" />
-    <item
-        android:id="@+id/action_ng1"
-        android:title="@string/ng1_menu_title">
+        android:id="@+id/action_devices_management"
+        android:title="@string/devices_management_menu"
+        app:showAsAction="never">
         <menu>
+
             <item
-                android:id="@+id/action_install_ng_game"
-                android:title="@string/install_ng_game"
+                android:id="@+id/action_packages"
+                android:title="@string/packages"
                 app:showAsAction="never" />
+
             <item
-                android:id="@+id/action_mount_sd"
-                android:title="@string/mount_sd"
+                android:id="@+id/action_install_preconfigured_pack"
+                android:title="@string/install_preconfigured_pack_menu"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_export_preconfigured_pack"
+                android:title="@string/export_preconfigured_pack_menu"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_save_log"
+                android:title="@string/save_log_menu"
                 app:showAsAction="never" />
         </menu>
     </item>
+
+    <item
+        android:id="@+id/action_ngage_menu"
+        android:title="@string/ng1_menu_title"
+        app:showAsAction="never">
+        <menu>
+
+            <item
+                android:id="@+id/action_install_ng_game"
+                android:title="@string/install_ng_game_menu"
+                app:showAsAction="never" />
+
+            <item
+                android:id="@+id/action_mount_sd"
+                android:title="@string/mount_sd_menu"
+                app:showAsAction="never" />
+        </menu>
+    </item>
+
+    <item
+        android:id="@+id/action_devices"
+        android:icon="@drawable/ic_mobile_white"
+        android:title="@string/end_devices_menu"
+        app:showAsAction="always" />
+
+    <item
+        android:id="@+id/action_devices_overflow"
+        android:title="@string/end_devices_menu"
+        app:showAsAction="never" />
+
+    <item
+        android:id="@+id/action_profiles"
+        android:title="@string/profiles_menu_title"
+        app:showAsAction="never" />
 
 </menu>

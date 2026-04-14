@@ -6,34 +6,40 @@
         android:defaultValue="0"
         android:entries="@array/pref_bt_netplay_mode"
         android:entryValues="@array/pref_bt_netplay_values"
+        android:icon="@drawable/ic_pref_bt_mode"
         android:key="btnet-discovery-mode"
         android:title="@string/mode" />
     <EditTextPreference
         android:defaultValue="15000"
+        android:icon="@drawable/ic_pref_port"
         android:key="btnet-port-offset"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_bt_netplay_port_offset" />
     <EditTextPreference
         android:defaultValue="btnetplay.12z1.com"
+        android:icon="@drawable/ic_pref_server"
         android:key="bt-central-server-url"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_bt_netplay_server_address"
         app:isPreferenceVisible="false" />
     <EditTextPreference
+        android:icon="@drawable/ic_pref_password"
         android:selectAllOnFocus="true"
         android:singleLine="true"
         android:title="@string/pref_bt_netplay_password"
         app:key="btnet-password" />
     <SwitchPreference
         android:defaultValue="false"
+        android:icon="@drawable/ic_pref_upnp"
         android:key="enable-upnp"
         android:title="@string/pref_bt_netplay_enable_upnp" />
     <Preference
         android:id="@+id/Preference"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:icon="@drawable/ic_pref_direct_ip"
         android:key="pref_bt_netplay_direct_ips_manager"
         android:title="@string/pref_bt_netplay_direct_ips_manager"
         app:enabled="false"

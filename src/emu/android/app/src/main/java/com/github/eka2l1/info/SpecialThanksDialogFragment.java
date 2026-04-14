@@ -21,9 +21,7 @@ package com.github.eka2l1.info;
 
 import android.app.Dialog;
 import android.os.Bundle;
-import android.text.Html;
-import android.text.method.LinkMovementMethod;
-import android.widget.TextView;
+import android.view.View;
 
 import androidx.annotation.NonNull;
 import androidx.appcompat.app.AlertDialog;
@@ -35,19 +33,12 @@ public class SpecialThanksDialogFragment extends DialogFragment {
     @NonNull
     @Override
     public Dialog onCreateDialog(Bundle savedInstanceState) {
-        StringBuilder message = new StringBuilder().append(getText(R.string.about_special_thanks_content));
-        TextView tv = new TextView(getActivity());
-        tv.setMovementMethod(LinkMovementMethod.getInstance());
-        tv.setText(Html.fromHtml(message.toString()));
-        tv.setTextSize(16);
-        float density = getResources().getDisplayMetrics().density;
-        int paddingHorizontal = (int) (density * 20);
-        int paddingVertical = (int) (density * 14);
-        tv.setPadding(paddingHorizontal, paddingVertical, paddingHorizontal, paddingVertical);
+        View contentView = AboutDialogHelper.createBulletedListView(requireContext(), getText(R.string.about_special_thanks_content));
+
         AlertDialog.Builder builder = new AlertDialog.Builder(requireActivity());
         builder.setTitle(R.string.about_special_thanks_title)
                 .setIcon(R.mipmap.ic_ducky)
-                .setView(tv)
+                .setView(contentView)
                 .setPositiveButton(R.string.about, (d, w) -> {
                     AboutDialogFragment aboutDialogFragment = new AboutDialogFragment();
                     aboutDialogFragment.show(getParentFragmentManager(), "about");

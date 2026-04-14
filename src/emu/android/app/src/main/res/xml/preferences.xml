@@ -3,15 +3,19 @@
 
     <Preference
         android:key="pref_android"
+        android:icon="@drawable/ic_pref_android"
         android:title="@string/pref_android_title" />
     <Preference
         android:key="pref_general"
+        android:icon="@drawable/ic_pref_general"
         android:title="@string/pref_general_title" />
     <Preference
         android:key="pref_system"
+        android:icon="@drawable/ic_pref_system"
         android:title="@string/pref_system_title" />
     <Preference
         android:key="pref_bt_netplay"
+        android:icon="@drawable/ic_pref_bt_netplay"
         android:title="@string/pref_bt_netplay" />
 
 </PreferenceScreen>

@@ -37,6 +37,7 @@
     <string name="delete_existing_data">Do you want to delete existing emulator data (devices, apps, games,...)?</string>
     <string name="fail_to_install_preconfigured_pack">Failed to install preconfigured pack!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Failed to install preconfigured pack! Rollback-ed to old data!</string>
+    <string name="fail_to_export_preconfigured_pack">Failed to export preconfigured pack!</string>
     <string name="choose_installation_type">Choose installation type</string>
     <string name="choose_installation_type_instruction">Use an existing data pack to quickly settle in, or start afresh by installing a new device using its ROM/firmware.</string>
     <string name="preconfigured_pack">Preconfigured pack</string>
@@ -45,7 +46,7 @@
 
     <string name="install">Install</string>
     <string name="rescan_devices">Rescan devices</string>
-    <string name="device_dump">Device dump</string>
+    <string name="device_dump">ROM dump</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>
     <string name="path_to_rpkg">Path to RPKG</string>
@@ -255,4 +256,17 @@
     <string name="install_ng_game_more_than_one_game">There is more than one game in the given card game folder!</string>
     <string name="install_ng_game_no_game_info_file">The game information file does not exist in the card game folder!</string>
     <string name="install_ng_game_corrupted_game_info">The game information file has been corrupted. Please check your data\'s validity!</string>
+    <string name="select_app_list_mode">Choose view</string>
+    <string name="list_app_list_mode_2">2-column tile mode</string>
+    <string name="list_app_list_mode_3">3-column tile mode</string>
+    <string name="devices_management_menu">System management</string>
+    <string name="end_devices_menu">End device</string>
+    <string name="system_menu_title">System</string>
+    <string name="profiles_menu_title">Profiles</string>
+    <string name="install_preconfigured_pack_menu">Install preconfigured pack</string>
+    <string name="export_preconfigured_pack_menu">Export existing data</string>
+    <string name="export_preconfigured_pack_success">Preconfigured pack exported: %1$s</string>
+    <string name="install_ng_game_menu">Install N-Gage Game</string>
+    <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
+    <string name="save_log_menu">Save log</string>
 </resources>

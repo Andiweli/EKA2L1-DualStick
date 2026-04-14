@@ -12,36 +12,39 @@
         <LinearLayout
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
+            android:layout_marginTop="8dp"
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="10dp"
+            android:baselineAligned="false"
             android:gravity="center_vertical"
-            android:paddingTop="8dp">
+            android:orientation="horizontal">
 
             <Spinner
                 android:id="@+id/sp_device_list"
-                android:layout_width="match_parent"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
                 android:gravity="center" />
 
             <Button
-                android:id="@+id/bt_rename_device"
-                android:layout_width="match_parent"
+                android:id="@+id/bt_rescan_devices"
+                android:layout_width="0dp"
                 android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
                 android:layout_marginEnd="8dp"
-                android:layout_weight="2"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/rescan_devices" />
+
+            <Button
+                android:id="@+id/bt_rename_device"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rename" />
         </LinearLayout>
-
-        <Button
-            android:id="@+id/bt_rescan_devices"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:layout_marginTop="5dp"
-            android:layout_marginBottom="10dp"
-            android:layout_marginStart="8dp"
-            android:layout_marginEnd="8dp"
-            android:gravity="center"
-            android:text="@string/rescan_devices" />
 
         <com.skydoves.expandablelayout.ExpandableLayout
             android:id="@+id/ex_recommended_device"
@@ -56,8 +59,8 @@
             app:expandable_secondLayout="@layout/layout_recommend_devices_second"
             app:expandable_showSpinner="true"
             app:expandable_spinner="@drawable/ic_arrow_down"
-            app:expandable_spinner_color="?attr/spinnerColor"
             app:expandable_spinner_animate="true"
+            app:expandable_spinner_color="?attr/spinnerColor"
             app:expandable_spinner_gravity="end"
             app:expandable_spinner_margin="14dp"
             app:expandable_spinner_size="32dp" />
@@ -81,92 +84,145 @@
             android:layout_marginEnd="8dp"
             android:layout_marginBottom="10dp" />
 
-        <TextView
-            android:id="@+id/tv_install_method"
-            android:layout_width="wrap_content"
+        <LinearLayout
+            android:id="@+id/ll_install_panel"
+            android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:layout_gravity="center_vertical"
             android:layout_marginStart="8dp"
-            android:text="@string/install_method" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="8dp"
+            android:orientation="vertical">
 
-        <Spinner
-            android:id="@+id/sp_device_install_method"
+            <LinearLayout
+                android:id="@+id/ll_firmware"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/bt_firmware"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/firmware"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tv_firmware"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/path_to_firmware" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_rom"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bt_rom"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rom"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tv_rom"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/path_to_rom" />
+            </LinearLayout>
+
+            <LinearLayout
+                android:id="@+id/ll_rpkg"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginTop="8dp"
+                android:gravity="center_vertical"
+                android:minHeight="48dp"
+                android:orientation="horizontal"
+                android:visibility="gone">
+
+                <Button
+                    android:id="@+id/bt_rpkg"
+                    android:layout_width="132dp"
+                    android:layout_height="wrap_content"
+                    android:text="@string/rpkg"
+                    android:textColor="@android:color/black" />
+
+                <TextView
+                    android:id="@+id/tv_rpkg"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="12dp"
+                    android:layout_weight="1"
+                    android:ellipsize="end"
+                    android:gravity="center_vertical"
+                    android:maxLines="1"
+                    android:text="@string/path_to_rpkg" />
+
+            </LinearLayout>
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/ll_bottom_controls"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
+            android:layout_marginStart="8dp"
             android:layout_marginTop="10dp"
-            android:entries="@array/install_method_entries" />
+            android:layout_marginEnd="8dp"
+            android:layout_marginBottom="12dp"
+            android:baselineAligned="false"
+            android:gravity="center_vertical"
+            android:orientation="horizontal">
 
-        <LinearLayout
-            android:id="@+id/ll_firmware"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
+            <RadioGroup
+                android:id="@+id/rg_install_method"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_weight="1"
+                android:gravity="start|center_vertical"
+                android:orientation="horizontal">
+
+                <RadioButton
+                    android:id="@+id/rb_device_dump"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:checked="true"
+                    android:text="@string/device_dump" />
+
+                <RadioButton
+                    android:id="@+id/rb_firmware"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="18dp"
+                    android:text="@string/firmware" />
+            </RadioGroup>
 
             <Button
-                android:id="@+id/bt_firmware"
+                android:id="@+id/bt_device_install"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/firmware" />
-
-            <TextView
-                android:id="@+id/tv_firmware"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="19dp"
-                android:text="@string/path_to_firmware" />
+                android:layout_marginStart="12dp"
+                android:text="@string/install" />
         </LinearLayout>
 
-        <LinearLayout
-            android:id="@+id/ll_rom"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content">
-
-            <Button
-                android:id="@+id/bt_rom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/rom" />
-
-            <TextView
-                android:id="@+id/tv_rom"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="19dp"
-                android:text="@string/path_to_rom" />
-        </LinearLayout>
-
-        <LinearLayout
-            android:id="@+id/ll_rpkg"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:visibility="gone">
-
-            <Button
-                android:id="@+id/bt_rpkg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginTop="8dp"
-                android:text="@string/rpkg" />
-
-            <TextView
-                android:id="@+id/tv_rpkg"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_gravity="center_vertical"
-                android:layout_marginStart="19dp"
-                android:text="@string/path_to_rpkg" />
-
-        </LinearLayout>
-
-        <Button
-            android:id="@+id/bt_device_install"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_marginTop="10dp"
-            android:text="@string/install" />
     </LinearLayout>
 </ScrollView>
