@@ -16,7 +16,7 @@ EKA2L1 emulates the Symbian OS / N-Gage kernel and reimplements many of its crit
 
 ## 🆕 What’s New in This Fork
 
-Compared to the broader upstream project, this fork currently focuses on a more tailored **Android** experience with ongoing improvements in controls and usability.
+Compared to the broader upstream project, this fork currently focuses on a more tailored **Android** experience with [ongoing improvements in controls and usability](https://github.com/Andiweli/EKA2L1-DualStick/blob/master/screenshots/0.1.2/screenshot_012_fixes.png).
 
 So far, changes in this fork include:
 
