@@ -28,7 +28,7 @@ So far, changes in this fork include:
 - Improved presentation of informational screens such as **About**, **Translators** and **Special Thanks**
 - Added and fixed selected **game / launcher icons** for a more complete frontend experience
 - Added the ability to export installed games as a **preconfigured pack** for easier later re-import and setup
-- Immproved translations for missing parts
+- Improved translations for missing parts
 
 ---
 
