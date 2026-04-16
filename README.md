@@ -20,12 +20,15 @@ Compared to the broader upstream project, this fork currently focuses on a more 
 
 So far, changes in this fork include:
 
-- Added and refined **dual-stick controls** for games that benefit from modern handheld-style input
-- Ongoing **UI / UX improvements** across Android-specific screens and menus as there are: new list-column-views, renaming options for games, menu improvements, etc.
-- Polished parts of the launcher and setup flow for a cleaner and more controller-friendly experience
+- Improved support for **dual-stick controls** for more natural movement and aiming
+- Added **two new grid views** for a more flexible and modern game browser presentation
+- Various **UI / UX improvements** across Android-specific screens and menus
+- Improved **formatting and alignment** of texts, buttons and input fields for a cleaner and more consistent layout
+- Polished parts of the launcher and setup flow for a more controller-friendly experience
 - Improved presentation of informational screens such as **About**, **Translators** and **Special Thanks**
-- Improved translations with missing parts and also the new added parts in the UI texts
 - Added and fixed selected **game / launcher icons** for a more complete frontend experience
+- Added the ability to export installed games as a **preconfigured pack** for easier later re-import and setup
+- Immproved translations for missing parts
 
 ---
 
