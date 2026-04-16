@@ -14,13 +14,28 @@ EKA2L1 emulates the Symbian OS / N-Gage kernel and reimplements many of its crit
 
 ---
 
+## 🆕 What’s New in This Fork
+
+Compared to the broader upstream project, this fork currently focuses on a more tailored **Android** experience with ongoing improvements in controls and usability.
+
+So far, changes in this fork include:
+
+- Added and refined **dual-stick controls** for games that benefit from modern handheld-style input
+- Ongoing **UI / UX improvements** across Android-specific screens and menus as there are: new list-column-views, renaming options for games, menu improvements, etc.
+- Polished parts of the launcher and setup flow for a cleaner and more controller-friendly experience
+- Improved presentation of informational screens such as **About**, **Translators** and **Special Thanks**
+- Improved translations with missing parts and also the new added parts in the UI texts
+- Added and fixed selected **game / launcher icons** for a more complete frontend experience
+
+---
+
 ## 📱 About This Fork
 
 This fork is focused primarily on:
 
 - **Android support**
 - Proper handling of **two analog sticks**
-- Improving controller usability for Symbian OS and **N-Gage** games on Android devices
+- Improving UI and UX
 
 <p align="center">
 <img width="640" height="360" alt="screenshot-eka2l1" src="https://github.com/user-attachments/assets/94702763-75a1-4873-937f-c47b491354b5" /><br/>
