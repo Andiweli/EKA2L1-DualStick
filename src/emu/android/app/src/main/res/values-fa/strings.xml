@@ -6,7 +6,7 @@
     <string name="search">Search</string>
     <string name="about">About</string>
     <string name="settings">Settings</string>
-    <string name="packages">Packages</string>
+    <string name="packages">بسته‌های نصب‌شده</string>
     <string name="devices">Devices</string>
     <string name="switch_devices">Switch devices</string>
     <string name="profiles">Profiles</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>

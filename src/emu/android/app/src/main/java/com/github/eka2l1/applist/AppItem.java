@@ -25,11 +25,13 @@ public class AppItem {
     private long uid;
     private long extIndex;
     private String title;
+    private String originalTitle;
     private Bitmap icon;
 
     public AppItem(long uid, long extIndex, String title, Bitmap icon) {
         this.uid = uid;
         this.title = title;
+        this.originalTitle = title;
         this.icon = icon;
         this.extIndex = extIndex;
     }
@@ -46,6 +48,10 @@ public class AppItem {
 
     public String getTitle() {
         return title;
+    }
+
+    public String getOriginalTitle() {
+        return originalTitle;
     }
 
     public void setTitle(String title) {

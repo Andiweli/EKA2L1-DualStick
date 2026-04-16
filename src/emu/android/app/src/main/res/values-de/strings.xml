@@ -6,7 +6,7 @@
     <string name="search">Suchen</string>
     <string name="about">Über</string>
     <string name="settings">Einstellungen</string>
-    <string name="packages">Pakete</string>
+    <string name="packages">Installierte Pakete</string>
     <string name="devices">Endgeräte</string>
     <string name="switch_devices">Geräte wechseln</string>
     <string name="profiles">Profile</string>
@@ -118,6 +118,7 @@
     <string name="action_context_delete">Löschen</string>
     <string name="action_context_rename">Umbenennen</string>
     <string name="action_context_shortcut">Verknüpfung erstellen</string>
+    <string name="rename_app_reset_hint">Leer lassen, um den Originalnamen wiederherzustellen</string>
     <string name="action_context_launch_file">Startdatei erstellen</string>
     <string name="start">Starten</string>
     <string name="reset_settings">Einstellungen zurücksetzen</string>

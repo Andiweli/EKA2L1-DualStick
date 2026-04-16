@@ -6,7 +6,7 @@
     <string name="search">Cerca</string>
     <string name="about">Informazioni</string>
     <string name="settings">Impostazioni</string>
-    <string name="packages">Pacchetti</string>
+    <string name="packages">Pacchetti installati</string>
     <string name="devices">Dispositivi</string>
     <string name="switch_devices">Cambia dispositivo</string>
     <string name="profiles">Profili</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>

@@ -32,6 +32,7 @@ import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.database.Cursor;
 import android.graphics.Bitmap;
+import android.graphics.BitmapFactory;
 import android.net.Uri;
 import android.os.Build;
 import android.os.Environment;
@@ -64,6 +65,7 @@ import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
 import java.util.ArrayList;
+import java.util.Locale;
 
 import io.reactivex.Completable;
 import io.reactivex.Single;
@@ -248,6 +250,7 @@ public class Emulator {
             ArrayList<AppItem> items = new ArrayList<>();
             for (int i = 0; i < apps.length; i += 2) {
                 long appUid = Long.parseLong(apps[i]);
+                String appTitle = apps[i + 1];
                 Bitmap[] iconAndMask = getAppIcon(appUid);
 
                 Bitmap finalIcon = null;
@@ -262,11 +265,46 @@ public class Emulator {
                     }
                 }
 
-                AppItem item = new AppItem(appUid, 0, apps[i + 1], finalIcon);
+                Bitmap specialIcon = getSpecialAppIcon(appUid, appTitle);
+                if (specialIcon != null) {
+                    if (finalIcon != null && !finalIcon.isRecycled()) {
+                        finalIcon.recycle();
+                    }
+                    finalIcon = specialIcon;
+                }
+
+                AppItem item = new AppItem(appUid, 0, appTitle, finalIcon);
                 items.add(item);
             }
             emitter.onSuccess(items);
         });
+    }
+
+    private static Bitmap getSpecialAppIcon(long appUid, String appTitle) {
+        if (appUid == 0x101FBF9CL) {
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_game_pandemonium);
+        }
+        if (appUid == 0x101FBF9DL) {
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_game_tombraider);
+        }
+
+        if (appTitle == null) {
+            return null;
+        }
+
+        String normalizedTitle = appTitle.toLowerCase(Locale.ROOT)
+                .replace(" ", "")
+                .replace("'", "")
+                .replace("’", "")
+                .replace("-", "");
+        if (normalizedTitle.contains("pandemonium")) {
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_game_pandemonium);
+        }
+        if (normalizedTitle.contains("tombraider")) {
+            return BitmapFactory.decodeResource(context.getResources(), R.drawable.ic_game_tombraider);
+        }
+
+        return null;
     }
 
     public static ArrayList<AppItem> getPackagesList() {

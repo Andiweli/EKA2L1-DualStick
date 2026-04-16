@@ -7,6 +7,9 @@
         android:id="@+id/action_context_launch_file"
         android:title="@string/action_context_launch_file" />
     <item
+        android:id="@+id/action_context_rename"
+        android:title="@string/action_context_rename" />
+    <item
         android:id="@+id/action_context_settings"
         android:title="@string/settings" />
 </menu>

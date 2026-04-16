@@ -156,6 +156,10 @@ public class AppDataStore extends PreferenceDataStore {
         configMap.put(key, values);
     }
 
+    public void remove(String key) {
+        configMap.remove(key);
+    }
+
     public void putArrayList(String key, ArrayList<?> values) {
         configMap.put(key, values);
     }

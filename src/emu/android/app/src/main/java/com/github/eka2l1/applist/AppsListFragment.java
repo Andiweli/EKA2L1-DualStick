@@ -45,6 +45,7 @@ import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -122,6 +123,8 @@ public class AppsListFragment extends Fragment {
     private boolean restartNeeded;
     private AppItem pendingAppItem;
     private int currentViewMode = AppsListAdapter.VIEW_MODE_LIST;
+
+    private static final String APP_RENAME_KEY_PREFIX = "apps.rename";
 
     private static final int MIN_WIDTH_DP_FOR_2_COL = 600;
     private static final int MIN_WIDTH_DP_FOR_3_COL = 840;
@@ -288,6 +291,87 @@ public class AppsListFragment extends Fragment {
         adapter.setDisplayMode(viewMode);
     }
 
+    private String getCurrentDeviceCode() {
+        int currentDeviceId = Emulator.getCurrentDevice();
+        String[] deviceCodes = Emulator.getDeviceFirmwareCodes();
+
+        if (deviceCodes != null && currentDeviceId >= 0 && currentDeviceId < deviceCodes.length) {
+            return deviceCodes[currentDeviceId];
+        }
+
+        return "default";
+    }
+
+    private String getAppRenameKey(long appUid) {
+        return APP_RENAME_KEY_PREFIX + "." + getCurrentDeviceCode() + "." + appUid;
+    }
+
+    private void applyCustomAppTitles(ArrayList<AppItem> appItems) {
+        AppDataStore dataStore = AppDataStore.getAndroidStore();
+
+        for (AppItem appItem : appItems) {
+            String renamedTitle = dataStore.getString(getAppRenameKey(appItem.getUid()), null);
+
+            if (renamedTitle != null && !renamedTitle.trim().isEmpty()) {
+                appItem.setTitle(renamedTitle);
+            }
+        }
+    }
+
+    private void showRenameAppDialog(AppItem appItem) {
+        LayoutInflater inflater = LayoutInflater.from(getActivity());
+        @SuppressLint("InflateParams")
+        View dialogView = inflater.inflate(R.layout.dialog_change_name, null);
+
+        EditText editText = dialogView.findViewById(R.id.et_name);
+        editText.setText(appItem.getTitle());
+        editText.setSelectAllOnFocus(true);
+        editText.setSelection(0, appItem.getTitle().length());
+
+        TextView hintView = new TextView(requireContext());
+        hintView.setText(R.string.rename_app_reset_hint);
+        float density = getResources().getDisplayMetrics().density;
+        int paddingLeft = Math.round(24 * density);
+        int paddingTop = Math.round(8 * density);
+        int paddingRight = Math.round(24 * density);
+        int paddingBottom = Math.round(16 * density);
+        hintView.setPadding(paddingLeft, paddingTop, paddingRight, paddingBottom);
+
+        LinearLayout container = new LinearLayout(requireContext());
+        container.setOrientation(LinearLayout.VERTICAL);
+        container.addView(dialogView);
+        container.addView(hintView);
+
+        AlertDialog dialog = new AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.enter_new_name)
+                .setView(container)
+                .create();
+
+        View positiveButton = dialogView.findViewById(R.id.bt_positive);
+        View negativeButton = dialogView.findViewById(R.id.bt_negative);
+
+        negativeButton.setOnClickListener(v -> dialog.dismiss());
+        positiveButton.setOnClickListener(v -> {
+            String newTitle = editText.getText().toString().replaceAll("[\r\n]+", " ").trim();
+            AppDataStore dataStore = AppDataStore.getAndroidStore();
+            String renameKey = getAppRenameKey(appItem.getUid());
+
+            if (newTitle.isEmpty()) {
+                dataStore.remove(renameKey);
+                appItem.setTitle(appItem.getOriginalTitle());
+            } else {
+                dataStore.putString(renameKey, newTitle);
+                appItem.setTitle(newTitle);
+            }
+
+            dataStore.save();
+            adapter.refreshItems();
+            dialog.dismiss();
+        });
+
+        dialog.show();
+    }
+
     private void switchToDeviceList() {
         DeviceListFragment deviceListFragment = new DeviceListFragment();
         getParentFragmentManager().beginTransaction()
@@ -311,6 +395,7 @@ public class AppsListFragment extends Fragment {
                 .subscribeWith(new DisposableSingleObserver<ArrayList<AppItem>>() {
                     @Override
                     public void onSuccess(@NonNull ArrayList<AppItem> appItems) {
+                        applyCustomAppTitles(appItems);
                         adapter.setItems(appItems);
                         dialog.cancel();
                     }
@@ -974,6 +1059,8 @@ public class AppsListFragment extends Fragment {
             addAppShortcut(appItem);
         } else if (item.getItemId() == R.id.action_context_launch_file) {
             saveAppLaunchFile(appItem);
+        } else if (item.getItemId() == R.id.action_context_rename) {
+            showRenameAppDialog(appItem);
         }
         return super.onContextItemSelected(item);
     }

@@ -6,7 +6,7 @@
     <string name="search">Etsi</string>
     <string name="about">Tietoa</string>
     <string name="settings">Asetukset</string>
-    <string name="packages">Paketit</string>
+    <string name="packages">Asennetut paketit</string>
     <string name="devices">Laitteet</string>
     <string name="switch_devices">Vaihda laitetta</string>
     <string name="profiles">Profiilit</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>

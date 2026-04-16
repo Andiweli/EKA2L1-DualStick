@@ -37,6 +37,7 @@ import com.github.eka2l1.R;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
+import java.util.Locale;
 
 
 public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> implements Filterable {
@@ -51,6 +52,7 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
     public static final int VIEW_MODE_GRID = 3;
 
     private int viewMode = VIEW_MODE_LIST;
+    private String lastConstraint = "";
 
     public AppsListAdapter(Context context) {
         this.list = new ArrayList<>();
@@ -97,12 +99,31 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
     }
 
     public void setItems(List<AppItem> items) {
-        Collections.sort(items, (o1, o2) -> {
+        list = items;
+        refreshItems();
+    }
+
+    public void refreshItems() {
+        Collections.sort(list, (o1, o2) -> {
+            int compareResult = o1.getTitle().compareToIgnoreCase(o2.getTitle());
+            if (compareResult != 0) {
+                return compareResult;
+            }
             return o1.getTitle().compareTo(o2.getTitle());
         });
 
-        list = items;
-        filteredList = items;
+        if (lastConstraint == null || lastConstraint.isEmpty()) {
+            filteredList = list;
+        } else {
+            ArrayList<AppItem> resultList = new ArrayList<>();
+            for (AppItem item : list) {
+                if (item.getTitle().toLowerCase(Locale.ROOT).contains(lastConstraint)) {
+                    resultList.add(item);
+                }
+            }
+            filteredList = resultList;
+        }
+
         notifyDataSetChanged();
     }
 
@@ -132,13 +153,14 @@ public class AppsListAdapter extends RecyclerView.Adapter<AppItemViewHolder> imp
         @Override
         protected FilterResults performFiltering(CharSequence constraint) {
             FilterResults results = new FilterResults();
-            if (constraint.equals("")) {
+            lastConstraint = constraint == null ? "" : constraint.toString().toLowerCase(Locale.ROOT);
+            if (lastConstraint.equals("")) {
                 results.count = list.size();
                 results.values = list;
             } else {
                 ArrayList<AppItem> resultList = new ArrayList<>();
                 for (AppItem item : list) {
-                    if (item.getTitle().toLowerCase().contains(constraint)) {
+                    if (item.getTitle().toLowerCase(Locale.ROOT).contains(lastConstraint)) {
                         resultList.add(item);
                     }
                 }

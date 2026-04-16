@@ -6,7 +6,7 @@
     <string name="search">Cari</string>
     <string name="about">Tentang</string>
     <string name="settings">Pengaturan</string>
-    <string name="packages">Paket aplikasi</string>
+    <string name="packages">Paket terinstal</string>
     <string name="devices">Firmware perangkat</string>
     <string name="switch_devices">Ganti perangkat</string>
     <string name="profiles">Profil</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>

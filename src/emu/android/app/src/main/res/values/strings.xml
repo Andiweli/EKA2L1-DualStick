@@ -5,7 +5,7 @@
     <string name="search">Search</string>
     <string name="about">About</string>
     <string name="settings">Settings</string>
-    <string name="packages">Packages</string>
+    <string name="packages">Installed packages</string>
     <string name="devices">Devices</string>
     <string name="switch_devices">Switch devices</string>
     <string name="profiles">Profiles</string>
@@ -43,7 +43,6 @@
     <string name="preconfigured_pack">Preconfigured pack</string>
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
-
     <string name="install">Install</string>
     <string name="rescan_devices">Rescan devices</string>
     <string name="device_dump">ROM dump</string>
@@ -56,14 +55,12 @@
     <string name="install_method">Install method</string>
     <string name="enter_new_name">Enter new name</string>
     <string name="mode">Mode</string>
-
     <string name="no_device_dialog_title">No device installed!</string>
     <string name="no_device_installed">Please install a device. Files and ROM of a Symbian device are needed for the installation.\n\n<b>Note:</b> Each app will need suitable Symbian device to run.</string>
     <string name="install_device_note_may_need_rpkg">For S60v2 devices or higher, you may need to provide additional file called RPKG. The path chooser will pop up if the installer detects the need for it.</string>
     <string name="recommended_devices_to_install">Recommend devices to install</string>
     <string name="wiki_info">For more info about device install, please check out our wiki:</string>
-    <string name="wiki_link" translatable="false">&#160;&lt;a href="https://eka2l1.miraheze.org/wiki/Official_Links">eka2l1.miraheze.org&lt;/a></string>
-
+    <string name="wiki_link" translatable="false"> &lt;a href="https://eka2l1.miraheze.org/wiki/Official_Links"&gt;eka2l1.miraheze.org&lt;/a&gt;</string>
     <string name="install_rpkg_corrupt">The RPKG file provided is corrupt!</string>
     <string name="install_rpkg_file_not_found">RPKG file specified can\'t be opened!</string>
     <string name="install_raw_dump_fail_to_copy">Fail to copy raw dump files to target destination!</string>
@@ -75,7 +72,6 @@
     <string name="install_device_rofs_corrupt_msg">ROFS file is corrupted!</string>
     <string name="install_device_rom_corrupt_msg">ROM file is corrupted!</string>
     <string name="install_device_fpsx_corrupt_msg">FPSX file is corrupted!</string>
-
     <string name="pref_general_title">General</string>
     <string name="pref_system_title">System</string>
     <string name="pref_android_title" translatable="false">Android</string>
@@ -118,12 +114,11 @@
     <string name="pref_bt_netplay_server_address">Server address</string>
     <string name="pref_bt_netplay_password">Password</string>
     <string name="pref_bt_netplay_port_offset">Port offset</string>
-
     <string name="action_context_delete">Delete</string>
     <string name="action_context_rename">Rename</string>
     <string name="action_context_shortcut">Create shortcut</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
     <string name="action_context_launch_file">Create launch file</string>
-
     <string name="start">Start</string>
     <string name="reset_settings">Reset settings</string>
     <string name="reset_layout">Reset keylayout</string>
@@ -164,7 +159,6 @@
     <string name="pref_vk_type_phone">Phone</string>
     <string name="pref_vk_type_phone_arrows">Phone (arrows)</string>
     <string name="pref_vk_hide_hint">disabled</string>
-
     <string name="pref_button_shape_title">Button shape</string>
     <string name="pref_button_shape_oval">Oval</string>
     <string name="pref_button_shape_rect">Rectangle</string>
@@ -184,7 +178,6 @@
     <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
     <string name="pref_screen_upscale_shader">Upscale shader</string>
     <string name="pref_screen_default_shader">Default</string>
-
     <string name="default_label">"%s (default)"</string>
     <string name="not_saved_exists">Already exists</string>
     <string name="error_name">Enter name!</string>
@@ -196,7 +189,6 @@
     <string name="set_default_profile_description">Select this profile as a standard settings for all apps that will be installed later</string>
     <string name="error_name_exists">Already exists, enter other name</string>
     <string name="extensive_logging">Extensive logging</string>
-
     <string name="virtual_key_left_soft" translatable="false">L</string>
     <string name="virtual_key_right_soft" translatable="false">R</string>
     <string name="virtual_key_d" translatable="false">D</string>
@@ -221,7 +213,6 @@
     <string name="mapping_dialog_title">Press a key</string>
     <string name="mapping_dialog_message" formatted="false">Current mapping: %1$s</string>
     <string name="reset_mapping">Reset</string>
-
     <string name="layout_edit_finished">Edit mode finished</string>
     <string name="layout_edit_finish">Finish edit mode</string>
     <string name="layout_edit_mode">Keylayout edit mode</string>
@@ -232,26 +223,29 @@
     <string name="force_close_confirmation">Force-closing the application may result in data loss or even break it completely!\nProceed?</string>
     <string name="log_saved">Log has been saved</string>
     <string name="enter_text">Enter the text</string>
-
-    <string name="about_website" translatable="false">&lt;BR>Website: &lt;a href="https://eka2l1.github.io">eka2l1.github.io&lt;/a></string>
-    <string name="about_github" translatable="false">&lt;BR>GitHub: &lt;a href="https://github.com/EKA2L1/EKA2L1">github.com/EKA2L1/EKA2L1&lt;/a></string>
-    <string name="about_crowdin" translatable="false">&lt;BR>Crowdin(translation): &lt;a href="https://crowdin.com/project/EKA2L1">crowdin.com/project/EKA2L1&lt;/a></string>
-    <string name="about_copyright" translatable="false">&lt;BR>&lt;BR>Copyright 2018-2024 EKA2L1 Team</string>
+    <string name="about_website" translatable="false">&lt;BR&gt;Website: &lt;a href="https://eka2l1.github.io"&gt;eka2l1.github.io&lt;/a&gt;</string>
+    <string name="about_github" translatable="false">&lt;BR&gt;GitHub: &lt;a href="https://github.com/EKA2L1/EKA2L1"&gt;github.com/EKA2L1/EKA2L1&lt;/a&gt;</string>
+    <string name="about_crowdin" translatable="false">&lt;BR&gt;Crowdin(translation): &lt;a href="https://crowdin.com/project/EKA2L1"&gt;crowdin.com/project/EKA2L1&lt;/a&gt;</string>
+    <string name="about_copyright" translatable="false">&lt;BR&gt;&lt;BR&gt;Copyright 2018-2024 EKA2L1 Team</string>
     <string name="about_icon_author" translatable="false">dmolina007 &amp; Frenesi</string>
-    <string name="about_icon_by">&lt;BR>Icon by: </string>
+    <string name="about_icon_by">&lt;BR&gt;Icon by: </string>
     <string name="about_special_thanks_title">Special thanks</string>
-    <string name="about_special_thanks_content">  - nikita36078 for publishing the Android version on Play Store and for his help!&lt;BR>  - Symbian/N-Gage OG sceners: BinPDA, pSyGAGE, Engage, zg, eskMaemo, BodyZ, Ilya Dianov, iCodeRUS, huellif, … for wonderful contributions!&lt;BR>  - Phone manufacturers for creating wonderful Symbian devices: Nokia, Sony Ericsson, Samsung, Siemens, ...&lt;BR>  - The N-Gage Discord community&lt;BR>  - vk.com/Symbian_zone community&lt;BR>  - EKA2L1 Discord community</string>
+    <string name="about_special_thanks_content">  - nikita36078 for publishing the Android version on Play Store and for his help!&lt;BR&gt;  - Symbian/N-Gage OG sceners: BinPDA, pSyGAGE, Engage, zg, eskMaemo, BodyZ, Ilya Dianov, iCodeRUS, huellif, … for wonderful contributions!&lt;BR&gt;  - Phone manufacturers for creating wonderful Symbian devices: Nokia, Sony Ericsson, Samsung, Siemens, ...&lt;BR&gt;  - The N-Gage Discord community&lt;BR&gt;  - vk.com/Symbian_zone community&lt;BR&gt;  - EKA2L1 Discord community</string>
     <string name="about_translator">Translators</string>
-    <string name="about_translator_content" translatable="false">- PhantomHorror (Українська, Беларуская, Русский)&lt;BR>  - Federico Dispinzeri (ca0ss) (Italiano)&lt;BR>  - Faalagorn (Polski)&lt;BR>  - Nikita Shakarun (nikita36078) (Русский)&lt;BR>  - Rex_sa (rex07) (العربية)&lt;BR>  - Walisson Silva (w_alisson_gostoso) (português brasileiro)&lt;BR>  - Allen Merlin (ShadowDumb) (简体中文)&lt;BR>  - heydootdoot (Bahasa Indonesia)&lt;BR>  - Ar1 (Ary404) (Bahasa Indonesia, 日本語)&lt;BR>  - enriqueyair (FrenesiGG) (Español)&lt;BR>  - නාමල් ජයසිංහ (nimnaya) (සිංහල)&lt;BR>  - Patrick Mates (patmat99) (Deutsch, Français, Español)&lt;BR>  - I HAVE GOT THE POWER (rimbado) (Azərbaycanca, Türkçe)&lt;BR>  - Tauhid Alam Rifty (ChildishRifty7) (বাংলা)&lt;BR>  - Div, mix (reymo.az) (Azərbaycanca, Türkçe)&lt;BR>  - João (Sefhriloff) (Español, português brasileiro)&lt;BR>  - Alexis Jhon Gaspar (Lucss21a) (Wikang Filipino, Bahasa Indonesia)&lt;BR>  - Nokia64 (Español)&lt;BR>  - Jaakko Saarikko (styxnix) (Suomi)&lt;BR>  - Alonso Neto (AlonsoNeto) (português brasileiro)&lt;BR>  - GiorgioHerbie (Italiano)&lt;BR>  - Hafiz Mohamed (Apihplays) (Bahasa Melayu)&lt;BR>  - ShahinF27 (Khan27) (Azərbaycanca)&lt;BR>  - Alain Teulet (niala6433) (Français)&lt;BR>  - Daichi (Daichix) (Français)&lt;BR>  - Peter Tissen (Bigpet) (Deutsch)&lt;BR>  - Reiju (Rejiu) (Polski, Română, Deutsch)&lt;BR>  - Jeremy Belpois (JeremyBelpois) (Bahasa Indonesia)&lt;BR>  - Steven Felix (stevenfelix505) (Bahasa Indonesia)&lt;BR>  - OguzHans (symbianware) (Türkçe)&lt;BR>  - mvenhaikal (Bahasa Indonesia)&lt;BR>  - JCC (johncarreon2012) (简体中文)&lt;BR>  - Huaji Nishikino (sky0hjh) (简体中文)&lt;BR>  - Fire_Head (Українська)&lt;BR>  - oqzhnyldz (Türkçe)&lt;BR>  - sakirasci (Türkçe)&lt;BR>  - zixing (zixing131) (简体中文)&lt;BR>  - Aaron Feng (AaronFeng753) (简体中文)&lt;BR>  - Никита Пикалов (keXa2008) (Русский)&lt;BR>  - literalmente-game (português brasileiro)&lt;BR>  - Osanosa (Українська)&lt;BR>  - Arthur de Castro Silva (arthurion) (português brasileiro)&lt;BR>  - Marco Steinhaeuser (kermie) (Deutsch)&lt;BR>  - Trinh Manh Viet (manhviet) (Tiếng Việt)&lt;BR>  - Foysal Bhuiyan (foysalbhuyian008) (简体中文)&lt;BR>  - zesty (简体中文)&lt;BR>  - sony_rich (sonyrich) (Tiếng Việt)&lt;BR>  - artem78 (Русский)&lt;BR>  - Văn Heo Quay Nguyễn (FDERROR) (Tiếng Việt)&lt;BR>  - Cetaceaqua (简体中文)&lt;BR>  - mp107 (Polski)&lt;BR>  - Hiago Cardoso de Melo (bearusumyo) (português brasileiro)&lt;BR>  - gwmgdemj (简体中文)&lt;BR>  - Quakeman 0 (williampaiva021) (português brasileiro)&lt;BR>  - Dede Kurniawan (CraX_Dev) (Bahasa Indonesia)&lt;BR>  - NinPhi (Русский)&lt;BR>  - Florin9doi (Română)&lt;BR>  - artemka 333 (artemka333) (Беларуская)&lt;BR>  - Korteks Korta (kortex.343434) (Türkçe)&lt;BR>  - 123456sdfft (简体中文)&lt;BR>  - crisanto valler (vallercrisanto) (Wikang Filipino)&lt;BR>  - Saqala Bilaabayso (Saqala) (Polski)&lt;BR>  - 115190 (Italiano)&lt;BR>  - Олександр Лапин (maliar2014) (Русский)&lt;BR>  - Huck Jones (huckleberrypie) (Wikang Filipino)&lt;BR>  - Rachel Wang (rwang4064) (简体中文)&lt;BR>  - Никита Шустол (QsFvn5bA4v) (Беларуская)&lt;BR>  - Serkan Ağdeve (usta_serkan_06) (Türkçe)&lt;BR>  - REMOVED_USER (Deutsch)&lt;BR>  - Бато Батоболотов (Just_Bato) (Русский)&lt;BR>  - හෙළබස සමූහය (HelaBasa) (සිංහල)&lt;BR>  - Trần Nam Hải (E.GMR) (Tiếng Việt)&lt;BR>  - GG Snake (dnfcf524) (简体中文)&lt;BR>  - Khoirul Anam (Anam31) (Bahasa Indonesia)&lt;BR>  - where where (wherewhere) (简体中文)&lt;BR>  - XheroxJS (Español)&lt;BR>  - Nicolas Augustin (nicolasaugustin.atlantis) (Français)&lt;BR>  - Juan Ortiz (Kloido) (Español)&lt;BR>  - mauricio toxqui citalan (mauriciotoxquicitalan) (Español)&lt;BR>  - Sen Esguerra (videogameboy0783) (Wikang Filipino)&lt;BR>  - Shahril Shahril (shahrilshahril609) (Bahasa Indonesia)&lt;BR>  - Serkan Agdeve (serkanagdeve10) (Türkçe)&lt;BR>  - Raziel Benjamin Zapata (razielben1504) (Español)&lt;BR>  - Indra Saragosa (indrasaragosa946) (Bahasa Indonesia)&lt;BR>  - My Talking Tom 2 Smash Hit Mod [No Pay 2 Win] (ctnhanhuy) (Tiếng Việt)&lt;BR>  - CIssnei - (cissnei112) (简体中文)&lt;BR>  - леонид поляков (leon412) (Русский)&lt;BR>  - Johny19 Jonius19 (joniusjohny18) (Bahasa Melayu)&lt;BR>  - 孙福玥 (sun2839266) (简体中文)&lt;BR>  - Rumia (bagregsidoel) (Bahasa Indonesia)&lt;BR>  - igor macedo (igor3891344467) (português brasileiro)&lt;BR>  - Trong Thu Do (fewdspuckrito) (Tiếng Việt)&lt;BR></string>
+    <string name="about_translator_content" translatable="false">- PhantomHorror (Українська, Беларуская, Русский)&lt;BR&gt;  - Federico Dispinzeri (ca0ss) (Italiano)&lt;BR&gt;  - Faalagorn (Polski)&lt;BR&gt;  - Nikita Shakarun (nikita36078) (Русский)&lt;BR&gt;  - Rex_sa (rex07) (العربية)&lt;BR&gt;  - Walisson Silva (w_alisson_gostoso) (português brasileiro)&lt;BR&gt;  - Allen Merlin (ShadowDumb) (简体中文)&lt;BR&gt;  - heydootdoot (Bahasa Indonesia)&lt;BR&gt;  - Ar1 (Ary404) (Bahasa Indonesia, 日本語)&lt;BR&gt;  - enriqueyair (FrenesiGG) (Español)&lt;BR&gt;  - නාමල් ජයසිංහ (nimnaya) (සිංහල)&lt;BR&gt;  - Patrick Mates (patmat99) (Deutsch, Français, Español)&lt;BR&gt;  - I HAVE GOT THE POWER (rimbado) (Azərbaycanca, Türkçe)&lt;BR&gt;  - Tauhid Alam Rifty (ChildishRifty7) (বাংলা)&lt;BR&gt;  - Div, mix (reymo.az) (Azərbaycanca, Türkçe)&lt;BR&gt;  - João (Sefhriloff) (Español, português brasileiro)&lt;BR&gt;  - Alexis Jhon Gaspar (Lucss21a) (Wikang Filipino, Bahasa Indonesia)&lt;BR&gt;  - Nokia64 (Español)&lt;BR&gt;  - Jaakko Saarikko (styxnix) (Suomi)&lt;BR&gt;  - Alonso Neto (AlonsoNeto) (português brasileiro)&lt;BR&gt;  - GiorgioHerbie (Italiano)&lt;BR&gt;  - Hafiz Mohamed (Apihplays) (Bahasa Melayu)&lt;BR&gt;  - ShahinF27 (Khan27) (Azərbaycanca)&lt;BR&gt;  - Alain Teulet (niala6433) (Français)&lt;BR&gt;  - Daichi (Daichix) (Français)&lt;BR&gt;  - Peter Tissen (Bigpet) (Deutsch)&lt;BR&gt;  - Reiju (Rejiu) (Polski, Română, Deutsch)&lt;BR&gt;  - Jeremy Belpois (JeremyBelpois) (Bahasa Indonesia)&lt;BR&gt;  - Steven Felix (stevenfelix505) (Bahasa Indonesia)&lt;BR&gt;  - OguzHans (symbianware) (Türkçe)&lt;BR&gt;  - mvenhaikal (Bahasa Indonesia)&lt;BR&gt;  - JCC (johncarreon2012) (简体中文)&lt;BR&gt;  - Huaji Nishikino (sky0hjh) (简体中文)&lt;BR&gt;  - Fire_Head (Українська)&lt;BR&gt;  - oqzhnyldz (Türkçe)&lt;BR&gt;  - sakirasci (Türkçe)&lt;BR&gt;  - zixing (zixing131) (简体中文)&lt;BR&gt;  - Aaron Feng (AaronFeng753) (简体中文)&lt;BR&gt;  - Никита Пикалов (keXa2008) (Русский)&lt;BR&gt;  - literalmente-game (português brasileiro)&lt;BR&gt;  - Osanosa (Українська)&lt;BR&gt;  - Arthur de Castro Silva (arthurion) (português brasileiro)&lt;BR&gt;  - Marco Steinhaeuser (kermie) (Deutsch)&lt;BR&gt;  - Trinh Manh Viet (manhviet) (Tiếng Việt)&lt;BR&gt;  - Foysal Bhuiyan (foysalbhuyian008) (简体中文)&lt;BR&gt;  - zesty (简体中文)&lt;BR&gt;  - sony_rich (sonyrich) (Tiếng Việt)&lt;BR&gt;  - artem78 (Русский)&lt;BR&gt;  - Văn Heo Quay Nguyễn (FDERROR) (Tiếng Việt)&lt;BR&gt;  - Cetaceaqua (简体中文)&lt;BR&gt;  - mp107 (Polski)&lt;BR&gt;  - Hiago Cardoso de Melo (bearusumyo) (português brasileiro)&lt;BR&gt;  - gwmgdemj (简体中文)&lt;BR&gt;  - Quakeman 0 (williampaiva021) (português brasileiro)&lt;BR&gt;  - Dede Kurniawan (CraX_Dev) (Bahasa Indonesia)&lt;BR&gt;  - NinPhi (Русский)&lt;BR&gt;  - Florin9doi (Română)&lt;BR&gt;  - artemka 333 (artemka333) (Беларуская)&lt;BR&gt;  - Korteks Korta (kortex.343434) (Türkçe)&lt;BR&gt;  - 123456sdfft (简体中文)&lt;BR&gt;  - crisanto valler (vallercrisanto) (Wikang Filipino)&lt;BR&gt;  - Saqala Bilaabayso (Saqala) (Polski)&lt;BR&gt;  - 115190 (Italiano)&lt;BR&gt;  - Олександр Лапин (maliar2014) (Русский)&lt;BR&gt;  - Huck Jones (huckleberrypie) (Wikang Filipino)&lt;BR&gt;  - Rachel Wang (rwang4064) (简体中文)&lt;BR&gt;  - Никита Шустол (QsFvn5bA4v) (Беларуская)&lt;BR&gt;  - Serkan Ağdeve (usta_serkan_06) (Türkçe)&lt;BR&gt;  - REMOVED_USER (Deutsch)&lt;BR&gt;  - Бато Батоболотов (Just_Bato) (Русский)&lt;BR&gt;  - හෙළබස සමූහය (HelaBasa) (සිංහල)&lt;BR&gt;  - Trần Nam Hải (E.GMR) (Tiếng Việt)&lt;BR&gt;  - GG Snake (dnfcf524) (简体中文)&lt;BR&gt;  - Khoirul Anam (Anam31) (Bahasa Indonesia)&lt;BR&gt;  - where where (wherewhere) (简体中文)&lt;BR&gt;  - XheroxJS (Español)&lt;BR&gt;  - Nicolas Augustin (nicolasaugustin.atlantis) (Français)&lt;BR&gt;  - Juan Ortiz (Kloido) (Español)&lt;BR&gt;  - mauricio toxqui citalan (mauriciotoxquicitalan) (Español)&lt;BR&gt;  - Sen Esguerra (videogameboy0783) (Wikang Filipino)&lt;BR&gt;  - Shahril Shahril (shahrilshahril609) (Bahasa Indonesia)&lt;BR&gt;  - Serkan Agdeve (serkanagdeve10) (Türkçe)&lt;BR&gt;  - Raziel Benjamin Zapata (razielben1504) (Español)&lt;BR&gt;  - Indra Saragosa (indrasaragosa946) (Bahasa Indonesia)&lt;BR&gt;  - My Talking Tom 2 Smash Hit Mod [No Pay 2 Win] (ctnhanhuy) (Tiếng Việt)&lt;BR&gt;  - CIssnei - (cissnei112) (简体中文)&lt;BR&gt;  - леонид поляков (leon412) (Русский)&lt;BR&gt;  - Johny19 Jonius19 (joniusjohny18) (Bahasa Melayu)&lt;BR&gt;  - 孙福玥 (sun2839266) (简体中文)&lt;BR&gt;  - Rumia (bagregsidoel) (Bahasa Indonesia)&lt;BR&gt;  - igor macedo (igor3891344467) (português brasileiro)&lt;BR&gt;  - Trong Thu Do (fewdspuckrito) (Tiếng Việt)&lt;BR&gt;</string>
     <string name="version">Version: </string>
-
-    <string name="recommended_devices_note"><b>Note:</b> It\'s recommended to use firmware for installation of devices from S60v3 and above.</string>
-    <string name="recommended_devices_s60v1" translatable="false"><b>S60v1:</b> N-Gage</string>
-    <string name="recommended_devices_s60v2" translatable="false"><b>S60v2:</b> Nokia N70</string>
-    <string name="recommended_devices_s60v3" translatable="false"><b>S60v3:</b> Nokia 5320 XpressMusic, Nokia E5</string>
-    <string name="recommended_devices_s60v5" translatable="false"><b>S60v5:</b> Nokia 5800 XpressMusic, Nokia 5230</string>
-    <string name="recommended_devices_s3_belle" translatable="false"><b>S^3, Belle:</b> Nokia C7-00, Nokia X7-00</string>
-
+    <string name="recommended_devices_note">
+        <b>Note:</b> It\'s recommended to use firmware for installation of devices from S60v3 and above.</string>
+    <string name="recommended_devices_s60v1" translatable="false">
+        <b>S60v1:</b> N-Gage</string>
+    <string name="recommended_devices_s60v2" translatable="false">
+        <b>S60v2:</b> Nokia N70</string>
+    <string name="recommended_devices_s60v3" translatable="false">
+        <b>S60v3:</b> Nokia 5320 XpressMusic, Nokia E5</string>
+    <string name="recommended_devices_s60v5" translatable="false">
+        <b>S60v5:</b> Nokia 5800 XpressMusic, Nokia 5230</string>
+    <string name="recommended_devices_s3_belle" translatable="false">
+        <b>S^3, Belle:</b> Nokia C7-00, Nokia X7-00</string>
     <string name="install_ng_game_cant_find_data_folder">Can\'t find the game data folder!</string>
     <string name="install_ng_game_more_than_one_game">There is more than one game in the given card game folder!</string>
     <string name="install_ng_game_no_game_info_file">The game information file does not exist in the card game folder!</string>

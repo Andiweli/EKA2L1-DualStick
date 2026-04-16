@@ -146,7 +146,11 @@ public class DeviceListFragment extends Fragment {
             LinearLayout.LayoutParams params = new LinearLayout.LayoutParams(
                     LinearLayout.LayoutParams.MATCH_PARENT, LinearLayout.LayoutParams.WRAP_CONTENT);
 
-            params.setMargins(20, 0, 20, 0);
+            float density = getResources().getDisplayMetrics().density;
+            int horizontalMargin = Math.round(24 * density);
+            int topMargin = Math.round(18 * density);
+
+            params.setMargins(horizontalMargin, topMargin, horizontalMargin, 0);
             containLayout.addView(inputNameField, params);
             inputNameBuilder.setView(containLayout);
 

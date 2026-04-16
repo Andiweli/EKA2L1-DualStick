@@ -6,7 +6,7 @@
     <string name="search">ابحث</string>
     <string name="about">عن</string>
     <string name="settings">إعدادات</string>
-    <string name="packages">مجموعات</string>
+    <string name="packages">الحزم المثبتة</string>
     <string name="devices">Device</string>
     <string name="switch_devices">التبديل بين الاجهزة</string>
     <string name="profiles">الملفات الشخصية</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>

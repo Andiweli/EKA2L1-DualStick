@@ -28,9 +28,12 @@ public final class InputBinding {
     public static final int INPUT_RIGHT_STICK_RIGHT = -1008;
 
     public static final float ANALOG_DIRECTION_THRESHOLD = 0.50f;
-    public static final float ANALOG_CAPTURE_THRESHOLD = 0.65f;
+    public static final float ANALOG_CAPTURE_THRESHOLD = 0.40f;
     public static final float DPAD_HAT_THRESHOLD = 0.50f;
+    public static final float DPAD_HAT_CAPTURE_THRESHOLD = 0.35f;
     private static final float DEFAULT_DEADZONE = 0.25f;
+    private static final float BINDING_MIN_DEADZONE = 0.08f;
+    private static final float BINDING_MAX_DEADZONE = 0.18f;
 
     private InputBinding() {
     }
@@ -54,12 +57,12 @@ public final class InputBinding {
     }
 
     public static float getRightStickX(@NonNull MotionEvent event) {
-        AxisPair pair = resolveRightStickAxes(event);
+        AxisPair pair = resolveRightStickAxes(event, false);
         return pair == null ? 0.0f : getCenteredAxis(event, pair.axisX);
     }
 
     public static float getRightStickY(@NonNull MotionEvent event) {
-        AxisPair pair = resolveRightStickAxes(event);
+        AxisPair pair = resolveRightStickAxes(event, false);
         return pair == null ? 0.0f : getCenteredAxis(event, pair.axisY);
     }
 
@@ -72,26 +75,24 @@ public final class InputBinding {
     }
 
     public static int detectBindableInput(@NonNull MotionEvent event) {
-        if (event.getActionMasked() != MotionEvent.ACTION_MOVE || !isJoystickMotionEvent(event)) {
+        int action = event.getActionMasked();
+        if ((action != MotionEvent.ACTION_MOVE && action != MotionEvent.ACTION_HOVER_MOVE)
+                || !isJoystickMotionEvent(event)) {
             return Integer.MAX_VALUE;
         }
 
         CaptureCandidate dpadCandidate = dominantDirection(
-                getDpadHatX(event),
-                getDpadHatY(event),
+                getBindingDpadHatX(event),
+                getBindingDpadHatY(event),
                 KeyEvent.KEYCODE_DPAD_LEFT,
                 KeyEvent.KEYCODE_DPAD_RIGHT,
                 KeyEvent.KEYCODE_DPAD_UP,
                 KeyEvent.KEYCODE_DPAD_DOWN,
-                DPAD_HAT_THRESHOLD);
-
-        if (dpadCandidate.strength > 0.0f) {
-            return dpadCandidate.inputCode;
-        }
+                DPAD_HAT_CAPTURE_THRESHOLD);
 
         CaptureCandidate leftCandidate = dominantDirection(
-                getLeftStickX(event),
-                getLeftStickY(event),
+                getBindingLeftStickX(event),
+                getBindingLeftStickY(event),
                 INPUT_LEFT_STICK_LEFT,
                 INPUT_LEFT_STICK_RIGHT,
                 INPUT_LEFT_STICK_UP,
@@ -99,21 +100,23 @@ public final class InputBinding {
                 ANALOG_CAPTURE_THRESHOLD);
 
         CaptureCandidate rightCandidate = dominantDirection(
-                getRightStickX(event),
-                getRightStickY(event),
+                getBindingRightStickX(event),
+                getBindingRightStickY(event),
                 INPUT_RIGHT_STICK_LEFT,
                 INPUT_RIGHT_STICK_RIGHT,
                 INPUT_RIGHT_STICK_UP,
                 INPUT_RIGHT_STICK_DOWN,
                 ANALOG_CAPTURE_THRESHOLD);
 
-        if (leftCandidate.strength == 0.0f && rightCandidate.strength == 0.0f) {
-            return Integer.MAX_VALUE;
+        CaptureCandidate strongest = dpadCandidate;
+        if (leftCandidate.strength > strongest.strength) {
+            strongest = leftCandidate;
+        }
+        if (rightCandidate.strength > strongest.strength) {
+            strongest = rightCandidate;
         }
 
-        return leftCandidate.strength >= rightCandidate.strength
-                ? leftCandidate.inputCode
-                : rightCandidate.inputCode;
+        return strongest.strength > 0.0f ? strongest.inputCode : Integer.MAX_VALUE;
     }
 
     public static String getInputName(int inputCode) {
@@ -145,6 +148,32 @@ public final class InputBinding {
             default:
                 return sanitizeKeyName(KeyEvent.keyCodeToString(inputCode));
         }
+    }
+
+    private static float getBindingLeftStickX(@NonNull MotionEvent event) {
+        return getCenteredAxisForBinding(event, MotionEvent.AXIS_X);
+    }
+
+    private static float getBindingLeftStickY(@NonNull MotionEvent event) {
+        return getCenteredAxisForBinding(event, MotionEvent.AXIS_Y);
+    }
+
+    private static float getBindingRightStickX(@NonNull MotionEvent event) {
+        AxisPair pair = resolveRightStickAxes(event, true);
+        return pair == null ? 0.0f : getCenteredAxisForBinding(event, pair.axisX);
+    }
+
+    private static float getBindingRightStickY(@NonNull MotionEvent event) {
+        AxisPair pair = resolveRightStickAxes(event, true);
+        return pair == null ? 0.0f : getCenteredAxisForBinding(event, pair.axisY);
+    }
+
+    private static float getBindingDpadHatX(@NonNull MotionEvent event) {
+        return getCenteredAxisForBinding(event, MotionEvent.AXIS_HAT_X);
+    }
+
+    private static float getBindingDpadHatY(@NonNull MotionEvent event) {
+        return getCenteredAxisForBinding(event, MotionEvent.AXIS_HAT_Y);
     }
 
     private static String sanitizeKeyName(String keyName) {
@@ -212,7 +241,30 @@ public final class InputBinding {
         return Math.abs(value) > flat ? value : 0.0f;
     }
 
-    private static AxisPair resolveRightStickAxes(@NonNull MotionEvent event) {
+    private static float getCenteredAxisForBinding(@NonNull MotionEvent event, int axis) {
+        InputDevice device = event.getDevice();
+        if (device == null) {
+            return 0.0f;
+        }
+
+        InputDevice.MotionRange range = device.getMotionRange(axis, event.getSource());
+        if (range == null) {
+            return 0.0f;
+        }
+
+        float value = event.getAxisValue(axis);
+        float flat = range.getFlat();
+
+        if (axis == MotionEvent.AXIS_HAT_X || axis == MotionEvent.AXIS_HAT_Y) {
+            flat = 0.05f;
+        } else {
+            flat = Math.max(BINDING_MIN_DEADZONE, Math.min(flat, BINDING_MAX_DEADZONE));
+        }
+
+        return Math.abs(value) > flat ? value : 0.0f;
+    }
+
+    private static AxisPair resolveRightStickAxes(@NonNull MotionEvent event, boolean forBinding) {
         InputDevice device = event.getDevice();
         if (device == null) {
             return null;
@@ -230,18 +282,23 @@ public final class InputBinding {
         }
 
         if (hasRxRy && hasZRz) {
-            float rxryStrength = Math.abs(getCenteredAxis(event, MotionEvent.AXIS_RX))
-                    + Math.abs(getCenteredAxis(event, MotionEvent.AXIS_RY));
-            float zrzStrength = Math.abs(getCenteredAxis(event, MotionEvent.AXIS_Z))
-                    + Math.abs(getCenteredAxis(event, MotionEvent.AXIS_RZ));
+            float rxryStrength = getAxisPairStrength(event, MotionEvent.AXIS_RX, MotionEvent.AXIS_RY, forBinding);
+            float zrzStrength = getAxisPairStrength(event, MotionEvent.AXIS_Z, MotionEvent.AXIS_RZ, forBinding);
 
-            if (rxryStrength > zrzStrength) {
+            if (rxryStrength >= zrzStrength) {
                 return new AxisPair(MotionEvent.AXIS_RX, MotionEvent.AXIS_RY);
             }
             return new AxisPair(MotionEvent.AXIS_Z, MotionEvent.AXIS_RZ);
         }
 
         return null;
+    }
+
+    private static float getAxisPairStrength(@NonNull MotionEvent event, int axisX, int axisY, boolean forBinding) {
+        if (forBinding) {
+            return Math.abs(getCenteredAxisForBinding(event, axisX)) + Math.abs(getCenteredAxisForBinding(event, axisY));
+        }
+        return Math.abs(getCenteredAxis(event, axisX)) + Math.abs(getCenteredAxis(event, axisY));
     }
 
     private static boolean hasBidirectionalAxisPair(InputDevice device, int source, int axisX, int axisY) {

@@ -6,7 +6,7 @@
     <string name="search">Tìm kiếm</string>
     <string name="about">Giới thiệu</string>
     <string name="settings">Cài đặt</string>
-    <string name="packages">Các gói</string>
+    <string name="packages">Gói đã cài đặt</string>
     <string name="devices">Thiết bị</string>
     <string name="switch_devices">Đổi thiết bị</string>
     <string name="profiles">Cấu hình</string>
@@ -257,4 +257,5 @@
     <string name="install_ng_game_menu">Install N-Gage Game</string>
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
+    <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
 </resources>
