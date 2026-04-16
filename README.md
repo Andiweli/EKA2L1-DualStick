@@ -20,7 +20,7 @@ This fork is focused primarily on:
 
 - **Android support**
 - Proper handling of **two analog sticks**
-- Improving controller usability for Symbian OS and **N-Gage** games on Android devices
+- Improving UI and UX
 
 <p align="center">
 <img width="640" height="360" alt="screenshot-eka2l1" src="https://github.com/user-attachments/assets/94702763-75a1-4873-937f-c47b491354b5" /><br/>
