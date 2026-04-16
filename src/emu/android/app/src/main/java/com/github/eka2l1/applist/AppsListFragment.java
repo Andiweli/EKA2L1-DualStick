@@ -985,56 +985,103 @@ public class AppsListFragment extends Fragment {
         }
     }
 
+    private void clearSavedLaunchFileDirectory() {
+        AppDataStore dataStore = AppDataStore.getAndroidStore();
+        dataStore.putString(PREF_LAUNCH_FILE_DIR, null);
+        dataStore.save();
+    }
+
+    private void requestLaunchFileDirectory(AppItem item) {
+        pendingAppItem = item;
+        pickLaunchFileDirectory.launch(null);
+    }
+
     private void saveAppLaunchFileToDirectory(String path, AppItem item) {
+        if (path == null || item == null) {
+            return;
+        }
+
         int currentDeviceId = Emulator.getCurrentDevice();
-        String []deviceCode = Emulator.getDeviceFirmwareCodes();
+        String[] deviceCode = Emulator.getDeviceFirmwareCodes();
+
+        if (deviceCode == null || currentDeviceId < 0 || currentDeviceId >= deviceCode.length) {
+            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+            return;
+        }
 
         AppLaunchInfo launchInfo = new AppLaunchInfo(item.getUid(), item.getTitle(), deviceCode[currentDeviceId]);
         String fileName = item.getTitle() + ".json";
 
-        Uri filePath = Uri.parse(path);
-        DocumentFile rootFile = DocumentFile.fromTreeUri(getContext(), filePath);
-        DocumentFile jsonFile = rootFile.findFile(fileName);
+        try {
+            Uri treeUri = Uri.parse(path);
+            DocumentFile rootFile = DocumentFile.fromTreeUri(requireContext(), treeUri);
 
-        if (jsonFile == null) {
-            jsonFile = rootFile.createFile("application/json", fileName);
-        }
+            if (rootFile == null || !rootFile.exists() || !rootFile.canWrite()) {
+                clearSavedLaunchFileDirectory();
+                Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+                requestLaunchFileDirectory(item);
+                return;
+            }
 
-        filePath = jsonFile.getUri();
+            DocumentFile jsonFile = rootFile.findFile(fileName);
+            if (jsonFile == null) {
+                jsonFile = rootFile.createFile("application/json", fileName);
+            }
 
-        try (OutputStream outputStream = getActivity().getContentResolver().openOutputStream(filePath, "wt")) {
-            OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream);
-            gson.toJson(launchInfo, outputStreamWriter);
+            if (jsonFile == null) {
+                Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+                return;
+            }
 
-            outputStreamWriter.flush();
-            outputStreamWriter.close();
+            try (OutputStream outputStream = requireActivity().getContentResolver().openOutputStream(jsonFile.getUri(), "wt")) {
+                if (outputStream == null) {
+                    throw new IOException("Failed to open output stream for launch file");
+                }
+
+                try (OutputStreamWriter outputStreamWriter = new OutputStreamWriter(outputStream)) {
+                    gson.toJson(launchInfo, outputStreamWriter);
+                    outputStreamWriter.flush();
+                }
+            }
 
             Toast.makeText(getContext(), String.format(getString(R.string.save_launch_file_success), fileName),
                     Toast.LENGTH_LONG).show();
-        } catch (IOException e) {
+        } catch (SecurityException | IllegalArgumentException | IOException e) {
             e.printStackTrace();
+            clearSavedLaunchFileDirectory();
+            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+            requestLaunchFileDirectory(item);
         }
     }
 
     private void onLaunchFileDirPickResult(String newPath) {
-        Uri persistableUri = Uri.parse(newPath);
+        if (newPath == null) {
+            return;
+        }
 
-        getActivity().getContentResolver().takePersistableUriPermission(persistableUri,
-                Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        try {
+            Uri persistableUri = Uri.parse(newPath);
 
-        AppDataStore dataStore = AppDataStore.getAndroidStore();
+            requireActivity().getContentResolver().takePersistableUriPermission(persistableUri,
+                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
-        dataStore.putString(PREF_LAUNCH_FILE_DIR, newPath);
-        dataStore.save();
+            AppDataStore dataStore = AppDataStore.getAndroidStore();
 
-        saveAppLaunchFileToDirectory(newPath, pendingAppItem);
+            dataStore.putString(PREF_LAUNCH_FILE_DIR, newPath);
+            dataStore.save();
+
+            saveAppLaunchFileToDirectory(newPath, pendingAppItem);
+        } catch (SecurityException | IllegalArgumentException e) {
+            e.printStackTrace();
+            clearSavedLaunchFileDirectory();
+            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_LONG).show();
+        }
     }
 
     private void saveAppLaunchFile(AppItem item) {
         String launchFileDir = AppDataStore.getAndroidStore().getString(PREF_LAUNCH_FILE_DIR, null);
         if (launchFileDir == null) {
-            pendingAppItem = item;
-            pickLaunchFileDirectory.launch(null);
+            requestLaunchFileDirectory(item);
         } else {
             saveAppLaunchFileToDirectory(launchFileDir, item);
         }

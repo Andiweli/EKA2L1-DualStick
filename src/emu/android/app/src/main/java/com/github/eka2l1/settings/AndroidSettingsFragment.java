@@ -29,6 +29,7 @@ import android.content.ActivityNotFoundException;
 import android.content.ContentResolver;
 import android.net.Uri;
 import android.os.Bundle;
+import android.os.Environment;
 import android.provider.DocumentsContract;
 import android.view.MenuItem;
 import android.view.View;
@@ -93,10 +94,10 @@ public class AndroidSettingsFragment extends PreferenceFragmentCompat {
             return true;
         });
 
-        String previousLaunchFileDir = dataStore.getString(PREF_EMULATOR_DIR, null);
+        String previousLaunchFileDir = dataStore.getString(PREF_LAUNCH_FILE_DIR, null);
 
         launchFileDirPreference = findPreference(PREF_LAUNCH_FILE_DIR);
-        launchFileDirPreference.setSummary(previousLaunchFileDir);
+        launchFileDirPreference.setSummary(getDisplayableDirPath(previousLaunchFileDir));
 
         launchFileDirPreference.setOnPreferenceClickListener(preference -> {
             pickLaunchFileDirectory.launch(null);
@@ -177,19 +178,67 @@ public class AndroidSettingsFragment extends PreferenceFragmentCompat {
         getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
     }
 
+    private String getDisplayableDirPath(String path) {
+        if (path == null || path.isEmpty()) {
+            return null;
+        }
+
+        if (path.startsWith("/")) {
+            return path;
+        }
+
+        try {
+            Uri uri = Uri.parse(path);
+            String documentId = DocumentsContract.getTreeDocumentId(uri);
+
+            if (documentId == null || documentId.isEmpty()) {
+                return path;
+            }
+
+            int separatorIndex = documentId.indexOf(':');
+            String volumeName = separatorIndex >= 0 ? documentId.substring(0, separatorIndex) : documentId;
+            String relativePath = separatorIndex >= 0 ? documentId.substring(separatorIndex + 1) : "";
+
+            StringBuilder displayPath = new StringBuilder();
+            if ("primary".equalsIgnoreCase(volumeName)) {
+                displayPath.append(Environment.getExternalStorageDirectory().getAbsolutePath());
+            } else {
+                displayPath.append("/storage/").append(volumeName);
+            }
+
+            if (!relativePath.isEmpty()) {
+                if (!relativePath.startsWith("/")) {
+                    displayPath.append('/');
+                }
+                displayPath.append(relativePath);
+            }
+
+            return displayPath.toString();
+        } catch (Exception e) {
+            return path;
+        }
+    }
+
     private void onLaunchFileDirPickResult(String newPath) {
+        if (newPath == null) {
+            return;
+        }
+
         String previousPathDir = dataStore.getString(PREF_LAUNCH_FILE_DIR, null);
         ContentResolver contentResolver = requireContext().getContentResolver();
 
-        if (previousPathDir != null) {
-            if (previousPathDir.equals(newPath)) {
-                return;
+        try {
+            if (previousPathDir != null) {
+                if (previousPathDir.equals(newPath)) {
+                    return;
+                }
+
+                Uri oldPathUri = Uri.parse(previousPathDir);
+
+                contentResolver.releasePersistableUriPermission(oldPathUri,
+                        Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
             }
-
-            Uri oldPathUri = Uri.parse(previousPathDir);
-
-            contentResolver.releasePersistableUriPermission(oldPathUri,
-                    Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
+        } catch (SecurityException | IllegalArgumentException ignored) {
         }
 
         Uri newPathUri = Uri.parse(newPath);
@@ -198,6 +247,6 @@ public class AndroidSettingsFragment extends PreferenceFragmentCompat {
                 Intent.FLAG_GRANT_READ_URI_PERMISSION | Intent.FLAG_GRANT_WRITE_URI_PERMISSION);
 
         dataStore.putString(PREF_LAUNCH_FILE_DIR, newPath);
-        launchFileDirPreference.setSummary(newPath);
+        launchFileDirPreference.setSummary(getDisplayableDirPath(newPath));
     }
 }
