@@ -41,7 +41,7 @@ This fork is focused primarily on:
 - Improving UI and UX
 
 <p align="center">
-<img width="640" height="360" alt="screenshot-eka2l1" src="https://github.com/user-attachments/assets/94702763-75a1-4873-937f-c47b491354b5" /><br/>
+<img width="1920" height="1080" alt="screenshot-eka2l1" src="https://github.com/Andiweli/EKA2L1-DualStick/blob/master/screenshots/0.1.2/screenshot_012_fixes.png?raw=true" /><br/>
 (FPS controls with dual-sticks for ASHEN)
 </p>
 
