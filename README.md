@@ -30,6 +30,11 @@ So far, changes in this fork include:
 - Added the ability to export installed games as a **preconfigured pack** for easier later re-import and setup
 - Improved translations for missing parts
 
+<p align="center">
+<img width="1920" height="1080" alt="screenshot-eka2l1" src="https://github.com/Andiweli/EKA2L1-DualStick/blob/master/screenshots/0.1.2/screenshot_012_fixes.png?raw=true" /><br/>
+(FPS controls with dual-sticks for ASHEN)
+</p>
+
 ---
 
 ## 📱 About This Fork
@@ -39,11 +44,6 @@ This fork is focused primarily on:
 - **Android support**
 - Proper handling of **two analog sticks**
 - Improving UI and UX
-
-<p align="center">
-<img width="1920" height="1080" alt="screenshot-eka2l1" src="https://github.com/Andiweli/EKA2L1-DualStick/blob/master/screenshots/0.1.2/screenshot_012_fixes.png?raw=true" /><br/>
-(FPS controls with dual-sticks for ASHEN)
-</p>
 
 Unlike the broader upstream project, the main goal of this fork is not to cover every supported platform equally, but to improve the Android experience with a stronger focus on modern handheld-style controls.
 
