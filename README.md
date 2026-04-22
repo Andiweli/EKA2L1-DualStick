@@ -5,7 +5,7 @@
   <img src="https://raw.githubusercontent.com/EKA2L1/eka2l1.github.io/main/assets/main/logo.gif" alt="EKA2L1 Logo" height="180">
 </p>
 
-Android-focused fork of **EKA2L1**, the Symbian OS / N-Gage emulator written in **C++17**.
+Android-focused fork of [**EKA2L1**](https://github.com/EKA2L1/EKA2L1), the Symbian OS / N-Gage emulator written in **C++17**.
 
 > [!NOTE]
 > This fork focuses specifically on **Android** and on adding proper support for **two analog sticks**, with the goal of improving controls and playability for Symbian and N-Gage games on modern Android handhelds and devices.
