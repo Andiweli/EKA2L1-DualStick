@@ -5,7 +5,7 @@
   <img src="https://raw.githubusercontent.com/EKA2L1/eka2l1.github.io/main/assets/main/logo.gif" alt="EKA2L1 Logo" height="180">
 </p>
 
-Android-focused fork of **EKA2L1**, the Symbian OS / N-Gage emulator written in **C++17**.
+Android-focused fork of [**EKA2L1**](https://github.com/EKA2L1/EKA2L1), the Symbian OS / N-Gage emulator written in **C++17**.
 
 > [!NOTE]
 > This fork focuses specifically on **Android** and on adding proper support for **two analog sticks**, with the goal of improving controls and playability for Symbian and N-Gage games on modern Android handhelds and devices.
@@ -30,6 +30,11 @@ So far, changes in this fork include:
 - Added the ability to export installed games as a **preconfigured pack** for easier later re-import and setup
 - Improved translations for missing parts
 
+<p align="center">
+<img width="1920" height="1080" alt="screenshot-eka2l1" src="https://github.com/Andiweli/EKA2L1-DualStick/blob/master/screenshots/0.1.2/screenshot_012_fixes.png?raw=true" /><br/>
+(FPS controls with dual-sticks for ASHEN)
+</p>
+
 ---
 
 ## 📱 About This Fork
@@ -39,11 +44,6 @@ This fork is focused primarily on:
 - **Android support**
 - Proper handling of **two analog sticks**
 - Improving UI and UX
-
-<p align="center">
-<img width="640" height="360" alt="screenshot-eka2l1" src="https://github.com/user-attachments/assets/94702763-75a1-4873-937f-c47b491354b5" /><br/>
-(FPS controls with dual-sticks for ASHEN)
-</p>
 
 Unlike the broader upstream project, the main goal of this fork is not to cover every supported platform equally, but to improve the Android experience with a stronger focus on modern handheld-style controls.
 
