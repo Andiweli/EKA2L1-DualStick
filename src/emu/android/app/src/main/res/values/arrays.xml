@@ -41,6 +41,7 @@
     <string-array name="pref_scale_type_entries">
         <item>@string/pref_screen_scale_type_none</item>
         <item>@string/pref_screen_scale_type_fit</item>
+        <item>@string/pref_screen_scale_type_fit_with_skin</item>
         <item>@string/pref_screen_scale_type_fill</item>
     </string-array>
     <string-array name="pref_screen_gravity_entries">

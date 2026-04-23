@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Right</string>
     <string name="pref_screen_gravity_top">Top</string>
     <string name="pref_screen_scale_type">Scale type</string>
-    <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
-    <string name="pref_screen_scale_type_fit">Fit to window</string>
-    <string name="pref_screen_scale_type_none">As is</string>
+    <string name="pref_screen_scale_type_fill">Ecran complet (ignoră raportul de aspect)</string>
+    <string name="pref_screen_scale_type_fit">Potrivește la ecran (păstrează raportul de aspect)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Potrivește la ecran (cu skin N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Rezoluție originală</string>
     <string name="pref_screen_use_notch">Use notch</string>
     <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
     <string name="pref_screen_upscale_shader">Upscale shader</string>

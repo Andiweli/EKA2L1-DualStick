@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">ডান</string>
     <string name="pref_screen_gravity_top">উপর</string>
     <string name="pref_screen_scale_type">স্কেল টাইপ</string>
-    <string name="pref_screen_scale_type_fill">উইন্ডো পূরণ করুন (দৃশ্যানুমান বাদ দিন)</string>
-    <string name="pref_screen_scale_type_fit">উইন্ডোতে ফিট করুন</string>
-    <string name="pref_screen_scale_type_none">As is</string>
+    <string name="pref_screen_scale_type_fill">পূর্ণস্ক্রিন (অনুপাত উপেক্ষা করুন)</string>
+    <string name="pref_screen_scale_type_fit">স্ক্রিনে মানানসই করুন (অনুপাত বজায় রেখে)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">স্ক্রিনে মানানসই করুন (N-Gage QD স্কিনসহ)</string>
+    <string name="pref_screen_scale_type_none">আসল রেজোলিউশন</string>
     <string name="pref_screen_use_notch">নচ ব্যবহার করুন</string>
     <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
     <string name="pref_screen_upscale_shader">Upscale shader</string>

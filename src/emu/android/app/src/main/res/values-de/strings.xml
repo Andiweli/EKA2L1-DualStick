@@ -172,9 +172,10 @@
     <string name="pref_screen_gravity_right">Rechts</string>
     <string name="pref_screen_gravity_top">Oben</string>
     <string name="pref_screen_scale_type">Skalierungstyp</string>
-    <string name="pref_screen_scale_type_fill">Fenster füllen (Seitenverhältnis ignorieren)</string>
-    <string name="pref_screen_scale_type_fit">An Fenster anpassen</string>
-    <string name="pref_screen_scale_type_none">Unverändert</string>
+    <string name="pref_screen_scale_type_fill">Vollbild (Seitenverhältnis ignorieren)</string>
+    <string name="pref_screen_scale_type_fit">An Bildschirm anpassen (Seitenverhältnis bleibt)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">An Bildschirm anpassen (mit N-Gage QD Skin)</string>
+    <string name="pref_screen_scale_type_none">Originalauflösung</string>
     <string name="pref_screen_use_notch">Notch verwenden</string>
     <string name="pref_screen_scale_use_shader">Shader für Hochskalierung verwenden</string>
     <string name="pref_screen_upscale_shader">Hochskalierungs-Shader</string>

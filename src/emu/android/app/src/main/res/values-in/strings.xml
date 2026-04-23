@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Kanan</string>
     <string name="pref_screen_gravity_top">Atas</string>
     <string name="pref_screen_scale_type">Jenis skala</string>
-    <string name="pref_screen_scale_type_fill">Penuhi layar (abaikan rasio aspek)</string>
-    <string name="pref_screen_scale_type_fit">Paskan ke layar</string>
-    <string name="pref_screen_scale_type_none">Ukuran asli</string>
+    <string name="pref_screen_scale_type_fill">Layar penuh (abaikan rasio aspek)</string>
+    <string name="pref_screen_scale_type_fit">Sesuaikan ke layar (pertahankan rasio aspek)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Sesuaikan ke layar (dengan skin N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Resolusi asli</string>
     <string name="pref_screen_use_notch">Pakai notch</string>
     <string name="pref_screen_scale_use_shader">Pakai shader untuk penaikan skala</string>
     <string name="pref_screen_upscale_shader">Naikkan skala shader</string>

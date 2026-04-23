@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Phải</string>
     <string name="pref_screen_gravity_top">Trên</string>
     <string name="pref_screen_scale_type">Loại phóng to</string>
-    <string name="pref_screen_scale_type_fill">Làm đầy cửa sổ (bỏ qua tỉ lệ khung hình)</string>
-    <string name="pref_screen_scale_type_fit">Vừa với cửa sổ</string>
-    <string name="pref_screen_scale_type_none">Như gốc</string>
+    <string name="pref_screen_scale_type_fill">Toàn màn hình (bỏ qua tỷ lệ khung hình)</string>
+    <string name="pref_screen_scale_type_fit">Vừa với màn hình (giữ tỷ lệ khung hình)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Vừa với màn hình (kèm skin N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Độ phân giải gốc</string>
     <string name="pref_screen_use_notch">Dùng tai thỏ</string>
     <string name="pref_screen_scale_use_shader">Sử dụng hiệu ứng đổ bóng để tăng chất lượng hình ảnh</string>
     <string name="pref_screen_upscale_shader">Nâng cấp hiệu ứng đổ bóng</string>

@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Oikealla</string>
     <string name="pref_screen_gravity_top">Ylhäällä</string>
     <string name="pref_screen_scale_type">Skaalaustyyppi</string>
-    <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
-    <string name="pref_screen_scale_type_fit">Sovita ikkunaan</string>
-    <string name="pref_screen_scale_type_none">Sellaisenaan</string>
+    <string name="pref_screen_scale_type_fill">Koko näyttö (ohita kuvasuhde)</string>
+    <string name="pref_screen_scale_type_fit">Sovita näyttöön (säilytä kuvasuhde)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Sovita näyttöön (N-Gage QD -teemalla)</string>
+    <string name="pref_screen_scale_type_none">Alkuperäinen tarkkuus</string>
     <string name="pref_screen_use_notch">Käytä lovea</string>
     <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
     <string name="pref_screen_upscale_shader">Upscale shader</string>

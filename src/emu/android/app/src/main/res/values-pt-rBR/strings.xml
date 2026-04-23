@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Direita</string>
     <string name="pref_screen_gravity_top">Topo</string>
     <string name="pref_screen_scale_type">Tipo de Escala</string>
-    <string name="pref_screen_scale_type_fill">Preencher janela (ignorar proporção de aspecto)</string>
-    <string name="pref_screen_scale_type_fit">Ajustar a janela</string>
-    <string name="pref_screen_scale_type_none">Como é</string>
+    <string name="pref_screen_scale_type_fill">Tela cheia (ignorar proporção)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar à tela (manter proporção)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Ajustar à tela (com skin do N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Resolução original</string>
     <string name="pref_screen_use_notch">Usar notch</string>
     <string name="pref_screen_scale_use_shader">Usar shader para ampliação</string>
     <string name="pref_screen_upscale_shader">Shader de Upscale</string>

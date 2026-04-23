@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Derecha</string>
     <string name="pref_screen_gravity_top">Superior</string>
     <string name="pref_screen_scale_type">Tipo de escalado</string>
-    <string name="pref_screen_scale_type_fill">Ajustar a la ventana (ignorando relación de aspecto)</string>
-    <string name="pref_screen_scale_type_fit">Ajustar a la ventana</string>
-    <string name="pref_screen_scale_type_none">Sin escalado</string>
+    <string name="pref_screen_scale_type_fill">Pantalla completa (ignorar relación de aspecto)</string>
+    <string name="pref_screen_scale_type_fit">Ajustar a la pantalla (mantener relación de aspecto)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Ajustar a la pantalla (con skin de N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Resolución original</string>
     <string name="pref_screen_use_notch">Usar notch</string>
     <string name="pref_screen_scale_use_shader">Usar sombreado para subir la escala</string>
     <string name="pref_screen_upscale_shader">Aumentar sombreado</string>

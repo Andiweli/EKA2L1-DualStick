@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Справа</string>
     <string name="pref_screen_gravity_top">Зверху</string>
     <string name="pref_screen_scale_type">Тып маштабавання</string>
-    <string name="pref_screen_scale_type_fill">Запоўніць акно (ігнараваць прапорцыі)</string>
-    <string name="pref_screen_scale_type_fit">Упісаць у акно</string>
-    <string name="pref_screen_scale_type_none">Як ёсць</string>
+    <string name="pref_screen_scale_type_fill">Поўны экран (ігнараваць прапорцыі)</string>
+    <string name="pref_screen_scale_type_fit">Падагнаць да экрана (з захаваннем прапорцый)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Падагнаць да экрана (са скінам N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Арыгінальнае раздзяленне</string>
     <string name="pref_screen_use_notch">Use notch</string>
     <string name="pref_screen_scale_use_shader">Выкарыстоўваць шэйдар для маштабавання</string>
     <string name="pref_screen_upscale_shader">Маштабавальны шэйдар</string>

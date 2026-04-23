@@ -188,6 +188,15 @@ public class Emulator {
 
         boolean shouldUpdate = checkUpdate();
         updateFolder("resources", shouldUpdate);
+
+        File skinsFolder = new File(emulatorDir + "resources/skins/");
+        if (!skinsFolder.exists()) {
+            skinsFolder.mkdirs();
+        }
+        FileUtils.copyAssetFile(context,
+                "resources/skins/ngage_qd_landscape_skin.png",
+                emulatorDir + "resources/skins/ngage_qd_landscape_skin.png");
+
         updateFolder("patch", shouldUpdate);
         copyFolder("compat", shouldUpdate);
         copyFolder("scripts", shouldUpdate);

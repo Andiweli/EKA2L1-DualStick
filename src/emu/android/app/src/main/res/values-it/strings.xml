@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Destro</string>
     <string name="pref_screen_gravity_top">Superiore</string>
     <string name="pref_screen_scale_type">Tipo Scala</string>
-    <string name="pref_screen_scale_type_fill">Riempi la finestra (ignora le proporzioni)</string>
-    <string name="pref_screen_scale_type_fit">Adatta alla finestra</string>
-    <string name="pref_screen_scale_type_none">Com\'è</string>
+    <string name="pref_screen_scale_type_fill">Schermo intero (ignora proporzioni)</string>
+    <string name="pref_screen_scale_type_fit">Adatta allo schermo (mantieni proporzioni)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Adatta allo schermo (con skin N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Risoluzione originale</string>
     <string name="pref_screen_use_notch">Usa notch</string>
     <string name="pref_screen_scale_use_shader">Usa shader per l\'upscaling</string>
     <string name="pref_screen_upscale_shader">Shader Upscale</string>

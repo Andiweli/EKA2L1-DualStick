@@ -36,6 +36,9 @@ public class AppItemViewHolder extends RecyclerView.ViewHolder implements View.O
         icon = itemView.findViewById(R.id.iconView);
         uid = itemView.findViewById(R.id.appUid);
 
+        itemView.setFocusable(true);
+        itemView.setFocusableInTouchMode(true);
+        itemView.setClickable(true);
         itemView.setOnClickListener(this);
         itemView.setOnCreateContextMenuListener(this);
     }

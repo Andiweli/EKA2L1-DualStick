@@ -94,6 +94,9 @@ public class EmulatorActivity extends AppCompatActivity {
     private static final int ORIENTATION_AUTO = 1;
     private static final int ORIENTATION_PORTRAIT = 2;
     private static final int ORIENTATION_LANDSCAPE = 3;
+    private static final int SCREEN_SCALE_TYPE_FIT_WITH_SKIN = 3;
+    private static final int SCREEN_GRAVITY_CENTER = 2;
+    private static final String DEFAULT_SKIN_RELATIVE_PATH = "resources/skins/ngage_qd_landscape_skin.png";
     private static final Gson gson = new GsonBuilder().setPrettyPrinting().create();
 
     private final ActivityResultLauncher<String[]> permissionsLauncher = registerForActivityResult(
@@ -235,7 +238,9 @@ public class EmulatorActivity extends AppCompatActivity {
         if (params.showKeyboard) {
             setVirtualKeyboard(uidStr);
         }
-        if (params.showKeyboard && keyboard instanceof FixedKeyboard) {
+        if (params.screenScaleType == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) {
+            setOrientation(ORIENTATION_LANDSCAPE);
+        } else if (params.showKeyboard && keyboard instanceof FixedKeyboard) {
             setOrientation(ORIENTATION_PORTRAIT);
         } else {
             setOrientation(params.orientation);
@@ -248,13 +253,22 @@ public class EmulatorActivity extends AppCompatActivity {
                             : WindowManager.LayoutParams.LAYOUT_IN_DISPLAY_CUTOUT_MODE_NEVER;
         }
 
-        final boolean hasBackground = ProfilesManager.getBackgroundFile(configDir).exists();
+        final boolean useSkin = params.screenScaleType == SCREEN_SCALE_TYPE_FIT_WITH_SKIN;
+        final File backgroundFile = useSkin
+                ? new File(Emulator.getEmulatorDir(), DEFAULT_SKIN_RELATIVE_PATH)
+                : ProfilesManager.getBackgroundFile(configDir);
+        final boolean hasBackground = backgroundFile.exists();
+        final int screenGravity = useSkin ? SCREEN_GRAVITY_CENTER : params.screenGravity;
+        final float backgroundOpacity = useSkin
+                ? 1.0f
+                : Math.max(0.0f, Math.min(params.screenBackgroundImageOpacity / 100.0f, 1.0f));
+        final boolean keepBackgroundAspect = useSkin || params.screenBackgroundImageKeepAspectRatio;
 
         Emulator.setScreenParams(params.screenBackgroundColor, params.screenScaleRatio,
-                params.screenScaleType, params.screenGravity,
-                hasBackground ? ProfilesManager.getBackgroundPath(configDir.getAbsolutePath()) : "",
-                Math.max(0.0f, Math.min(params.screenBackgroundImageOpacity / 100.0f, 1.0f)),
-                params.screenBackgroundImageKeepAspectRatio);
+                params.screenScaleType, screenGravity,
+                hasBackground ? backgroundFile.getAbsolutePath() : "",
+                backgroundOpacity,
+                keepBackgroundAspect);
     }
 
     @Override

@@ -76,6 +76,11 @@ import yuku.ambilwarna.AmbilWarnaDialog;
 import static com.github.eka2l1.emu.Constants.*;
 
 public class ConfigFragment extends Fragment implements View.OnClickListener {
+    private static final int SCREEN_SCALE_TYPE_FIT_WITH_SKIN = 3;
+    private static final int SCREEN_SCALE_TYPE_FILL = 2;
+    private static final int ORIENTATION_LANDSCAPE = 3;
+    private static final int SCREEN_GRAVITY_CENTER = 2;
+
     private final ActivityResultLauncher<String[]> openBackgroundImageLauncher = registerForActivityResult(
             FileUtils.getFilePicker(),
             this::onOpenBackgroundImageResult);
@@ -299,6 +304,17 @@ public class ConfigFragment extends Fragment implements View.OnClickListener {
                 upscaleShaderNames);
 
         spUpscaleShader.setAdapter(adapter);
+        spScaleType.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
+            @Override
+            public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                updateSkinModeUi();
+                compatChanged = true;
+            }
+
+            @Override
+            public void onNothingSelected(AdapterView<?> parent) {
+            }
+        });
 
         etScreenRefreshRate.addTextChangedListener(new TextWatcher() {
             @Override
@@ -473,8 +489,9 @@ public class ConfigFragment extends Fragment implements View.OnClickListener {
         etBgImgOpacityValue.setText(Integer.toString(params.screenBackgroundImageOpacity));
         etScaleRatioValue.setText(Integer.toString(params.screenScaleRatio));
         spOrientation.setSelection(params.orientation);
-        spScaleType.setSelection(params.screenScaleType);
+        spScaleType.setSelection(spinnerPositionFromScaleType(params.screenScaleType));
         spScreenGravity.setSelection(params.screenGravity);
+        updateSkinModeUi();
         cbShowNotch.setChecked(params.screenShowNotch);
         cbBgImgKeepAspectRatio.setChecked(params.screenBackgroundImageKeepAspectRatio);
 
@@ -518,9 +535,14 @@ public class ConfigFragment extends Fragment implements View.OnClickListener {
             }
             params.screenBackgroundImageOpacity = sbBgImgOpacity.getProgress();
             params.screenScaleRatio = sbScaleRatio.getProgress();
-            params.orientation = spOrientation.getSelectedItemPosition();
-            params.screenGravity = spScreenGravity.getSelectedItemPosition();
-            params.screenScaleType = spScaleType.getSelectedItemPosition();
+            params.screenScaleType = scaleTypeFromSpinnerPosition(spScaleType.getSelectedItemPosition());
+            if (params.screenScaleType == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) {
+                params.orientation = ORIENTATION_LANDSCAPE;
+                params.screenGravity = SCREEN_GRAVITY_CENTER;
+            } else {
+                params.orientation = spOrientation.getSelectedItemPosition();
+                params.screenGravity = spScreenGravity.getSelectedItemPosition();
+            }
             params.screenShowNotch = cbShowNotch.isChecked();
             params.screenBackgroundImageKeepAspectRatio = cbBgImgKeepAspectRatio.isChecked();
 
@@ -570,6 +592,45 @@ public class ConfigFragment extends Fragment implements View.OnClickListener {
         } catch (Throwable t) {
             t.printStackTrace();
         }
+    }
+
+    private int scaleTypeFromSpinnerPosition(int position) {
+        if (position == 2) {
+            return SCREEN_SCALE_TYPE_FIT_WITH_SKIN;
+        }
+        if (position == 3) {
+            return SCREEN_SCALE_TYPE_FILL;
+        }
+        return position;
+    }
+
+    private int spinnerPositionFromScaleType(int scaleType) {
+        if (scaleType == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) {
+            return 2;
+        }
+        if (scaleType == SCREEN_SCALE_TYPE_FILL) {
+            return 3;
+        }
+        return scaleType;
+    }
+
+    private void updateSkinModeUi() {
+        if (spScaleType == null || spOrientation == null || spScreenGravity == null) {
+            return;
+        }
+
+        final boolean skinMode = scaleTypeFromSpinnerPosition(spScaleType.getSelectedItemPosition()) == SCREEN_SCALE_TYPE_FIT_WITH_SKIN;
+        if (skinMode) {
+            if (spOrientation.getSelectedItemPosition() != ORIENTATION_LANDSCAPE) {
+                spOrientation.setSelection(ORIENTATION_LANDSCAPE);
+            }
+            if (spScreenGravity.getSelectedItemPosition() != SCREEN_GRAVITY_CENTER) {
+                spScreenGravity.setSelection(SCREEN_GRAVITY_CENTER);
+            }
+        }
+
+        spOrientation.setEnabled(!skinMode);
+        spScreenGravity.setEnabled(!skinMode);
     }
 
     @Override

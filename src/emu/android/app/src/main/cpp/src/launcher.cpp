@@ -49,6 +49,48 @@
 #include <stb/stb_image_write.h>
 
 namespace eka2l1::android {
+    static constexpr std::uint32_t SCREEN_SCALE_TYPE_NONE = 0;
+    static constexpr std::uint32_t SCREEN_SCALE_TYPE_FIT = 1;
+    static constexpr std::uint32_t SCREEN_SCALE_TYPE_FILL = 2;
+    static constexpr std::uint32_t SCREEN_SCALE_TYPE_FIT_WITH_SKIN = 3;
+
+    static constexpr float SKIN_SCREEN_LEFT_NORM = 538.0f / 2048.0f;
+    static constexpr float SKIN_SCREEN_TOP_NORM = 7.0f / 1152.0f;
+    static constexpr float SKIN_SCREEN_WIDTH_NORM = 971.0f / 2048.0f;
+    static constexpr float SKIN_SCREEN_HEIGHT_NORM = 1133.0f / 1152.0f;
+
+    static eka2l1::rect calculate_background_draw_rect(const eka2l1::vec2 &swapchain_size,
+                                                       const int background_width,
+                                                       const int background_height,
+                                                       const bool keep_aspect) {
+        eka2l1::rect draw_image_rect;
+        draw_image_rect.size = swapchain_size;
+
+        if (!keep_aspect || background_width <= 0 || background_height <= 0) {
+            return draw_image_rect;
+        }
+
+        const float bg_aspect_ratio = static_cast<float>(background_width) / static_cast<float>(background_height);
+        bool fit_width = false;
+
+        if (swapchain_size.x > swapchain_size.y) {
+            fit_width = (swapchain_size.y * bg_aspect_ratio <= draw_image_rect.size.x);
+        } else {
+            fit_width = (swapchain_size.x / bg_aspect_ratio > draw_image_rect.size.y);
+        }
+
+        if (fit_width) {
+            draw_image_rect.size.x = swapchain_size.x;
+            draw_image_rect.size.y = static_cast<int>(swapchain_size.x / bg_aspect_ratio);
+            draw_image_rect.top.y = (swapchain_size.y - draw_image_rect.size.y) / 2;
+        } else {
+            draw_image_rect.size.y = swapchain_size.y;
+            draw_image_rect.size.x = static_cast<int>(swapchain_size.y * bg_aspect_ratio);
+            draw_image_rect.top.x = (swapchain_size.x - draw_image_rect.size.x) / 2;
+        }
+
+        return draw_image_rect;
+    }
 
     launcher::launcher(eka2l1::system *sys)
         : sys(sys)
@@ -543,7 +585,7 @@ namespace eka2l1::android {
             drivers::draw_buffer_bit_color_buffer);
 
         if (!background_img_ && !background_img_path_.empty()) {
-            int x, y, comp = 0;
+            int comp = 0;
 
             FILE *f = eka2l1::common::open_c_file(background_img_path_, "rb");
             if (!f) {
@@ -552,10 +594,17 @@ namespace eka2l1::android {
                 // Not load again even if fail
                 background_img_path_.clear();
                 stbi_uc *data = stbi_load_from_file(f, &background_width, &background_height, &comp, STBI_rgb_alpha);
+                fclose(f);
 
-                background_img_ = eka2l1::drivers::create_texture(sys->get_graphics_driver(), 2, 0,
-                                                                  eka2l1::drivers::texture_format::rgba, eka2l1::drivers::texture_format::rgba,
-                                                                  eka2l1::drivers::texture_data_type::ubyte, data, x * y * 4, eka2l1::vec3(x, y, 0));
+                if (!data) {
+                    LOG_ERROR(eka2l1::FRONTEND_UI, "Unable to decode background texture!");
+                } else {
+                    background_img_ = eka2l1::drivers::create_texture(sys->get_graphics_driver(), 2, 0,
+                                                                      eka2l1::drivers::texture_format::rgba, eka2l1::drivers::texture_format::rgba,
+                                                                      eka2l1::drivers::texture_data_type::ubyte, data,
+                                                                      background_width * background_height * 4,
+                                                                      eka2l1::vec3(background_width, background_height, 0));
+                }
 
                 if (!background_img_) {
                     LOG_ERROR(eka2l1::FRONTEND_UI, "Unable to create background texture!");
@@ -568,29 +617,7 @@ namespace eka2l1::android {
         }
 
         if (background_img_ != 0) {
-            eka2l1::rect draw_image_rect;
-            draw_image_rect.size = swapchain_size;
-
-            if (keep_bg_aspect_) {
-                float bg_aspect_ratio = static_cast<float>(background_width) / background_height;
-                bool do_potrait_ap_keeping = false;
-
-                if (swapchain_size.x > swapchain_size.y) {
-                    do_potrait_ap_keeping = (swapchain_size.y * bg_aspect_ratio <= draw_image_rect.size.x);
-                } else {
-                    do_potrait_ap_keeping = (swapchain_size.x / bg_aspect_ratio > draw_image_rect.size.y);
-                }
-
-                if (do_potrait_ap_keeping) {
-                    draw_image_rect.size.x = swapchain_size.x;
-                    draw_image_rect.size.y = static_cast<int>(swapchain_size.x / bg_aspect_ratio);
-                    draw_image_rect.top.y = (swapchain_size.y - draw_image_rect.size.y) / 2;
-                } else {
-                    draw_image_rect.size.y = swapchain_size.y;
-                    draw_image_rect.size.x = static_cast<int>(swapchain_size.y * bg_aspect_ratio);
-                    draw_image_rect.top.x = (swapchain_size.x - draw_image_rect.size.x) / 2;
-                }
-            }
+            eka2l1::rect draw_image_rect = calculate_background_draw_rect(swapchain_size, background_width, background_height, keep_bg_aspect_);
 
             builder.set_feature(eka2l1::drivers::graphics_feature::blend, true);
             builder.blend_formula(eka2l1::drivers::blend_equation::add, eka2l1::drivers::blend_equation::add,
@@ -607,61 +634,85 @@ namespace eka2l1::android {
             eka2l1::vec2 size = crr_mode.size;
             src.size = size;
 
+            const bool use_skin_frame = (scale_type_ == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) && (background_img_ != 0)
+                && (background_width > 0) && (background_height > 0);
+
+            eka2l1::vec2 available_size = swapchain_size;
+            eka2l1::vec2 available_top(0, 0);
+
+            if (use_skin_frame) {
+                const eka2l1::rect skin_draw_rect = calculate_background_draw_rect(
+                    swapchain_size, background_width, background_height, true);
+
+                available_top.x = skin_draw_rect.top.x + static_cast<int>(skin_draw_rect.size.x * SKIN_SCREEN_LEFT_NORM);
+                available_top.y = skin_draw_rect.top.y + static_cast<int>(skin_draw_rect.size.y * SKIN_SCREEN_TOP_NORM);
+                available_size.x = static_cast<int>(skin_draw_rect.size.x * SKIN_SCREEN_WIDTH_NORM);
+                available_size.y = static_cast<int>(skin_draw_rect.size.y * SKIN_SCREEN_HEIGHT_NORM);
+            }
+
+            const std::uint32_t effective_scale_type =
+                (scale_type_ == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) ? SCREEN_SCALE_TYPE_FIT : scale_type_;
+
             float width = 0;
             float height = 0;
             std::uint32_t x = 0;
             std::uint32_t y = 0;
 
-            switch (scale_type_) {
-                case 0:
+            switch (effective_scale_type) {
+                case SCREEN_SCALE_TYPE_NONE:
                     // without scaling
                     width = size.x;
                     height = size.y;
                     break;
-                case 1:
+                case SCREEN_SCALE_TYPE_FIT:
                     // try to fit in width
-                    width = swapchain_size.x;
-                    height = size.y * swapchain_size.x / size.x;
+                    width = available_size.x;
+                    height = size.y * available_size.x / size.x;
 
-                    if (height > swapchain_size.y) {
+                    if (height > available_size.y) {
                         // if height is too big, then fit in height
-                        height = swapchain_size.y;
-                        width = size.x * swapchain_size.y / size.y;
+                        height = available_size.y;
+                        width = size.x * available_size.y / size.y;
                     }
                     break;
-                case 2:
+                case SCREEN_SCALE_TYPE_FILL:
                     // scaling without preserving the aspect ratio:
                     // just stretch the picture to full screen
                     // Upscale factor is the min factor of scale width and height
-                    width = swapchain_size.x;
-                    height = swapchain_size.y;
+                    width = available_size.x;
+                    height = available_size.y;
                     break;
             }
 
             width = width * scale_ratio_ / 100;
             height = height * scale_ratio_ / 100;
 
-            switch (gravity_) {
-                case 0: // left
-                    x = 0;
-                    y = (swapchain_size.y - height) / 2;
-                    break;
-                case 1: // top
-                    x = (swapchain_size.x - width) / 2;
-                    y = 0;
-                    break;
-                case 2: // center
-                    x = (swapchain_size.x - width) / 2;
-                    y = (swapchain_size.y - height) / 2;
-                    break;
-                case 3: // right
-                    x = swapchain_size.x - width;
-                    y = (swapchain_size.y - height) / 2;
-                    break;
-                case 4: // bottom
-                    x = (swapchain_size.x - width) / 2;
-                    y = swapchain_size.y - height;
-                    break;
+            if (use_skin_frame) {
+                x = available_top.x + (available_size.x - width) / 2;
+                y = available_top.y + (available_size.y - height) / 2;
+            } else {
+                switch (gravity_) {
+                    case 0: // left
+                        x = 0;
+                        y = (swapchain_size.y - height) / 2;
+                        break;
+                    case 1: // top
+                        x = (swapchain_size.x - width) / 2;
+                        y = 0;
+                        break;
+                    case 2: // center
+                        x = (swapchain_size.x - width) / 2;
+                        y = (swapchain_size.y - height) / 2;
+                        break;
+                    case 3: // right
+                        x = swapchain_size.x - width;
+                        y = (swapchain_size.y - height) / 2;
+                        break;
+                    case 4: // bottom
+                        x = (swapchain_size.x - width) / 2;
+                        y = swapchain_size.y - height;
+                        break;
+                }
             }
 
             const float scale_x = width / static_cast<float>(size.x);

@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Справа</string>
     <string name="pref_screen_gravity_top">Сверху</string>
     <string name="pref_screen_scale_type">Масштабирование</string>
-    <string name="pref_screen_scale_type_fill">Заполнить (без учёта пропорций)</string>
-    <string name="pref_screen_scale_type_fit">Вписать</string>
-    <string name="pref_screen_scale_type_none">Как есть</string>
+    <string name="pref_screen_scale_type_fill">Во весь экран (игнорировать пропорции)</string>
+    <string name="pref_screen_scale_type_fit">Подогнать под экран (с сохранением пропорций)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Подогнать под экран (со скином N-Gage QD)</string>
+    <string name="pref_screen_scale_type_none">Оригинальное разрешение</string>
     <string name="pref_screen_use_notch">Использовать вырез</string>
     <string name="pref_screen_scale_use_shader">Использовать шейдер для масштабирования</string>
     <string name="pref_screen_upscale_shader">Масштабирующий шейдер</string>

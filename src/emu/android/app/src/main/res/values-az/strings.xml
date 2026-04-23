@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Sağ</string>
     <string name="pref_screen_gravity_top">Üst</string>
     <string name="pref_screen_scale_type">Ölçəkleme növü</string>
-    <string name="pref_screen_scale_type_fill">Doldurma pəncərəsi (aspekt nisbətini nəzərə alma)</string>
-    <string name="pref_screen_scale_type_fit">Genişliyə uyğunlaşdır</string>
-    <string name="pref_screen_scale_type_none">olduğu kimi</string>
+    <string name="pref_screen_scale_type_fill">Tam ekran (ən-boy nisbətini nəzərə alma)</string>
+    <string name="pref_screen_scale_type_fit">Ekrana uyğunlaşdır (ən-boy nisbəti qorunur)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">Ekrana uyğunlaşdır (N-Gage QD skini ilə)</string>
+    <string name="pref_screen_scale_type_none">Orijinal çözünürlük</string>
     <string name="pref_screen_use_notch">Use notch</string>
     <string name="pref_screen_scale_use_shader">Ölçəyi yüksəltmək üçün şeyderdən istifadə edin</string>
     <string name="pref_screen_upscale_shader">Yüksək səviyyəli şeyder</string>

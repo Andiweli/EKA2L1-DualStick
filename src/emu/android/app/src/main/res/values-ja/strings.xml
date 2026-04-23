@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">Right</string>
     <string name="pref_screen_gravity_top">Top</string>
     <string name="pref_screen_scale_type">Scale type</string>
-    <string name="pref_screen_scale_type_fill">Fill window (ignore aspect ratio)</string>
-    <string name="pref_screen_scale_type_fit">Fit to window</string>
-    <string name="pref_screen_scale_type_none">As is</string>
+    <string name="pref_screen_scale_type_fill">全画面（縦横比を無視）</string>
+    <string name="pref_screen_scale_type_fit">画面に合わせる（縦横比を維持）</string>
+    <string name="pref_screen_scale_type_fit_with_skin">画面に合わせる（N-Gage QD スキン付き）</string>
+    <string name="pref_screen_scale_type_none">オリジナル解像度</string>
     <string name="pref_screen_use_notch">Use notch</string>
     <string name="pref_screen_scale_use_shader">Use shader for upscaling</string>
     <string name="pref_screen_upscale_shader">Upscale shader</string>

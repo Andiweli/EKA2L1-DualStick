@@ -171,9 +171,10 @@
     <string name="pref_screen_gravity_right">හරි</string>
     <string name="pref_screen_gravity_top">ඉහළට</string>
     <string name="pref_screen_scale_type">පරිමාණ වර්ගය</string>
-    <string name="pref_screen_scale_type_fill">කවුළුව පුරවන්න (දර්ශන අනුපාතය නොසලකා හරින්න)</string>
-    <string name="pref_screen_scale_type_fit">කවුළුවට ගැලපේ</string>
-    <string name="pref_screen_scale_type_none">පවතින පරිදි</string>
+    <string name="pref_screen_scale_type_fill">සම්පූර්ණ තිරය (අනුපාතය නොසලකා හරින්න)</string>
+    <string name="pref_screen_scale_type_fit">තිරයට ගැළපෙන්න (අනුපාතය තබාගෙන)</string>
+    <string name="pref_screen_scale_type_fit_with_skin">තිරයට ගැළපෙන්න (N-Gage QD ස්කින් සමඟ)</string>
+    <string name="pref_screen_scale_type_none">මුල් විභේදනය</string>
     <string name="pref_screen_use_notch">Use notch</string>
     <string name="pref_screen_scale_use_shader">ඉහළ නැංවීම සඳහා සෙවන භාවිතා කරන්න</string>
     <string name="pref_screen_upscale_shader">ඉහළ මට්ටමේ සෙවන</string>

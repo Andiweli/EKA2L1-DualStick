@@ -39,8 +39,10 @@ import android.os.Bundle;
 import android.provider.DocumentsContract;
 import android.util.Log;
 import android.util.TypedValue;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
 import android.view.Menu;
+import android.view.MotionEvent;
 import android.view.MenuInflater;
 import android.view.MenuItem;
 import android.view.View;
@@ -78,7 +80,6 @@ import com.github.eka2l1.settings.SettingsFragment;
 import com.github.eka2l1.util.FileUtils;
 import com.github.eka2l1.util.LogUtils;
 import com.github.eka2l1.util.ZipUtils;
-import com.google.android.material.floatingactionbutton.FloatingActionButton;
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
 
@@ -119,7 +120,12 @@ public class AppsListFragment extends Fragment {
     private AppsListAdapter adapter;
     private RecyclerView rvApplist;
     private TextView tvEmptyList;
+    private TextView tvCurrentDeviceName;
+    private View fabContainer;
     private DividerItemDecoration dividerItemDecoration;
+    private RecyclerView.ItemDecoration topSpacingDecoration;
+    private boolean initialControllerAlignedOffsetApplied;
+    private int preferredFocusedPosition = 0;
     private boolean restartNeeded;
     private AppItem pendingAppItem;
     private int currentViewMode = AppsListAdapter.VIEW_MODE_LIST;
@@ -174,6 +180,8 @@ public class AppsListFragment extends Fragment {
 
         rvApplist = view.findViewById(R.id.rv_applist);
         tvEmptyList = view.findViewById(R.id.tv_empty_list);
+        tvCurrentDeviceName = view.findViewById(R.id.tv_current_device_name);
+        fabContainer = view.findViewById(R.id.fab_container);
 
         registerForContextMenu(rvApplist);
 
@@ -181,6 +189,8 @@ public class AppsListFragment extends Fragment {
 
         rvApplist.setAdapter(adapter);
         applyViewMode(view, currentViewMode);
+        attachControllerTopSnapListener();
+        attachSingleTapLaunchListener();
 
         adapter.registerAdapterDataObserver(new RecyclerView.AdapterDataObserver() {
             @Override
@@ -197,8 +207,19 @@ public class AppsListFragment extends Fragment {
         ActionBar actionBar = ((AppCompatActivity) requireActivity()).getSupportActionBar();
         actionBar.setDisplayHomeAsUpEnabled(false);
         actionBar.setTitle(R.string.app_name);
-        FloatingActionButton fab = view.findViewById(R.id.fab);
-        fab.setOnClickListener(v -> openSisLauncher.launch(new String[]{".sis", ".sisx"}));
+
+        View fabInstallSis = view.findViewById(R.id.fab_install_sis);
+        View fabInstallNGage = view.findViewById(R.id.fab_install_ngage);
+
+        fabInstallSis.setOnClickListener(v -> openSisLauncher.launch(new String[]{".sis", ".sisx"}));
+        fabInstallNGage.setOnClickListener(v -> openNGageGameLauncher.launch(null));
+
+        if (fabContainer != null) {
+            fabContainer.addOnLayoutChangeListener((v, left, top, right, bottom, oldLeft, oldTop, oldRight, oldBottom) ->
+                    updateRecyclerBottomPadding());
+            fabContainer.post(this::updateRecyclerBottomPadding);
+        }
+
     }
 
     private int resolveDefaultViewMode() {
@@ -249,6 +270,178 @@ public class AppsListFragment extends Fragment {
         }
     }
 
+    private int getItemsInFirstRow() {
+        switch (currentViewMode) {
+            case AppsListAdapter.VIEW_MODE_LIST_2:
+                return 2;
+            case AppsListAdapter.VIEW_MODE_LIST_3:
+                return 3;
+            case AppsListAdapter.VIEW_MODE_GRID:
+                return 4;
+            case AppsListAdapter.VIEW_MODE_LIST:
+            default:
+                return 1;
+        }
+    }
+
+    private void snapFirstRowToTopIfNeeded(@NonNull View focusedChild) {
+        if (rvApplist == null) {
+            return;
+        }
+
+        int position = rvApplist.getChildAdapterPosition(focusedChild);
+        if (position == RecyclerView.NO_POSITION || position >= getItemsInFirstRow()) {
+            return;
+        }
+
+        rvApplist.post(() -> {
+            int desiredTop = dpToPx(4);
+            int delta = focusedChild.getTop() - desiredTop;
+
+            if (Math.abs(delta) <= 1) {
+                return;
+            }
+
+            rvApplist.smoothScrollBy(0, delta);
+        });
+    }
+
+    private void attachControllerTopSnapListener() {
+        if (rvApplist == null) {
+            return;
+        }
+
+        rvApplist.addOnChildAttachStateChangeListener(new RecyclerView.OnChildAttachStateChangeListener() {
+            @Override
+            public void onChildViewAttachedToWindow(@NonNull View view) {
+                view.setOnFocusChangeListener((v, hasFocus) -> {
+                    if (hasFocus) {
+                        int position = rvApplist.getChildAdapterPosition(v);
+                        if (position != RecyclerView.NO_POSITION) {
+                            preferredFocusedPosition = position;
+                        }
+                        snapFirstRowToTopIfNeeded(v);
+                    }
+                });
+            }
+
+            @Override
+            public void onChildViewDetachedFromWindow(@NonNull View view) {
+            }
+        });
+    }
+
+    private void attachSingleTapLaunchListener() {
+        if (rvApplist == null) {
+            return;
+        }
+
+        GestureDetector gestureDetector = new GestureDetector(requireContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(@NonNull MotionEvent e) {
+                View childView = rvApplist.findChildViewUnder(e.getX(), e.getY());
+                if (childView != null) {
+                    int position = rvApplist.getChildAdapterPosition(childView);
+                    if (position != RecyclerView.NO_POSITION) {
+                        preferredFocusedPosition = position;
+                    }
+
+                    childView.requestFocus();
+                    childView.requestFocusFromTouch();
+                    childView.post(childView::performClick);
+                    return true;
+                }
+                return false;
+            }
+
+            @Override
+            public boolean onDown(@NonNull MotionEvent e) {
+                return false;
+            }
+        });
+
+        rvApplist.addOnItemTouchListener(new RecyclerView.SimpleOnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(@NonNull RecyclerView rv, @NonNull MotionEvent e) {
+                gestureDetector.onTouchEvent(e);
+                return false;
+            }
+        });
+    }
+
+    private void restorePreferredFocusIfNeeded() {
+        if (rvApplist == null || adapter == null || adapter.getItemCount() == 0) {
+            return;
+        }
+
+        int targetPosition = preferredFocusedPosition;
+        if (targetPosition < 0) {
+            return;
+        }
+
+        if (targetPosition >= adapter.getItemCount()) {
+            targetPosition = adapter.getItemCount() - 1;
+        }
+
+        final int finalTargetPosition = targetPosition;
+        rvApplist.post(() -> {
+            RecyclerView.LayoutManager layoutManager = rvApplist.getLayoutManager();
+            if (layoutManager == null) {
+                return;
+            }
+
+            View targetView = layoutManager.findViewByPosition(finalTargetPosition);
+            if (targetView == null) {
+                rvApplist.scrollToPosition(finalTargetPosition);
+                rvApplist.post(() -> {
+                    RecyclerView.LayoutManager innerLayoutManager = rvApplist.getLayoutManager();
+                    if (innerLayoutManager == null) {
+                        return;
+                    }
+
+                    View innerTargetView = innerLayoutManager.findViewByPosition(finalTargetPosition);
+                    if (innerTargetView != null) {
+                        innerTargetView.requestFocus();
+                        innerTargetView.requestFocusFromTouch();
+                    }
+                });
+                return;
+            }
+
+            targetView.requestFocus();
+            targetView.requestFocusFromTouch();
+        });
+    }
+
+    private void applyInitialControllerAlignedOffsetIfNeeded() {
+        if (initialControllerAlignedOffsetApplied || rvApplist == null || adapter == null || adapter.getItemCount() == 0) {
+            return;
+        }
+
+        initialControllerAlignedOffsetApplied = true;
+        rvApplist.post(() -> {
+            rvApplist.scrollToPosition(0);
+            rvApplist.requestFocus();
+
+            rvApplist.post(() -> {
+                RecyclerView.LayoutManager layoutManager = rvApplist.getLayoutManager();
+                if (layoutManager == null) {
+                    return;
+                }
+
+                View firstView = layoutManager.findViewByPosition(0);
+                if (firstView == null) {
+                    return;
+                }
+
+                firstView.setFocusable(true);
+                firstView.setFocusableInTouchMode(true);
+                firstView.requestFocus();
+                firstView.requestFocusFromTouch();
+            });
+        });
+    }
+
     private void applyViewMode(@Nullable View view, int viewMode) {
         if (view == null) {
             view = getView();
@@ -256,8 +449,7 @@ public class AppsListFragment extends Fragment {
 
         Context context = (view != null) ? view.getContext() : requireContext();
 
-        rvApplist.setPadding(0, 0, 0, viewMode == AppsListAdapter.VIEW_MODE_GRID ? 200 : 0);
-        rvApplist.requestLayout();
+        updateRecyclerBottomPadding();
 
         if (dividerItemDecoration != null) {
             rvApplist.removeItemDecoration(dividerItemDecoration);
@@ -288,7 +480,52 @@ public class AppsListFragment extends Fragment {
         }
 
         currentViewMode = viewMode;
+        ensureTopSpacingDecoration();
         adapter.setDisplayMode(viewMode);
+    }
+
+
+    private int dpToPx(int dp) {
+        return Math.round(dp * getResources().getDisplayMetrics().density);
+    }
+
+    private void ensureTopSpacingDecoration() {
+        if (rvApplist == null || topSpacingDecoration != null) {
+            return;
+        }
+
+        topSpacingDecoration = new RecyclerView.ItemDecoration() {
+            @Override
+            public void getItemOffsets(@NonNull Rect outRect, @NonNull View view, @NonNull RecyclerView parent, @NonNull RecyclerView.State state) {
+                int position = parent.getChildAdapterPosition(view);
+                if (position == RecyclerView.NO_POSITION) {
+                    return;
+                }
+
+                if (position < getItemsInFirstRow()) {
+                    outRect.top = dpToPx(4);
+                }
+            }
+        };
+
+        rvApplist.addItemDecoration(topSpacingDecoration);
+    }
+
+    private void updateRecyclerBottomPadding() {
+        if (rvApplist == null) {
+            return;
+        }
+
+        int bottomPadding = 0;
+
+        if (fabContainer != null) {
+            int extraSpacing = dpToPx(8);
+            bottomPadding = fabContainer.getHeight() + extraSpacing;
+        }
+
+        rvApplist.setPadding(0, 0, 0, bottomPadding);
+        rvApplist.setClipToPadding(false);
+        rvApplist.requestLayout();
     }
 
     private String getCurrentDeviceCode() {
@@ -300,6 +537,37 @@ public class AppsListFragment extends Fragment {
         }
 
         return "default";
+    }
+
+    private String getCurrentDeviceDisplayName() {
+        int currentDeviceId = Emulator.getCurrentDevice();
+        String[] devices = Emulator.getDevices();
+
+        if (devices != null && currentDeviceId >= 0 && currentDeviceId < devices.length) {
+            String deviceName = devices[currentDeviceId];
+            if (deviceName != null) {
+                deviceName = deviceName.trim();
+                if (!deviceName.isEmpty()) {
+                    return deviceName;
+                }
+            }
+        }
+
+        String deviceCode = getCurrentDeviceCode();
+        return deviceCode != null ? deviceCode : "";
+    }
+
+    private void refreshCurrentDeviceName() {
+        if (tvCurrentDeviceName == null) {
+            return;
+        }
+
+        if (!Emulator.isInitialized()) {
+            tvCurrentDeviceName.setText("");
+            return;
+        }
+
+        tvCurrentDeviceName.setText(getCurrentDeviceDisplayName());
     }
 
     private String getAppRenameKey(long appUid) {
@@ -397,6 +665,8 @@ public class AppsListFragment extends Fragment {
                     public void onSuccess(@NonNull ArrayList<AppItem> appItems) {
                         applyCustomAppTitles(appItems);
                         adapter.setItems(appItems);
+                        applyInitialControllerAlignedOffsetIfNeeded();
+                        refreshCurrentDeviceName();
                         dialog.cancel();
                     }
 
@@ -432,6 +702,11 @@ public class AppsListFragment extends Fragment {
     @Override
     public void onResume() {
         super.onResume();
+        if (fabContainer != null) {
+            fabContainer.post(this::updateRecyclerBottomPadding);
+        }
+        refreshCurrentDeviceName();
+        restorePreferredFocusIfNeeded();
         if (restartNeeded) {
             restart();
         }
