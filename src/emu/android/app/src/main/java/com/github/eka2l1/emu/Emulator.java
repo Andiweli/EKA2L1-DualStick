@@ -338,6 +338,36 @@ public class Emulator {
         });
     }
 
+    public static Completable subscribeRescanDevices() {
+        return Completable.create(emitter -> {
+            try {
+                rescanDevices();
+                emitter.onComplete();
+            } catch (Throwable throwable) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(throwable);
+                }
+            }
+        });
+    }
+
+    public static Completable subscribeDeleteDevice(int id) {
+        return Completable.create(emitter -> {
+            try {
+                boolean result = deleteDevice(id);
+                if (result) {
+                    emitter.onComplete();
+                } else {
+                    emitter.onError(new IOException("deleteDevice failed"));
+                }
+            } catch (Throwable throwable) {
+                if (!emitter.isDisposed()) {
+                    emitter.onError(throwable);
+                }
+            }
+        });
+    }
+
     public static Completable subscribeInstallApp(String path) {
         return Completable.create(emitter -> {
             int installResult = installApp(path);
@@ -781,6 +811,8 @@ public class Emulator {
     public static native void setCurrentDevice(int id, boolean isTemporary);
 
     public static native void setDeviceName(int id, String newName);
+
+    public static native boolean deleteDevice(int id);
 
     public static native void rescanDevices();
 

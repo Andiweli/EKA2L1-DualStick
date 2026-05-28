@@ -81,6 +81,7 @@ public class DeviceListFragment extends Fragment {
     private String selectedVplPath = "";
 
     private boolean firmwareSet, rpkgSet, romSet, needRpkg;
+    private boolean suppressDeviceSelectionEvent;
     private ArrayAdapter<String> deviceAdapter;
     private final ActivityResultLauncher<String[]> openVplLauncher = registerForActivityResult(
             FileUtils.getFilePicker(),
@@ -125,6 +126,14 @@ public class DeviceListFragment extends Fragment {
         spDevice.setOnItemSelectedListener(new AdapterView.OnItemSelectedListener() {
             @Override
             public void onItemSelected(AdapterView<?> parent, View view, int position, long id) {
+                if (suppressDeviceSelectionEvent) {
+                    return;
+                }
+
+                if (position == Emulator.getCurrentDevice()) {
+                    return;
+                }
+
                 Emulator.setCurrentDevice(position, false);
                 getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
             }
@@ -136,6 +145,11 @@ public class DeviceListFragment extends Fragment {
 
         Button renameButton = view.findViewById(R.id.bt_rename_device);
         renameButton.setOnClickListener(v -> {
+            if (deviceAdapter.getCount() == 0) {
+                Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                return;
+            }
+
             AlertDialog.Builder inputNameBuilder = new AlertDialog.Builder(getContext());
             inputNameBuilder.setTitle(getString(R.string.enter_new_name));
 
@@ -164,14 +178,47 @@ public class DeviceListFragment extends Fragment {
             inputNameBuilder.show();
         });
 
+        Button deleteButton = view.findViewById(R.id.bt_delete_device);
+        deleteButton.setOnClickListener(v -> confirmDeleteDevice(spDevice));
+
         Button rescanButton = view.findViewById(R.id.bt_rescan_devices);
         rescanButton.setOnClickListener(v -> {
-            Emulator.rescanDevices();
+            ProgressDialog dialog = new ProgressDialog(getActivity());
+            dialog.setIndeterminate(true);
+            dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+            dialog.setCancelable(false);
+            dialog.setMessage(getText(R.string.processing));
+            dialog.show();
 
-            updateDeviceList();
-            spDevice.setSelection(Emulator.getCurrentDevice(), false);
-            getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
-            Toast.makeText(getContext(), R.string.completed, Toast.LENGTH_SHORT).show();
+            Emulator.subscribeRescanDevices()
+                    .subscribeOn(Schedulers.io())
+                    .observeOn(AndroidSchedulers.mainThread())
+                    .subscribeWith(new DisposableCompletableObserver() {
+                        @Override
+                        public void onComplete() {
+                            dialog.cancel();
+                            updateDeviceList();
+
+                            if (deviceAdapter.getCount() > 0) {
+                                int currentDevice = Emulator.getCurrentDevice();
+                                if (currentDevice < 0 || currentDevice >= deviceAdapter.getCount()) {
+                                    currentDevice = 0;
+                                }
+
+                                suppressDeviceSelectionEvent = true;
+                                spDevice.setSelection(currentDevice, false);
+                                spDevice.post(() -> suppressDeviceSelectionEvent = false);
+                            }
+
+                            Toast.makeText(getContext(), R.string.completed, Toast.LENGTH_SHORT).show();
+                        }
+
+                        @Override
+                        public void onError(@NonNull Throwable e) {
+                            dialog.cancel();
+                            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+                        }
+                    });
         });
 
         ExpandableLayout recommendedDevicesLayout = view.findViewById(R.id.ex_recommended_device);
@@ -330,6 +377,68 @@ public class DeviceListFragment extends Fragment {
         deviceAdapter.notifyDataSetChanged();
     }
 
+    private void confirmDeleteDevice(Spinner spDevice) {
+        if (deviceAdapter.getCount() == 0) {
+            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final int selectedIndex = spDevice.getSelectedItemPosition();
+        if (selectedIndex < 0 || selectedIndex >= deviceAdapter.getCount()) {
+            Toast.makeText(getContext(), R.string.error, Toast.LENGTH_SHORT).show();
+            return;
+        }
+
+        final String selectedName = String.valueOf(deviceAdapter.getItem(selectedIndex));
+        AlertDialog.Builder builder = new AlertDialog.Builder(requireContext());
+        builder.setTitle(R.string.delete_device_title);
+        builder.setMessage(getString(R.string.delete_device_message) + "\n\n" + selectedName);
+        builder.setPositiveButton(R.string.action_context_delete, (dialogInterface, i) -> deleteDevice(selectedIndex, spDevice));
+        builder.setNegativeButton(android.R.string.cancel, (dialogInterface, i) -> dialogInterface.cancel());
+        builder.show();
+    }
+
+    @SuppressLint("CheckResult")
+    private void deleteDevice(int deviceIndex, Spinner spDevice) {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.processing));
+        dialog.show();
+
+        Emulator.subscribeDeleteDevice(deviceIndex)
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableCompletableObserver() {
+                    @Override
+                    public void onComplete() {
+                        dialog.cancel();
+                        updateDeviceList();
+
+                        if (deviceAdapter.getCount() > 0) {
+                            int currentDevice = Emulator.getCurrentDevice();
+                            if (currentDevice < 0 || currentDevice >= deviceAdapter.getCount()) {
+                                currentDevice = 0;
+                            }
+
+                            suppressDeviceSelectionEvent = true;
+                            spDevice.setSelection(currentDevice, false);
+                            spDevice.post(() -> suppressDeviceSelectionEvent = false);
+                        }
+
+                        getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
+                        Toast.makeText(getContext(), R.string.completed, Toast.LENGTH_SHORT).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.cancel();
+                        Toast.makeText(getContext(), R.string.delete_device_failed, Toast.LENGTH_LONG).show();
+                    }
+                });
+    }
+
     @SuppressLint("CheckResult")
     private void installDevice() {
         if (mode == INSTALL_MODE.DEVICE_DUMP && ((needRpkg && !rpkgSet) || !romSet)) {
@@ -347,7 +456,7 @@ public class DeviceListFragment extends Fragment {
         dialog.show();
         Completable completable;
         if (mode == INSTALL_MODE.DEVICE_DUMP) {
-            completable = Emulator.subscribeInstallDevice(selectedRpkgPath, selectedRomPath, needRpkg);
+            completable = Emulator.subscribeInstallDevice(selectedRpkgPath, selectedRomPath, true);
         } else {
             completable = Emulator.subscribeInstallDevice("", selectedVplPath, false);
         }

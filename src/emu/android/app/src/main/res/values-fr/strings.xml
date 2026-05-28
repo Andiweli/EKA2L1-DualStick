@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">L\'application nécessite OpenGL ES 3.0+.</string>
     <string name="warning">ATTENTION</string>
-    <string name="scoped_storage_warning">Your user data is stored in a location which will be deleted when you uninstall the app:\n</string>
+    <string name="scoped_storage_warning">Vos données utilisateur sont stockées dans un emplacement qui sera supprimé lors de la désinstallation de l’application :
+</string>
     <string name="install_ng_game">Installer un jeu N-GAGE</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Installer un paquet préconfiguré</string>
     <string name="delete_existing_data_title">Supprimer les données existantes</string>
     <string name="delete_existing_data">Voulez-vous supprimer les données existantes de l’émulateur (appareils, applis, jeux, ...)?</string>
+    <string name="delete_device_failed">Impossible de supprimer l’appareil.</string>
+    <string name="delete_device_message">Supprimer l’appareil sélectionné ? Cela supprimera son dossier ROM et son entrée dans devices.yml.</string>
+    <string name="delete_device_title">Supprimer l’appareil</string>
     <string name="fail_to_install_preconfigured_pack">Échec de l’installation du paquet préconfiguré !</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Échec de l’installation du paquet préconfiguré ! Retour aux anciennes données effectué !</string>
     <string name="fail_to_export_preconfigured_pack">Échec de l’exportation du paquet préconfiguré !</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Installer</string>
-    <string name="rescan_devices">Rescanner les appareils</string>
+    <string name="rescan_devices">Analyser les appareils</string>
     <string name="device_dump">Dump de l\'appareil</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

@@ -46,6 +46,7 @@
 
 #include <atomic>
 #include <fstream>
+#include <set>
 #include <string>
 
 #include <disasm/disasm.h>
@@ -151,8 +152,8 @@ namespace eka2l1 {
 
         system *parent_;
 
-        std::size_t gdb_stub_breakpoint_callback_handle_;
-        std::size_t ldd_request_load_callback_handle_;
+        std::size_t gdb_stub_breakpoint_callback_handle_ = 0;
+        std::size_t ldd_request_load_callback_handle_ = 0;
 
         common::identity_container<system_reset_callback_type> reset_callbacks_;
 
@@ -322,6 +323,16 @@ namespace eka2l1 {
         }
 
         void set_symbian_version_use(const epocver ever) {
+            if (!kern_) {
+                LOG_WARN(SYSTEM, "System core is not initialised before setting Symbian version, starting it now");
+                startup();
+            }
+
+            if (!kern_) {
+                LOG_ERROR(SYSTEM, "Unable to set Symbian version: kernel is not available");
+                return;
+            }
+
             io_->set_epoc_ver(ever);
 
             // Use flexible model on 9.5 and onwards.
@@ -365,66 +376,90 @@ namespace eka2l1 {
         bool rescan_devices(const drive_number romdrv) {
             bool actually_found = false;
 
-            {
-                start_access();
+            start_access();
 
-                dvcmngr_->clear();
+            dvcmngr_->clear();
 
-                std::string rom_drive_name = std::string(1, static_cast<char>(drive_to_char16(romdrv)));
+            std::string rom_drive_name = std::string(1, static_cast<char>(drive_to_char16(romdrv)));
 
-                std::string storage_path;
-                common::get_current_directory(storage_path);
-                storage_path = eka2l1::absolute_path(conf_->storage, storage_path);
+            std::string storage_path;
+            common::get_current_directory(storage_path);
+            storage_path = eka2l1::absolute_path(conf_->storage, storage_path);
 
-                std::string root_z_path = add_path(storage_path, "drives/" + rom_drive_name + "/");
-                auto ite = common::make_directory_iterator(root_z_path, "");
-                if (!ite) {
-                    return false;
-                }
-
-                ite->detail = true;
-
-                common::dir_entry firm_entry;
-
-                while (ite->next_entry(firm_entry) == 0) {
-                    if ((firm_entry.type == common::file_type::FILE_DIRECTORY) && (firm_entry.name != ".")
-                        && (firm_entry.name != "..")) {
-                        const std::string full_entry_path = eka2l1::add_path(root_z_path,
-                            firm_entry.name);
-
-                        const epocver ver = loader::determine_rpkg_symbian_version(full_entry_path);
-
-                        std::string manu, firm_name, model;
-                        loader::determine_rpkg_product_info(full_entry_path, manu, firm_name, model);
-
-                        const std::string rom_directory = eka2l1::add_path(storage_path, eka2l1::add_path("roms", firm_name + "\\"));
-                        const std::string rom_file = eka2l1::add_path(rom_directory, "SYM.ROM");
-                        if (!common::exists(rom_file)) {
-                            LOG_ERROR(SYSTEM, "Removing broken device: {} ({})", model, firm_name);
-                            eka2l1::common::delete_folder(rom_directory);
-                            eka2l1::common::delete_folder(full_entry_path);
-                            continue;
-                        }
-
-                        LOG_INFO(SYSTEM, "Found a device: {} ({})", model, firm_name);
-
-                        if (dvcmngr_->add_new_device(firm_name, model, manu, ver, 0) != add_device_none) {
-                            LOG_ERROR(SYSTEM, "Unable to add this device, silently ignore!");
-                        } else {
-                            actually_found = true;
-                        }
-                    }
-                }
-
+            std::string root_z_path = add_path(storage_path, "drives/" + rom_drive_name + "/");
+            auto ite = common::make_directory_iterator(root_z_path, "");
+            if (!ite) {
+                LOG_ERROR(SYSTEM, "Unable to rescan devices: ROM drive folder is missing ({})", root_z_path);
                 dvcmngr_->save_devices();
                 end_access();
+                return false;
             }
+
+            ite->detail = true;
+
+            common::dir_entry firm_entry;
+            std::set<std::string> seen_firmware_codes;
+            std::size_t scanned_entries = 0;
+            constexpr std::size_t MAX_RESCAN_ENTRIES = 4096;
+
+            while (ite->next_entry(firm_entry) == 0) {
+                ++scanned_entries;
+                if (scanned_entries > MAX_RESCAN_ENTRIES) {
+                    LOG_ERROR(SYSTEM, "Stopping device rescan after {} entries to avoid an endless directory scan", MAX_RESCAN_ENTRIES);
+                    break;
+                }
+
+                if ((firm_entry.type == common::file_type::FILE_DIRECTORY) && (firm_entry.name != ".")
+                    && (firm_entry.name != "..")) {
+                    const std::string full_entry_path = eka2l1::add_path(root_z_path,
+                        firm_entry.name);
+
+                    const epocver ver = loader::determine_rpkg_symbian_version(full_entry_path);
+
+                    std::string manu, firm_name, model;
+                    loader::determine_rpkg_product_info(full_entry_path, manu, firm_name, model);
+
+                    if (firm_name.empty()) {
+                        LOG_ERROR(SYSTEM, "Ignoring device folder with unknown firmware code: {}", full_entry_path);
+                        continue;
+                    }
+
+                    const std::string firm_name_normalized = common::lowercase_string(firm_name);
+                    if (seen_firmware_codes.find(firm_name_normalized) != seen_firmware_codes.end()) {
+                        LOG_WARN(SYSTEM, "Ignoring duplicate device folder for firmware code: {}", firm_name);
+                        continue;
+                    }
+                    seen_firmware_codes.insert(firm_name_normalized);
+
+                    const std::string rom_directory = eka2l1::add_path(storage_path, eka2l1::add_path("roms", firm_name + "\\"));
+                    const std::string rom_directory_lower = eka2l1::add_path(storage_path, eka2l1::add_path("roms", firm_name_normalized + "\\"));
+                    const std::string rom_file = eka2l1::add_path(rom_directory, "SYM.ROM");
+                    const std::string rom_file_lower = eka2l1::add_path(rom_directory_lower, "SYM.ROM");
+                    if (!common::exists(rom_file) && !common::exists(rom_file_lower)) {
+                        LOG_ERROR(SYSTEM, "Removing broken device: {} ({})", model, firm_name);
+                        eka2l1::common::delete_folder(rom_directory);
+                        eka2l1::common::delete_folder(rom_directory_lower);
+                        eka2l1::common::delete_folder(full_entry_path);
+                        continue;
+                    }
+
+                    LOG_INFO(SYSTEM, "Found a device: {} ({})", model, firm_name);
+
+                    if (dvcmngr_->add_new_device(firm_name, model, manu, ver, 0) != add_device_none) {
+                        LOG_ERROR(SYSTEM, "Unable to add this device, silently ignore!");
+                    } else {
+                        actually_found = true;
+                    }
+                }
+            }
+
+            dvcmngr_->save_devices();
+            end_access();
 
             if (actually_found) {
                 conf_->device = 0;
                 conf_->serialize(false);
-
-                set_device(0);
+                LOG_INFO(SYSTEM, "Device rescan completed. Current device index was updated without immediate native reset.");
             }
 
             return true;
@@ -588,6 +623,10 @@ namespace eka2l1 {
     static constexpr std::uint32_t DEFAULT_CPU_HZ = 484000000;
 
     void system_impl::startup() {
+        if (startup_inited && kern_) {
+            return;
+        }
+
         exit = false;
 
         // Initialize all the system that doesn't depend on others first
@@ -604,6 +643,7 @@ namespace eka2l1 {
             disassembler_.get());
 
         epoc::init_panic_descriptions();
+        startup_inited = true;
     }
 
     system_impl::system_impl(system *parent, system_create_components &param)
@@ -1169,6 +1209,18 @@ namespace eka2l1 {
 
         exit = false;
 
+        if (!kern_) {
+            startup();
+        }
+
+        if (!kern_) {
+            LOG_ERROR(SYSTEM, "Unable to reset system: kernel is not available");
+            if (lock_sys) {
+                end_access();
+            }
+            return false;
+        }
+
 #ifdef ENABLE_SCRIPTING
         if (scripting_) {
             scripting_.reset();
@@ -1176,8 +1228,15 @@ namespace eka2l1 {
 #endif
 
         // Unregister HLE stuffs
-        kern_->unregister_ldd_factory_request_callback(ldd_request_load_callback_handle_);
-        kern_->unregister_breakpoint_hit_callback(gdb_stub_breakpoint_callback_handle_);
+        if (ldd_request_load_callback_handle_ != 0) {
+            kern_->unregister_ldd_factory_request_callback(ldd_request_load_callback_handle_);
+            ldd_request_load_callback_handle_ = 0;
+        }
+
+        if (gdb_stub_breakpoint_callback_handle_ != 0) {
+            kern_->unregister_breakpoint_hit_callback(gdb_stub_breakpoint_callback_handle_);
+            gdb_stub_breakpoint_callback_handle_ = 0;
+        }
 
         if (dispatcher_) {
             dispatcher_->shutdown(gdriver);

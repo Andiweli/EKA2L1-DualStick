@@ -44,6 +44,15 @@
                 android:layout_weight="1"
                 android:gravity="center"
                 android:text="@string/rename" />
+
+            <Button
+                android:id="@+id/bt_delete_device"
+                android:layout_width="0dp"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="8dp"
+                android:layout_weight="1"
+                android:gravity="center"
+                android:text="@string/action_context_delete" />
         </LinearLayout>
 
         <com.skydoves.expandablelayout.ExpandableLayout
@@ -108,7 +117,7 @@
                     android:layout_width="132dp"
                     android:layout_height="wrap_content"
                     android:text="@string/firmware"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/deviceFileButtonTextColor" />
 
                 <TextView
                     android:id="@+id/tv_firmware"
@@ -136,7 +145,7 @@
                     android:layout_width="132dp"
                     android:layout_height="wrap_content"
                     android:text="@string/rom"
-                    android:textColor="@android:color/black" />
+                    android:textColor="?attr/deviceFileButtonTextColor" />
 
                 <TextView
                     android:id="@+id/tv_rom"

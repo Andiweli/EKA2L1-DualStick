@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">The app requires OpenGL ES 3.0+.</string>
     <string name="warning">Babala</string>
-    <string name="scoped_storage_warning">Your user data is stored in a location which will be deleted when you uninstall the app:\n</string>
+    <string name="scoped_storage_warning">Naka-store ang iyong user data sa lokasyong mabubura kapag in-uninstall mo ang app:
+</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">I-install ang paunang na-configure na pakete</string>
     <string name="delete_existing_data_title">Burahin ang kasalukuyang data</string>
     <string name="delete_existing_data">Gusto mo bang burahin ang kasalukuyang data ng emulator (mga device, app, laro, ...)?</string>
+    <string name="delete_device_failed">Hindi ma-delete ang device.</string>
+    <string name="delete_device_message">I-delete ang napiling device? Aalisin nito ang ROM folder nito at ang entry nito sa devices.yml.</string>
+    <string name="delete_device_title">I-delete ang device</string>
     <string name="fail_to_install_preconfigured_pack">Nabigong i-install ang paunang na-configure na pakete!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Nabigong i-install ang paunang na-configure na pakete! Ibinalik sa dating data!</string>
     <string name="fail_to_export_preconfigured_pack">Nabigong i-export ang paunang na-configure na pakete!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">I-install</string>
-    <string name="rescan_devices">Mag-rescan ng aparato</string>
+    <string name="rescan_devices">I-scan ang mga device</string>
     <string name="device_dump">File mula sa aparato</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

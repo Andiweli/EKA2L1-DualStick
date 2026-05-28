@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Screenshot konnte nicht aufgenommen werden!</string>
     <string name="opengl_required">Die App benötigt OpenGL ES 3.0+.</string>
     <string name="warning">Warnung</string>
-    <string name="scoped_storage_warning">Ihre Benutzerdaten werden an einem Ort gespeichert, der &lt;b&gt;gelöscht wird&lt;/b&gt;, wenn Sie die App deinstallieren:\nwill be deleted when you uninstall the app:\n</string>
+    <string name="scoped_storage_warning">Ihre Benutzerdaten werden an einem Ort gespeichert, der gelöscht wird, wenn Sie die App deinstallieren:
+</string>
     <string name="install_ng_game">N-Gage-Spiel installieren</string>
     <string name="notify_dialog_title">Benachrichtigung</string>
     <string name="grid_app_list_mode">Rastermodus</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Vorkonfiguriertes Paket installieren</string>
     <string name="delete_existing_data_title">Vorhandene Daten löschen</string>
     <string name="delete_existing_data">Möchten Sie vorhandene Emulator-Daten (Geräte, Apps, Spiele, ...) löschen?</string>
+    <string name="delete_device_failed">Gerät konnte nicht gelöscht werden.</string>
+    <string name="delete_device_message">Das ausgewählte Gerät löschen? Dadurch werden sein ROM-Ordner und sein Eintrag in devices.yml entfernt.</string>
+    <string name="delete_device_title">Gerät löschen</string>
     <string name="fail_to_install_preconfigured_pack">Vorkonfiguriertes Paket konnte nicht installiert werden!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Vorkonfiguriertes Paket konnte nicht installiert werden! Auf die alten Daten wurde zurückgesetzt!</string>
     <string name="fail_to_export_preconfigured_pack">Vorkonfiguriertes Paket konnte nicht exportiert werden!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Startdatei wurde als %s gespeichert!</string>
     <string name="install">Installieren</string>
-    <string name="rescan_devices">Geräte neu scannen</string>
+    <string name="rescan_devices">Geräte scannen</string>
     <string name="device_dump">ROM-Dump</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

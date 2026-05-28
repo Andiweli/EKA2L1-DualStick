@@ -25,11 +25,11 @@
 #include <system/devices.h>
 
 #include <common/fileutils.h>
+#include <common/algorithm.h>
 #include <common/android/jniutils.h>
 #include <common/language.h>
 #include <common/path.h>
 #include <common/pystr.h>
-#include <common/fileutils.h>
 #include <loader/mif.h>
 #include <loader/svgb.h>
 #include <loader/nvg.h>
@@ -451,6 +451,46 @@ namespace eka2l1::android {
             dvcs[id].model = name;
             dvc_mngr->save_devices();
         }
+    }
+
+    bool launcher::delete_device(std::uint32_t id) {
+        device_manager *dvc_mngr = sys->get_device_manager();
+        auto &dvcs = dvc_mngr->get_devices();
+
+        if (id >= dvcs.size()) {
+            return false;
+        }
+
+        const std::string firmware_code = dvcs[id].firmware_code;
+        const std::string firmware_code_lower = common::lowercase_string(firmware_code);
+
+        common::delete_folder(add_path(conf->storage, add_path("roms", firmware_code + "\\")));
+        if (firmware_code_lower != firmware_code) {
+            common::delete_folder(add_path(conf->storage, add_path("roms", firmware_code_lower + "\\")));
+        }
+
+        common::delete_folder(add_path(conf->storage, add_path("drives/z", firmware_code + "\\")));
+        if (firmware_code_lower != firmware_code) {
+            common::delete_folder(add_path(conf->storage, add_path("drives/z", firmware_code_lower + "\\")));
+        }
+
+        const bool deleted = dvc_mngr->delete_device(firmware_code);
+        if (!deleted) {
+            return false;
+        }
+
+        const std::size_t remaining = dvc_mngr->total();
+        if (remaining == 0) {
+            conf->device = 0;
+        } else if (conf->device >= remaining) {
+            conf->device = static_cast<std::uint32_t>(remaining - 1);
+        } else if ((id <= conf->device) && (conf->device > 0)) {
+            conf->device--;
+        }
+
+        dvc_mngr->set_current(static_cast<std::uint8_t>(conf->device));
+        conf->serialize(false);
+        return true;
     }
 
     void launcher::rescan_devices() {

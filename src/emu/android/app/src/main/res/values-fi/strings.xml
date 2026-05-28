@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Kuvakaappaus epäonnistui!</string>
     <string name="opengl_required">Sovellus vaatii OpenGL ES 3.0+:n.</string>
     <string name="warning">Varoitus</string>
-    <string name="scoped_storage_warning">Käyttäjätietosi on tallennettu paikkaan, joka poistetaan, kun poistat sovelluksen:\n</string>
+    <string name="scoped_storage_warning">Käyttäjätietosi tallennetaan sijaintiin, joka poistetaan, kun poistat sovelluksen:
+</string>
     <string name="install_ng_game">Asenna N-Gage-peli</string>
     <string name="notify_dialog_title">Ilmoitus</string>
     <string name="grid_app_list_mode">Ruudukkotila</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Asenna esiasetettu paketti</string>
     <string name="delete_existing_data_title">Poista olemassa olevat tiedot</string>
     <string name="delete_existing_data">Haluatko poistaa olemassa olevat emulaattorin tiedot (laitteet, sovellukset, pelit, ...)?</string>
+    <string name="delete_device_failed">Laitetta ei voitu poistaa.</string>
+    <string name="delete_device_message">Poistetaanko valittu laite? Tämä poistaa sen ROM-kansion ja devices.yml-merkinnän.</string>
+    <string name="delete_device_title">Poista laite</string>
     <string name="fail_to_install_preconfigured_pack">Esiasetetun paketin asennus epäonnistui!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Esiasetetun paketin asennus epäonnistui! Vanhat tiedot palautettiin!</string>
     <string name="fail_to_export_preconfigured_pack">Esiasetetyn paketin vienti epäonnistui!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/laiteohjelmisto</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Asenna</string>
-    <string name="rescan_devices">Skannaa laitteet uudelleen</string>
+    <string name="rescan_devices">Skannaa laitteet</string>
     <string name="device_dump">Device dump</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

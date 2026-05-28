@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">স্ক্রিনশট তুলতে ব্যর্থ!</string>
     <string name="opengl_required">এই অ্যাপ চালাতে ওপেনজিএল ইএস ৩.০+ লাগবে।</string>
     <string name="warning">সতর্কতা</string>
-    <string name="scoped_storage_warning">আপনার ইউজার ডেটা যে জায়গায় সংরক্ষণ করা হয়েছিলো সেটা মুছে ফেলা হবে যখন আপনি এই অ্যাপটি আনইনস্টল করবেন:\n</string>
+    <string name="scoped_storage_warning">আপনার ব্যবহারকারী ডেটা এমন একটি স্থানে সংরক্ষিত আছে যা অ্যাপ আনইনস্টল করলে মুছে ফেলা হবে:
+</string>
     <string name="install_ng_game">এন-গেইজ গেম ইনস্টল করুন</string>
     <string name="notify_dialog_title">নোটিফিকেশন</string>
     <string name="grid_app_list_mode">গ্রিড মোড</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">পূর্বনির্ধারিত প্যাক ইনস্টল করুন</string>
     <string name="delete_existing_data_title">বিদ্যমান ডেটা মুছুন</string>
     <string name="delete_existing_data">আপনি কি বিদ্যমান এমুলেটর ডেটা (ডিভাইস, অ্যাপ, গেম, ...) মুছে ফেলতে চান?</string>
+    <string name="delete_device_failed">ডিভাইসটি মুছে ফেলা যায়নি।</string>
+    <string name="delete_device_message">নির্বাচিত ডিভাইসটি মুছবেন? এতে তার ROM ফোল্ডার এবং devices.yml এন্ট্রি মুছে যাবে।</string>
+    <string name="delete_device_title">ডিভাইস মুছুন</string>
     <string name="fail_to_install_preconfigured_pack">পূর্বনির্ধারিত প্যাক ইনস্টল করা যায়নি!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">পূর্বনির্ধারিত প্যাক ইনস্টল করা যায়নি! পুরোনো ডেটায় ফিরিয়ে নেওয়া হয়েছে!</string>
     <string name="fail_to_export_preconfigured_pack">পূর্বনির্ধারিত প্যাক রপ্তানি করা যায়নি!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">রম/ফার্মওয়্যার</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">ইনস্টল</string>
-    <string name="rescan_devices">পুনরায় ডিভাইসসমূহ স্ক্যান করুন</string>
+    <string name="rescan_devices">ডিভাইস স্ক্যান করুন</string>
     <string name="device_dump">ডিভাইস ডাম্প</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

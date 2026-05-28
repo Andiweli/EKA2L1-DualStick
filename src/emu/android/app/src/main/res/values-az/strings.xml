@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">Proqram OpenGL ES 3.0+ tələb edir.</string>
     <string name="warning">Xəbərdarlıq</string>
-    <string name="scoped_storage_warning">İstifadəçi məlumatlarınız proqramı sildiyiniz zaman silinəcək məkanda saxlanılır:\n</string>
+    <string name="scoped_storage_warning">İstifadəçi məlumatlarınız proqramı sildiyiniz zaman silinəcək bir yerdə saxlanılır:
+</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Əvvəlcədən qurulmuş paketi quraşdır</string>
     <string name="delete_existing_data_title">Mövcud məlumatları sil</string>
     <string name="delete_existing_data">Mövcud emulator məlumatlarını (cihazlar, tətbiqlər, oyunlar, ...) silmək istəyirsiniz?</string>
+    <string name="delete_device_failed">Cihaz silinə bilmədi.</string>
+    <string name="delete_device_message">Seçilmiş cihaz silinsin? Bu, onun ROM qovluğunu və devices.yml qeydini siləcək.</string>
+    <string name="delete_device_title">Cihazı sil</string>
     <string name="fail_to_install_preconfigured_pack">Əvvəlcədən qurulmuş paketin quraşdırılması alınmadı!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Əvvəlcədən qurulmuş paketin quraşdırılması alınmadı! Köhnə məlumatlara geri qaytarıldı!</string>
     <string name="fail_to_export_preconfigured_pack">Əvvəlcədən qurulmuş paket ixrac edilə bilmədi!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Quraşdır</string>
-    <string name="rescan_devices">Cihazları təkrar axtar</string>
+    <string name="rescan_devices">Cihazları axtar</string>
     <string name="device_dump">Cihaz tullantıları</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

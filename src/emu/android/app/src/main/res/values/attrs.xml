@@ -5,4 +5,5 @@
     <attr name="textColorSecondary" format="color" />
     <attr name="bg_config_card" format="reference" />
     <attr name="bg_button" format="reference" />
+    <attr name="deviceFileButtonTextColor" format="color" />
 </resources>

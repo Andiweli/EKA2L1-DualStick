@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">فشل في التقاط لقطة الشاشة!</string>
     <string name="opengl_required">يتطلب التطبيق OpenGL ES 3.0+.</string>
     <string name="warning">تحذير</string>
-    <string name="scoped_storage_warning">يتم تخزين بيانات المستخدم في مسار سيتم حذفه عند إلغاء تثبيت التطبيق:\n</string>
+    <string name="scoped_storage_warning">يتم تخزين بيانات المستخدم الخاصة بك في موقع سيتم حذفه عند إلغاء تثبيت التطبيق:
+</string>
     <string name="install_ng_game">تثبيت لعبة N-Gage</string>
     <string name="notify_dialog_title">الإشعارات</string>
     <string name="grid_app_list_mode">وضع الشبكة</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">تثبيت حزمة مكونة مسبقاً</string>
     <string name="delete_existing_data_title">احذف البيانات الموجودة</string>
     <string name="delete_existing_data">هل تريد حذف بيانات المحاكي الموجودة (الأجهزة، التطبيقات، الألعاب...)؟</string>
+    <string name="delete_device_failed">تعذر حذف الجهاز.</string>
+    <string name="delete_device_message">هل تريد حذف الجهاز المحدد؟ سيؤدي ذلك إلى إزالة مجلد ROM الخاص به وإدخاله في devices.yml.</string>
+    <string name="delete_device_title">حذف الجهاز</string>
     <string name="fail_to_install_preconfigured_pack">فشل في تثبيت حزمة مكونة مسبقاً!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">فشل في تثبيت الحزمة التي تم تكوينها مسبقا! رجوع إلى البيانات القديمة!</string>
     <string name="fail_to_export_preconfigured_pack">فشل في تصدير الحزمة المعدة مسبقاً!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">الروم/البرنامج الثابت</string>
     <string name="save_launch_file_success">تم حفظ ملف التشغيل باسم %s!</string>
     <string name="install">تثبيت</string>
-    <string name="rescan_devices">إعادة فحص الأجهزة</string>
+    <string name="rescan_devices">فحص الأجهزة</string>
     <string name="device_dump">Dump الجهاز</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

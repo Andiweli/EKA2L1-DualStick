@@ -29,7 +29,7 @@ android {
         minSdk 21
         targetSdk 34
         versionCode 14
-        versionName '0.1.2-dualstick'
+        versionName '0.1.4-dualstick'
         ndkVersion '25.1.8937393'
         buildConfigField 'String', 'GIT_HASH', "\"${getGitHash()}\""
 

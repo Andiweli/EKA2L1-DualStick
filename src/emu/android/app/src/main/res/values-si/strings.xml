@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">යෙදුමට OpenGL ES 3.0+ අවශ්‍ය වේ.</string>
     <string name="warning">අවවාදයයි</string>
-    <string name="scoped_storage_warning">ඔබගේ පරිශීලක දත්ත ගබඩා කර ඇති ස්ථානයක මකා දමනු ලැබේ ඔබ යෙදුම අස්ථාපනය කරන විට:\n</string>
+    <string name="scoped_storage_warning">ඔබ යෙදුම අස්ථාපනය කරන විට මැකෙන ස්ථානයක ඔබගේ පරිශීලක දත්ත ගබඩා කර ඇත:
+</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">පෙර සැකසූ පැකේජය ස්ථාපනය කරන්න</string>
     <string name="delete_existing_data_title">පවතින දත්ත මකා දමන්න</string>
     <string name="delete_existing_data">පවතින ඉමියුලේටර් දත්ත (උපාංග, යෙදුම්, ක්‍රීඩා, ...) මකා දැමීමට ඔබට අවශ්‍යද?</string>
+    <string name="delete_device_failed">උපාංගය මකා දැමිය නොහැකි විය.</string>
+    <string name="delete_device_message">තෝරාගත් උපාංගය මකන්නද? මෙය එහි ROM ෆෝල්ඩරය සහ devices.yml ප්‍රවේශය ඉවත් කරයි.</string>
+    <string name="delete_device_title">උපාංගය මකන්න</string>
     <string name="fail_to_install_preconfigured_pack">පෙර සැකසූ පැකේජය ස්ථාපනය කිරීමට අසමත් විය!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">පෙර සැකසූ පැකේජය ස්ථාපනය කිරීමට අසමත් විය! පැරණි දත්ත වෙත ආපසු ගියා!</string>
     <string name="fail_to_export_preconfigured_pack">පෙර සැකසූ පැකේජය නිර්යාත කිරීමට අසමත් විය!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">ස්ථාපනය කරන්න</string>
-    <string name="rescan_devices">උපාංග නැවත පරිලෝකනය කරන්න</string>
+    <string name="rescan_devices">උපාංග පරිලෝකනය කරන්න</string>
     <string name="device_dump">උපාංග ඩම්ප්</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

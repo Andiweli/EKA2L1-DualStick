@@ -1,0 +1,5 @@
+# Copy this file to local.properties and adjust the paths for your machine.
+# Example for Windows:
+# sdk.dir=C\:\\Users\\YOUR_USER\\AppData\\Local\\Android\\Sdk
+# ndk.dir=C\:\\Users\\YOUR_USER\\AppData\\Local\\Android\\Sdk\\ndk\\25.1.8937393
+# cmake.dir=C\:\\Users\\YOUR_USER\\AppData\\Local\\Android\\Sdk\\cmake\\3.22.1

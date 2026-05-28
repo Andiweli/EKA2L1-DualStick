@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">このアプリには OpenGL ES 3.0+ が必要です。</string>
     <string name="warning">注意</string>
-    <string name="scoped_storage_warning">あなたのユーザーデータは アプリのアンインストール時に 削除される場所に保存されます\n</string>
+    <string name="scoped_storage_warning">ユーザーデータは、アプリをアンインストールすると削除される場所に保存されています:
+</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">事前設定パックをインストール</string>
     <string name="delete_existing_data_title">既存データを削除</string>
     <string name="delete_existing_data">既存のエミュレーターデータ（デバイス、アプリ、ゲームなど）を削除しますか？</string>
+    <string name="delete_device_failed">デバイスを削除できませんでした。</string>
+    <string name="delete_device_message">選択したデバイスを削除しますか？ ROM フォルダーと devices.yml のエントリが削除されます。</string>
+    <string name="delete_device_title">デバイスを削除</string>
     <string name="fail_to_install_preconfigured_pack">事前設定パックのインストールに失敗しました！</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">事前設定パックのインストールに失敗しました！古いデータにロールバックしました！</string>
     <string name="fail_to_export_preconfigured_pack">事前設定パックのエクスポートに失敗しました！</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">インストール</string>
-    <string name="rescan_devices">Rescan devices</string>
+    <string name="rescan_devices">デバイスをスキャン</string>
     <string name="device_dump">デバイスダンプ</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

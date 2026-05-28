@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">The app requires OpenGL ES 3.0+.</string>
     <string name="warning">Warning</string>
-    <string name="scoped_storage_warning">Your user data is stored in a location which will be deleted when you uninstall the app:\n</string>
+    <string name="scoped_storage_warning">داده‌های کاربر شما در مکانی ذخیره می‌شود که با حذف برنامه پاک خواهد شد:
+</string>
     <string name="install_ng_game">Install N-Gage game</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">نصب بسته از پیش پیکربندی‌شده</string>
     <string name="delete_existing_data_title">حذف داده‌های موجود</string>
     <string name="delete_existing_data">آیا می‌خواهید داده‌های موجود شبیه‌ساز (دستگاه‌ها، برنامه‌ها، بازی‌ها و ...) را حذف کنید؟</string>
+    <string name="delete_device_failed">دستگاه حذف نشد.</string>
+    <string name="delete_device_message">دستگاه انتخاب‌شده حذف شود؟ این کار پوشه ROM و ورودی آن در devices.yml را حذف می‌کند.</string>
+    <string name="delete_device_title">حذف دستگاه</string>
     <string name="fail_to_install_preconfigured_pack">نصب بسته از پیش پیکربندی‌شده ناموفق بود!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">نصب بسته از پیش پیکربندی‌شده ناموفق بود! داده‌های قدیمی بازگردانده شدند!</string>
     <string name="fail_to_export_preconfigured_pack">صادر کردن بسته از پیش پیکربندی‌شده ناموفق بود!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Install</string>
-    <string name="rescan_devices">Rescan devices</string>
+    <string name="rescan_devices">اسکن دستگاه‌ها</string>
     <string name="device_dump">Device dump</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

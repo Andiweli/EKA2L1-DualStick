@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Falha ao tirar um screenshot!</string>
     <string name="opengl_required">Este aplicativo requer OpenGL ES 3.0+.</string>
     <string name="warning">Atenção</string>
-    <string name="scoped_storage_warning">Seus dados de usuário são armazenados em um local que será excluído quando você desinstalar o aplicativo:\n</string>
+    <string name="scoped_storage_warning">Seus dados de usuário são armazenados em um local que será excluído ao desinstalar o aplicativo:
+</string>
     <string name="install_ng_game">Instalar jogo N-Gage</string>
     <string name="notify_dialog_title">Notificação</string>
     <string name="grid_app_list_mode">Modo em grade</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Instalar pacote pré-configurado</string>
     <string name="delete_existing_data_title">Deletar dados existentes</string>
     <string name="delete_existing_data">Deseja apagar os dados de emuladores existentes (dispositivos, apps, jogos,...)?</string>
+    <string name="delete_device_failed">Não foi possível excluir o dispositivo.</string>
+    <string name="delete_device_message">Excluir o dispositivo selecionado? Isso remove sua pasta ROM e sua entrada em devices.yml.</string>
+    <string name="delete_device_title">Excluir dispositivo</string>
     <string name="fail_to_install_preconfigured_pack">Falha ao instalar o pacote pré-configurado!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Falha ao instalar o pacote pré-configurado! Reverter para os dados antigos!</string>
     <string name="fail_to_export_preconfigured_pack">Falha ao exportar o pacote pré-configurado!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Arquivo de inicialização salvo como %s!</string>
     <string name="install">Instalar</string>
-    <string name="rescan_devices">Reescanear dispositivos</string>
+    <string name="rescan_devices">Escanear dispositivos</string>
     <string name="device_dump">Despejo de dispositivo</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

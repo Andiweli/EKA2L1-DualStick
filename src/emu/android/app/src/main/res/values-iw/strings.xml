@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">צילום מסך נכשל</string>
     <string name="opengl_required">האפליקציה דורשת OpenGL ES 3.0+</string>
     <string name="warning">אזהרה</string>
-    <string name="scoped_storage_warning">Your user data is stored in a location which will be deleted when you uninstall the app:\n</string>
+    <string name="scoped_storage_warning">נתוני המשתמש שלך מאוחסנים במיקום שיימחק בעת הסרת ההתקנה של האפליקציה:
+</string>
     <string name="install_ng_game">התקן משחק N-Gage</string>
     <string name="notify_dialog_title">הודעה</string>
     <string name="grid_app_list_mode">מצב רשת</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">התקן חבילה שהוגדרה מראש</string>
     <string name="delete_existing_data_title">מחיקת נתונים קיימים</string>
     <string name="delete_existing_data">האם ברצונך למחוק את נתוני האמולטור הקיימים (מכשירים, אפליקציות, משחקים וכו׳)?</string>
+    <string name="delete_device_failed">לא ניתן למחוק את המכשיר.</string>
+    <string name="delete_device_message">למחוק את המכשיר שנבחר? פעולה זו תסיר את תיקיית ה-ROM שלו ואת הרשומה שלו ב-devices.yml.</string>
+    <string name="delete_device_title">מחק מכשיר</string>
     <string name="fail_to_install_preconfigured_pack">התקנת החבילה שהוגדרה מראש נכשלה!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">התקנת החבילה שהוגדרה מראש נכשלה! בוצעה חזרה לנתונים הישנים!</string>
     <string name="fail_to_export_preconfigured_pack">הייצוא של החבילה שהוגדרה מראש נכשל!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">Install</string>
-    <string name="rescan_devices">Rescan devices</string>
+    <string name="rescan_devices">סרוק מכשירים</string>
     <string name="device_dump">Device dump</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

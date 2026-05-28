@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Failed to take screenshot!</string>
     <string name="opengl_required">此应用需要OpenGL ES 3.0及更高版本。</string>
     <string name="warning">警告</string>
-    <string name="scoped_storage_warning">您的用户数据存储路径在卸载应用时将被删除\n</string>
+    <string name="scoped_storage_warning">您的用户数据存储在卸载应用时会被删除的位置：
+</string>
     <string name="install_ng_game">安装 N-Gage 游戏</string>
     <string name="notify_dialog_title">Notification</string>
     <string name="grid_app_list_mode">Grid mode</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">安装预配置包</string>
     <string name="delete_existing_data_title">删除现有数据</string>
     <string name="delete_existing_data">您要删除现有的模拟器数据（设备、应用、游戏等）吗？</string>
+    <string name="delete_device_failed">无法删除设备。</string>
+    <string name="delete_device_message">删除所选设备？这会移除其 ROM 文件夹以及 devices.yml 中的条目。</string>
+    <string name="delete_device_title">删除设备</string>
     <string name="fail_to_install_preconfigured_pack">安装预配置包失败！</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">安装预配置包失败！已回滚到旧数据！</string>
     <string name="fail_to_export_preconfigured_pack">导出预配置包失败！</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Launch file saved as %s!</string>
     <string name="install">安装</string>
-    <string name="rescan_devices">重新扫描设备</string>
+    <string name="rescan_devices">扫描设备</string>
     <string name="device_dump">从设备上导出的ROM</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

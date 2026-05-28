@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Impossibile eseguire lo screenshot!</string>
     <string name="opengl_required">Questa applicazione richiede OpenGL ES 3.0+.</string>
     <string name="warning">Attenzione</string>
-    <string name="scoped_storage_warning">I tuoi dati utente vengono memorizzati in una posizione che verrà cancellata quando disinstalli l\'app:\n</string>
+    <string name="scoped_storage_warning">I tuoi dati utente sono archiviati in una posizione che verrà eliminata quando disinstalli l\'app:
+</string>
     <string name="install_ng_game">Installa gioco N-Gage</string>
     <string name="notify_dialog_title">Notifiche</string>
     <string name="grid_app_list_mode">Modalità Griglia</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Installa pacchetto preconfigurato</string>
     <string name="delete_existing_data_title">Elimina dati esistenti</string>
     <string name="delete_existing_data">Vuoi eliminare i dati dell\'emulatore esistente (dispositivi, applicazioni, giochi,...)?</string>
+    <string name="delete_device_failed">Impossibile eliminare il dispositivo.</string>
+    <string name="delete_device_message">Eliminare il dispositivo selezionato? Verranno rimossi la sua cartella ROM e la sua voce in devices.yml.</string>
+    <string name="delete_device_title">Elimina dispositivo</string>
     <string name="fail_to_install_preconfigured_pack">Impossibile installare il pacchetto preconfigurato!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Installazione del pacchetto preconfigurato non riuscita! Ripristino dati pre-esistenti!</string>
     <string name="fail_to_export_preconfigured_pack">Impossibile esportare il pacchetto preconfigurato!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/Firmware</string>
     <string name="save_launch_file_success">Avvia il file salvato come %s!</string>
     <string name="install">Installa</string>
-    <string name="rescan_devices">Ricarica dispositivi</string>
+    <string name="rescan_devices">Scansiona dispositivi</string>
     <string name="device_dump">Dump dispositivo</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

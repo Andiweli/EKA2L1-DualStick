@@ -25,7 +25,8 @@
     <string name="take_screenshot_fail">Не удалось выполнить скриншот!</string>
     <string name="opengl_required">Приложение требует OpenGL ES 3.0+.</string>
     <string name="warning">Внимание</string>
-    <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая будет удалена при удалении приложения:\n</string>
+    <string name="scoped_storage_warning">Ваши пользовательские данные хранятся в папке, которая будет удалена при удалении приложения:
+</string>
     <string name="install_ng_game">Установка игры N-Gage</string>
     <string name="notify_dialog_title">Уведомление</string>
     <string name="grid_app_list_mode">Режим сетки</string>
@@ -36,6 +37,9 @@
     <string name="install_preconfigured_pack">Установить предварительно настроенный пакет</string>
     <string name="delete_existing_data_title">Удалить все существующие данные</string>
     <string name="delete_existing_data">Вы хотите удалить существующие данные эмулятора (устройства, приложения, игры,...)?</string>
+    <string name="delete_device_failed">Не удалось удалить устройство.</string>
+    <string name="delete_device_message">Удалить выбранное устройство? Будут удалены его папка ROM и запись в devices.yml.</string>
+    <string name="delete_device_title">Удалить устройство</string>
     <string name="fail_to_install_preconfigured_pack">Не удалось установить предварительно настроенный пакет!</string>
     <string name="fail_to_install_preconfigured_pack_and_rollback">Не удалось установить предварительно настроенный пакет! Сброс до старой информации!</string>
     <string name="fail_to_export_preconfigured_pack">Не удалось экспортировать предварительно настроенный пакет!</string>
@@ -45,7 +49,7 @@
     <string name="rom_or_firmware">ROM/прошивка</string>
     <string name="save_launch_file_success">Файл запуска сохранён как %s!</string>
     <string name="install">Установить</string>
-    <string name="rescan_devices">Пересканировать устройства</string>
+    <string name="rescan_devices">Сканировать устройства</string>
     <string name="device_dump">Дамп устройства</string>
     <string name="rpkg" translatable="false">RPKG</string>
     <string name="rom" translatable="false">ROM</string>

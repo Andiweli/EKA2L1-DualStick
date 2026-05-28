@@ -42,13 +42,30 @@
                     android:text="@string/rescan_devices" />
             </LinearLayout>
 
-            <Button
-                android:id="@+id/bt_rename_device"
+            <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:layout_marginTop="8dp"
-                android:gravity="center"
-                android:text="@string/rename" />
+                android:baselineAligned="false"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/bt_rename_device"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/rename" />
+
+                <Button
+                    android:id="@+id/bt_delete_device"
+                    android:layout_width="0dp"
+                    android:layout_height="wrap_content"
+                    android:layout_marginStart="8dp"
+                    android:layout_weight="1"
+                    android:gravity="center"
+                    android:text="@string/action_context_delete" />
+            </LinearLayout>
         </LinearLayout>
 
         <com.skydoves.expandablelayout.ExpandableLayout
@@ -143,7 +160,7 @@
                         android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:text="@string/firmware"
-                        android:textColor="@android:color/black" />
+                        android:textColor="?attr/deviceFileButtonTextColor" />
 
                     <TextView
                         android:id="@+id/tv_firmware"
@@ -171,7 +188,7 @@
                         android:layout_marginTop="8dp"
                         android:gravity="center"
                         android:text="@string/rom"
-                        android:textColor="@android:color/black" />
+                        android:textColor="?attr/deviceFileButtonTextColor" />
 
                     <TextView
                         android:id="@+id/tv_rom"

@@ -20,6 +20,7 @@
         <item name="textColorPrimary">@color/dark_color_text_primary</item>
         <item name="textColorSecondary">@color/dark_color_text_secondary</item>
         <item name="spinnerColor">@color/dark_color_spinner</item>
+        <item name="deviceFileButtonTextColor">@android:color/black</item>
         <item name="android:navigationBarColor" tools:ignore="NewApi">@android:color/black</item>
     </style>
 
@@ -43,6 +44,7 @@
         <item name="textColorPrimary">@color/light_color_text_primary</item>
         <item name="textColorSecondary">@color/light_color_text_secondary</item>
         <item name="spinnerColor">@color/light_color_spinner</item>
+        <item name="deviceFileButtonTextColor">@android:color/white</item>
     </style>
 
     <style name="AppTheme.NoActionBar" parent="Theme.AppCompat.NoActionBar">
