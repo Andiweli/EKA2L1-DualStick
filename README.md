@@ -7,6 +7,11 @@
 
 Android-focused fork of [**EKA2L1**](https://github.com/EKA2L1/EKA2L1), the Symbian OS / N-Gage emulator written in **C++17**.
 
+![Android 16](https://img.shields.io/badge/OS-up%20to%20Android%2016-green)
+![ABI](https://img.shields.io/badge/ABI-32bit/64bit-orange)
+![AI](https://img.shields.io/badge/AI-assisted%20coding-6e7781)
+![Controller](https://img.shields.io/badge/Controls-Touch/Controller-blueviolet)
+
 > [!NOTE]
 > This fork focuses specifically on **Android** and on adding proper support for **two analog sticks**, with the goal of improving controls and playability for Symbian and N-Gage games on modern Android handhelds and devices.
 
