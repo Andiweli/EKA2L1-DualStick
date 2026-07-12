@@ -20,6 +20,7 @@
 package com.github.eka2l1.applist;
 
 import android.annotation.SuppressLint;
+import android.app.Activity;
 import android.app.ActivityManager;
 import android.app.AlertDialog;
 import android.app.ProgressDialog;
@@ -33,11 +34,11 @@ import android.graphics.Rect;
 import android.graphics.RectF;
 import android.net.Uri;
 import android.text.SpannableString;
+import android.text.format.Formatter;
 import android.text.style.ForegroundColorSpan;
 import android.text.style.RelativeSizeSpan;
 import android.os.Bundle;
 import android.provider.DocumentsContract;
-import android.util.Log;
 import android.util.TypedValue;
 import android.view.GestureDetector;
 import android.view.LayoutInflater;
@@ -128,6 +129,7 @@ public class AppsListFragment extends Fragment {
     private int preferredFocusedPosition = 0;
     private boolean restartNeeded;
     private AppItem pendingAppItem;
+    private AppItem pendingExportAppItem;
     private int currentViewMode = AppsListAdapter.VIEW_MODE_LIST;
 
     private static final String APP_RENAME_KEY_PREFIX = "apps.rename";
@@ -147,9 +149,15 @@ public class AppsListFragment extends Fragment {
     private final ActivityResultLauncher<String[]> openPreconfiguredPackZIPLauncher = registerForActivityResult(
             FileUtils.getFilePicker(),
             this::onPreconfiguredPackZIPResult);
+    private final ActivityResultLauncher<String[]> openAppBackupLauncher = registerForActivityResult(
+            FileUtils.getFilePicker(),
+            this::onAppBackupResult);
     private final ActivityResultLauncher<Void> pickPreconfiguredPackExportDirectory = registerForActivityResult(
             FileUtils.getDirPicker(true),
             this::onPreconfiguredPackExportDirectoryResult);
+    private final ActivityResultLauncher<Void> pickAppExportDirectory = registerForActivityResult(
+            FileUtils.getDirPicker(true),
+            this::onAppExportDirectoryResult);
     private final ActivityResultLauncher pickLaunchFileDirectory = registerForActivityResult(
             FileUtils.getDirPicker(true),
             this::onLaunchFileDirPickResult);
@@ -638,6 +646,219 @@ public class AppsListFragment extends Fragment {
         });
 
         dialog.show();
+    }
+
+    private void openAppBackupPicker() {
+        openAppBackupLauncher.launch(new String[] { "*.zip" });
+    }
+
+    private void onAppBackupResult(String sourcePath) {
+        if (sourcePath == null) {
+            return;
+        }
+        inspectAppBackup(sourcePath);
+    }
+
+    @SuppressLint("CheckResult")
+    private void inspectAppBackup(String sourcePath) {
+        Context context = requireContext();
+        ProgressDialog dialog = new ProgressDialog(requireActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.import_app_checking));
+        dialog.show();
+
+        Disposable disposable = Single.fromCallable(() ->
+                        AppImportManager.inspectBackup(context, sourcePath))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<AppImportManager.ImportInfo>() {
+                    @Override
+                    public void onSuccess(@NonNull AppImportManager.ImportInfo info) {
+                        dialog.cancel();
+                        if (!isAdded()) {
+                            return;
+                        }
+                        showAppImportConfirmation(sourcePath, info);
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.cancel();
+                        e.printStackTrace();
+                        if (isAdded()) {
+                            Toast.makeText(context, R.string.import_app_invalid,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void showAppImportConfirmation(String sourcePath,
+                                           AppImportManager.ImportInfo info) {
+        String formattedSize = Formatter.formatShortFileSize(requireContext(), info.totalBytes);
+        new AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.import_app_title)
+                .setMessage(getString(R.string.import_app_message,
+                        info.title, info.appUid, info.fileCount, formattedSize))
+                .setPositiveButton(R.string.import_app_action,
+                        (dialog, which) -> importAppBackup(sourcePath, info))
+                .setNegativeButton(android.R.string.cancel,
+                        (dialog, which) -> dialog.cancel())
+                .show();
+    }
+
+    @SuppressLint("CheckResult")
+    private void importAppBackup(String sourcePath, AppImportManager.ImportInfo info) {
+        Context context = requireContext();
+        ProgressDialog dialog = new ProgressDialog(requireActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.import_app_processing));
+        dialog.show();
+
+        Disposable disposable = Single.fromCallable(() ->
+                        AppImportManager.importBackup(context, sourcePath, info))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<AppImportManager.ImportInfo>() {
+                    @Override
+                    public void onSuccess(@NonNull AppImportManager.ImportInfo importedInfo) {
+                        dialog.cancel();
+                        if (!isAdded()) {
+                            return;
+                        }
+                        Toast.makeText(context,
+                                getString(R.string.import_app_completed, importedInfo.title),
+                                Toast.LENGTH_LONG).show();
+                        getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
+                        restart();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.cancel();
+                        e.printStackTrace();
+                        if (isAdded()) {
+                            Toast.makeText(context, R.string.import_app_failed,
+                                    Toast.LENGTH_LONG).show();
+                        }
+                    }
+                });
+        compositeDisposable.add(disposable);
+    }
+
+    private void requestAppExport(AppItem appItem) {
+        pendingExportAppItem = appItem;
+        pickAppExportDirectory.launch(null);
+    }
+
+    private void onAppExportDirectoryResult(String destinationPath) {
+        AppItem appItem = pendingExportAppItem;
+        pendingExportAppItem = null;
+
+        if (destinationPath == null || appItem == null) {
+            return;
+        }
+
+        exportApp(appItem, destinationPath);
+    }
+
+    @SuppressLint("CheckResult")
+    private void exportApp(AppItem appItem, String destinationPath) {
+        Context context = requireContext();
+        Activity activity = requireActivity();
+
+        ProgressDialog dialog = new ProgressDialog(activity);
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.export_app_processing));
+        dialog.show();
+
+        Disposable disposable = Single.<String>fromCallable(() ->
+                        AppExportManager.exportApp(context, activity, appItem, destinationPath))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<String>() {
+                    @Override
+                    public void onSuccess(@NonNull String exportedFileName) {
+                        dialog.cancel();
+                        Toast.makeText(context,
+                                getString(R.string.export_app_completed, exportedFileName),
+                                Toast.LENGTH_LONG).show();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.cancel();
+                        Toast.makeText(context, R.string.export_app_failed,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
+
+        compositeDisposable.add(disposable);
+    }
+
+    private void confirmDeleteApp(AppItem appItem) {
+        new AlertDialog.Builder(requireActivity())
+                .setTitle(R.string.delete_app_title)
+                .setMessage(getString(R.string.delete_app_message, appItem.getTitle()))
+                .setPositiveButton(R.string.action_context_delete,
+                        (dialog, which) -> deleteApp(appItem))
+                .setNegativeButton(android.R.string.cancel,
+                        (dialog, which) -> dialog.cancel())
+                .show();
+    }
+
+    @SuppressLint("CheckResult")
+    private void deleteApp(AppItem appItem) {
+        ProgressDialog dialog = new ProgressDialog(getActivity());
+        dialog.setIndeterminate(true);
+        dialog.setProgressStyle(ProgressDialog.STYLE_SPINNER);
+        dialog.setCancelable(false);
+        dialog.setMessage(getText(R.string.processing));
+        dialog.show();
+
+        Single.fromCallable(() -> Emulator.uninstallApp((int) appItem.getUid()))
+                .subscribeOn(Schedulers.io())
+                .observeOn(AndroidSchedulers.mainThread())
+                .subscribeWith(new DisposableSingleObserver<Boolean>() {
+                    @Override
+                    public void onSuccess(@NonNull Boolean deleted) {
+                        if (!deleted) {
+                            dialog.cancel();
+                            Toast.makeText(getContext(), R.string.delete_app_failed,
+                                    Toast.LENGTH_LONG).show();
+                            return;
+                        }
+
+                        String uidStr = Long.toHexString(appItem.getUid()).toUpperCase(Locale.US);
+                        File configDir = new File(Emulator.getConfigsDir(), uidStr);
+                        FileUtils.deleteDirectory(configDir);
+
+                        AppDataStore dataStore = AppDataStore.getAndroidStore();
+                        dataStore.remove(getAppRenameKey(appItem.getUid()));
+                        dataStore.save();
+
+                        dialog.cancel();
+                        Toast.makeText(getContext(), R.string.delete_app_completed,
+                                Toast.LENGTH_SHORT).show();
+
+                        getParentFragmentManager().setFragmentResult(KEY_RESTART, new Bundle());
+                        restart();
+                    }
+
+                    @Override
+                    public void onError(@NonNull Throwable e) {
+                        dialog.cancel();
+                        Toast.makeText(getContext(), R.string.delete_app_failed,
+                                Toast.LENGTH_LONG).show();
+                    }
+                });
     }
 
     private void switchToDeviceList() {
@@ -1198,6 +1419,8 @@ public class AppsListFragment extends Fragment {
                     .commit();
         } else if (itemId == R.id.action_install_ng_game) {
             openNGageGameLauncher.launch(null);
+        } else if (itemId == R.id.action_import_app_backup) {
+            openAppBackupPicker();
         } else if (itemId == R.id.action_install_preconfigured_pack) {
             openPreconfiguredZIPFilePicker();
         } else if (itemId == R.id.action_export_preconfigured_pack) {
@@ -1383,6 +1606,10 @@ public class AppsListFragment extends Fragment {
             saveAppLaunchFile(appItem);
         } else if (item.getItemId() == R.id.action_context_rename) {
             showRenameAppDialog(appItem);
+        } else if (item.getItemId() == R.id.action_context_export) {
+            requestAppExport(appItem);
+        } else if (item.getItemId() == R.id.action_context_delete) {
+            confirmDeleteApp(appItem);
         }
         return super.onContextItemSelected(item);
     }

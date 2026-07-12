@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Tətbiqi sil</string>
+    <string name="delete_app_message">“%1$s” silinsin? Tətbiq və saxlanmış məlumatları silinəcək.</string>
+    <string name="delete_app_completed">Tətbiq silindi.</string>
+    <string name="delete_app_failed">Tətbiqi silmək mümkün olmadı.</string>
+    <string name="action_context_export">İxrac et</string>
+    <string name="export_app_completed">Tətbiq ixrac edildi: %1$s</string>
+    <string name="export_app_failed">Tətbiqi ixrac etmək mümkün olmadı.</string>
+    <string name="export_app_processing">Tətbiq və saxlanmış məlumatlar ixrac olunur…</string>
+    <string name="import_app_action">İdxal et</string>
+    <string name="import_app_checking">Tətbiq ehtiyat nüsxəsi yoxlanılır…</string>
+    <string name="import_app_completed">Tətbiq idxal edildi: %1$s</string>
+    <string name="import_app_failed">Tətbiqi idxal etmək mümkün olmadı. Mövcud məlumatlar bərpa edildi.</string>
+    <string name="import_app_invalid">Seçilmiş fayl etibarlı EKA2L1 tətbiq ehtiyat nüsxəsi deyil.</string>
+    <string name="import_app_menu">Tətbiq/oyun ehtiyat nüsxəsini idxal et</string>
+    <string name="import_app_message">%1$s (UID %2$s) saxlanmış məlumatlarla birlikdə idxal edilsin?\n\n%3$d fayl, %4$s\nBu tətbiqin mövcud faylları üzərinə yazılacaq.</string>
+    <string name="import_app_processing">Tətbiq və saxlanmış məlumatlar idxal olunur…</string>
+    <string name="import_app_title">Tətbiqi idxal et</string>
 </resources>

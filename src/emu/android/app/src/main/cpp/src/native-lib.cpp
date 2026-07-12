@@ -252,6 +252,26 @@ Java_com_github_eka2l1_emu_Emulator_uninstallPackage(JNIEnv *env, jclass clazz, 
     state->launcher->uninstall_package(uid, ext_index);
 }
 
+extern "C" JNIEXPORT jboolean JNICALL
+Java_com_github_eka2l1_emu_Emulator_uninstallApp(JNIEnv *env, jclass clazz, jint app_uid) {
+    return state->launcher->uninstall_app(static_cast<std::uint32_t>(app_uid));
+}
+
+extern "C" JNIEXPORT jobjectArray JNICALL
+Java_com_github_eka2l1_emu_Emulator_getAppExportPaths(JNIEnv *env, jclass clazz, jint app_uid) {
+    std::vector<std::string> paths =
+        state->launcher->get_app_export_paths(static_cast<std::uint32_t>(app_uid));
+
+    jobjectArray result = env->NewObjectArray(static_cast<jsize>(paths.size()),
+        env->FindClass("java/lang/String"), nullptr);
+
+    for (jsize i = 0; i < static_cast<jsize>(paths.size()); ++i) {
+        env->SetObjectArrayElement(result, i, env->NewStringUTF(paths[i].c_str()));
+    }
+
+    return result;
+}
+
 extern "C" JNIEXPORT void JNICALL
 Java_com_github_eka2l1_emu_Emulator_mountSdCard(JNIEnv *env, jclass clazz, jstring path) {
     const char *cstr = env->GetStringUTFChars(path, nullptr);

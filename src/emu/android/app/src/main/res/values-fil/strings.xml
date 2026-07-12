@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">I-delete ang app</string>
+    <string name="delete_app_message">I-delete ang “%1$s”? Aalisin ang app at ang naka-save nitong data.</string>
+    <string name="delete_app_completed">Na-delete ang app.</string>
+    <string name="delete_app_failed">Hindi ma-delete ang app.</string>
+    <string name="action_context_export">I-export</string>
+    <string name="export_app_completed">Na-export ang app: %1$s</string>
+    <string name="export_app_failed">Hindi ma-export ang app.</string>
+    <string name="export_app_processing">Ini-export ang app at naka-save na data…</string>
+    <string name="import_app_action">I-import</string>
+    <string name="import_app_checking">Sinusuri ang backup ng app…</string>
+    <string name="import_app_completed">Na-import ang app: %1$s</string>
+    <string name="import_app_failed">Hindi ma-import ang app. Naibalik ang kasalukuyang data.</string>
+    <string name="import_app_invalid">Ang napiling file ay hindi wastong backup ng EKA2L1 app.</string>
+    <string name="import_app_menu">Mag-import ng backup ng app/laro</string>
+    <string name="import_app_message">I-import ang %1$s (UID %2$s) kasama ang naka-save na data?\n\n%3$d file, %4$s\nMapapatungan ang mga kasalukuyang file ng app na ito.</string>
+    <string name="import_app_processing">Ini-import ang app at naka-save na data…</string>
+    <string name="import_app_title">Mag-import ng app</string>
 </resources>

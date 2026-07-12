@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Видалити застосунок</string>
+    <string name="delete_app_message">Видалити «%1$s»? Застосунок і його збережені дані буде видалено.</string>
+    <string name="delete_app_completed">Застосунок видалено.</string>
+    <string name="delete_app_failed">Не вдалося видалити застосунок.</string>
+    <string name="action_context_export">Експортувати</string>
+    <string name="export_app_completed">Застосунок експортовано: %1$s</string>
+    <string name="export_app_failed">Не вдалося експортувати застосунок.</string>
+    <string name="export_app_processing">Експорт застосунку та збережених даних…</string>
+    <string name="import_app_action">Імпортувати</string>
+    <string name="import_app_checking">Перевірка резервної копії застосунку…</string>
+    <string name="import_app_completed">Застосунок імпортовано: %1$s</string>
+    <string name="import_app_failed">Не вдалося імпортувати застосунок. Наявні дані відновлено.</string>
+    <string name="import_app_invalid">Вибраний файл не є дійсною резервною копією застосунку EKA2L1.</string>
+    <string name="import_app_menu">Імпортувати резервну копію застосунку/гри</string>
+    <string name="import_app_message">Імпортувати %1$s (UID %2$s) разом зі збереженими даними?\n\n%3$d файлів, %4$s\nНаявні файли цього застосунку буде перезаписано.</string>
+    <string name="import_app_processing">Імпорт застосунку та збережених даних…</string>
+    <string name="import_app_title">Імпортувати застосунок</string>
 </resources>

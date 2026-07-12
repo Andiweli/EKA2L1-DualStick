@@ -16,6 +16,10 @@
     <string name="mount_sd">Mount MMC/SD card</string>
     <string name="no_devices_found">No devices found</string>
     <string name="exit">Exit</string>
+    <string name="delete_app_title">Delete app</string>
+    <string name="delete_app_message">Delete “%1$s”? The app and its saved data will be removed.</string>
+    <string name="delete_app_completed">App deleted.</string>
+    <string name="delete_app_failed">App could not be deleted.</string>
     <string name="rename">Rename</string>
     <string name="save_log">Save log</string>
     <string name="take_screenshot">Take screenshot</string>
@@ -270,4 +274,20 @@
     <string name="save_log_menu">Save log</string>
 	<string name="install_sis_package_launcher">SIS/SISX</string>
 	<string name="install_ng_game_launcher">N-Gage</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="action_context_export">Export</string>
+    <string name="export_app_completed">App exported: %1$s</string>
+    <string name="export_app_failed">App could not be exported.</string>
+    <string name="export_app_processing">Exporting app and saved data…</string>
+    <string name="import_app_action">Import</string>
+    <string name="import_app_checking">Checking app backup…</string>
+    <string name="import_app_completed">App imported: %1$s</string>
+    <string name="import_app_failed">App could not be imported. Existing data was restored.</string>
+    <string name="import_app_invalid">The selected file is not a valid EKA2L1 app backup.</string>
+    <string name="import_app_menu">Import app/game backup</string>
+    <string name="import_app_message">Import %1$s (UID %2$s) including saved data?\n\n%3$d files, %4$s\nExisting files for this app will be overwritten.</string>
+    <string name="import_app_processing">Importing app and saved data…</string>
+    <string name="import_app_title">Import app</string>
 </resources>

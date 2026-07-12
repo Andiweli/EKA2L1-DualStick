@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">অ্যাপ মুছুন</string>
+    <string name="delete_app_message">“%1$s” মুছবেন? অ্যাপ এবং এর সংরক্ষিত ডেটা সরিয়ে দেওয়া হবে।</string>
+    <string name="delete_app_completed">অ্যাপ মুছে ফেলা হয়েছে।</string>
+    <string name="delete_app_failed">অ্যাপ মুছে ফেলা যায়নি।</string>
+    <string name="action_context_export">এক্সপোর্ট</string>
+    <string name="export_app_completed">অ্যাপ এক্সপোর্ট হয়েছে: %1$s</string>
+    <string name="export_app_failed">অ্যাপ এক্সপোর্ট করা যায়নি।</string>
+    <string name="export_app_processing">অ্যাপ ও সংরক্ষিত ডেটা এক্সপোর্ট হচ্ছে…</string>
+    <string name="import_app_action">ইমপোর্ট</string>
+    <string name="import_app_checking">অ্যাপ ব্যাকআপ পরীক্ষা করা হচ্ছে…</string>
+    <string name="import_app_completed">অ্যাপ ইমপোর্ট হয়েছে: %1$s</string>
+    <string name="import_app_failed">অ্যাপ ইমপোর্ট করা যায়নি। বিদ্যমান ডেটা পুনরুদ্ধার করা হয়েছে।</string>
+    <string name="import_app_invalid">নির্বাচিত ফাইলটি বৈধ EKA2L1 অ্যাপ ব্যাকআপ নয়।</string>
+    <string name="import_app_menu">অ্যাপ/গেম ব্যাকআপ ইমপোর্ট করুন</string>
+    <string name="import_app_message">সংরক্ষিত ডেটাসহ %1$s (UID %2$s) ইমপোর্ট করবেন?\n\n%3$dটি ফাইল, %4$s\nএই অ্যাপের বিদ্যমান ফাইলগুলো ওভাররাইট হবে।</string>
+    <string name="import_app_processing">অ্যাপ ও সংরক্ষিত ডেটা ইমপোর্ট হচ্ছে…</string>
+    <string name="import_app_title">অ্যাপ ইমপোর্ট করুন</string>
 </resources>

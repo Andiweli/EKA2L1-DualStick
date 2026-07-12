@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Xóa ứng dụng</string>
+    <string name="delete_app_message">Xóa “%1$s”? Ứng dụng và dữ liệu đã lưu sẽ bị xóa.</string>
+    <string name="delete_app_completed">Đã xóa ứng dụng.</string>
+    <string name="delete_app_failed">Không thể xóa ứng dụng.</string>
+    <string name="action_context_export">Xuất</string>
+    <string name="export_app_completed">Đã xuất ứng dụng: %1$s</string>
+    <string name="export_app_failed">Không thể xuất ứng dụng.</string>
+    <string name="export_app_processing">Đang xuất ứng dụng và dữ liệu đã lưu…</string>
+    <string name="import_app_action">Nhập</string>
+    <string name="import_app_checking">Đang kiểm tra bản sao lưu ứng dụng…</string>
+    <string name="import_app_completed">Đã nhập ứng dụng: %1$s</string>
+    <string name="import_app_failed">Không thể nhập ứng dụng. Dữ liệu hiện có đã được khôi phục.</string>
+    <string name="import_app_invalid">Tệp đã chọn không phải là bản sao lưu ứng dụng EKA2L1 hợp lệ.</string>
+    <string name="import_app_menu">Nhập bản sao lưu ứng dụng/trò chơi</string>
+    <string name="import_app_message">Nhập %1$s (UID %2$s) cùng dữ liệu đã lưu?\n\n%3$d tệp, %4$s\nCác tệp hiện có của ứng dụng này sẽ bị ghi đè.</string>
+    <string name="import_app_processing">Đang nhập ứng dụng và dữ liệu đã lưu…</string>
+    <string name="import_app_title">Nhập ứng dụng</string>
 </resources>

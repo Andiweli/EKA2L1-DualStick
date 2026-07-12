@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Padam aplikasi</string>
+    <string name="delete_app_message">Padam “%1$s”? Aplikasi dan data simpanannya akan dialih keluar.</string>
+    <string name="delete_app_completed">Aplikasi dipadam.</string>
+    <string name="delete_app_failed">Aplikasi tidak dapat dipadam.</string>
+    <string name="action_context_export">Eksport</string>
+    <string name="export_app_completed">Aplikasi dieksport: %1$s</string>
+    <string name="export_app_failed">Aplikasi tidak dapat dieksport.</string>
+    <string name="export_app_processing">Mengeksport aplikasi dan data simpanan…</string>
+    <string name="import_app_action">Import</string>
+    <string name="import_app_checking">Memeriksa sandaran aplikasi…</string>
+    <string name="import_app_completed">Aplikasi diimport: %1$s</string>
+    <string name="import_app_failed">Aplikasi tidak dapat diimport. Data sedia ada telah dipulihkan.</string>
+    <string name="import_app_invalid">Fail yang dipilih bukan sandaran aplikasi EKA2L1 yang sah.</string>
+    <string name="import_app_menu">Import sandaran aplikasi/permainan</string>
+    <string name="import_app_message">Import %1$s (UID %2$s) bersama data simpanan?\n\n%3$d fail, %4$s\nFail sedia ada untuk aplikasi ini akan ditulis ganti.</string>
+    <string name="import_app_processing">Mengimport aplikasi dan data simpanan…</string>
+    <string name="import_app_title">Import aplikasi</string>
 </resources>

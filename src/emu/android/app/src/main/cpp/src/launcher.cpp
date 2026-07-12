@@ -42,6 +42,13 @@
 #include <lunasvg.h>
 #include <jni.h>
 
+#include <algorithm>
+#include <array>
+#include <cctype>
+#include <cstdio>
+#include <filesystem>
+#include <system_error>
+
 #define STB_IMAGE_IMPLEMENTATION
 #include <stb/stb_image.h>
 
@@ -571,6 +578,683 @@ namespace eka2l1::android {
 
         if (obj)
             manager->uninstall_package(*obj);
+    }
+
+
+    static std::u16string normalize_app_package_path(std::u16string path, const drive_number app_drive) {
+        while (!path.empty() && path.back() == u'\0') {
+            path.pop_back();
+        }
+
+        std::replace(path.begin(), path.end(), u'/', u'\\');
+
+        if ((path.size() >= 2) && (path[0] == u'!') && (path[1] == u':')) {
+            path[0] = drive_to_char16(app_drive);
+        }
+
+        return common::lowercase_ucs2_string(path);
+    }
+
+    static std::u16string parent_directory_with_separator(const std::u16string &path) {
+        const std::size_t separator = path.find_last_of(u'\\');
+        if (separator == std::u16string::npos) {
+            return {};
+        }
+
+        return path.substr(0, separator + 1);
+    }
+
+    static bool paths_equal_ignoring_drive(const std::u16string &lhs,
+                                           const std::u16string &rhs) {
+        if (lhs == rhs) {
+            return true;
+        }
+
+        if ((lhs.size() >= 2) && (rhs.size() >= 2)
+                && (lhs[1] == u':') && (rhs[1] == u':')) {
+            return lhs.substr(2) == rhs.substr(2);
+        }
+
+        return false;
+    }
+
+    static bool path_is_inside_directory_ignoring_drive(const std::u16string &path,
+                                                        const std::u16string &directory) {
+        if (path.empty() || directory.empty()) {
+            return false;
+        }
+
+        if (path.rfind(directory, 0) == 0) {
+            return true;
+        }
+
+        if ((path.size() >= 2) && (directory.size() >= 2)
+                && (path[1] == u':') && (directory[1] == u':')) {
+            const std::u16string path_without_drive = path.substr(2);
+            const std::u16string directory_without_drive = directory.substr(2);
+            return path_without_drive.rfind(directory_without_drive, 0) == 0;
+        }
+
+        return false;
+    }
+
+    static int package_match_score_for_app(const package::object &pkg,
+                                           const std::uint32_t app_uid,
+                                           const std::u16string &app_path,
+                                           const std::u16string &registry_path,
+                                           const std::u16string &localized_registry_path,
+                                           const std::u16string &icon_path,
+                                           const drive_number app_drive) {
+        int score = 0;
+        bool file_sid_matched = false;
+        bool app_directory_matched = false;
+
+        const std::u16string app_directory = parent_directory_with_separator(app_path);
+
+        if (std::find(pkg.sids.begin(), pkg.sids.end(), app_uid) != pkg.sids.end()) {
+            score += 800;
+        }
+
+        for (const package::file_description &description : pkg.file_descriptions) {
+            const std::u16string target = normalize_app_package_path(description.target, app_drive);
+
+            if (!file_sid_matched && (description.sid != 0) && (description.sid == app_uid)) {
+                score += 700;
+                file_sid_matched = true;
+            }
+
+            if (!app_path.empty() && paths_equal_ignoring_drive(target, app_path)) {
+                score += 1000;
+            }
+
+            if (!registry_path.empty() && paths_equal_ignoring_drive(target, registry_path)) {
+                score += 100;
+            }
+
+            if (!localized_registry_path.empty()
+                    && paths_equal_ignoring_drive(target, localized_registry_path)) {
+                score += 50;
+            }
+
+            if (!icon_path.empty() && paths_equal_ignoring_drive(target, icon_path)) {
+                score += 10;
+            }
+
+            // EKA1/SIS-v1 packages do not always expose the application's UID as package UID
+            // or file SID. The application's private folder under \system\apps\ is therefore
+            // the safest additional ownership signal. Only score it once per package.
+            if (!app_directory_matched
+                    && path_is_inside_directory_ignoring_drive(target, app_directory)) {
+                score += 400;
+                app_directory_matched = true;
+            }
+        }
+
+        return score;
+    }
+
+    static void delete_known_app_registry_files(io_system *io,
+                                                const std::u16string &app_path,
+                                                const std::u16string &registry_path,
+                                                const std::u16string &localized_registry_path,
+                                                const std::u16string &icon_path) {
+        const std::u16string known_paths[] = {
+            app_path,
+            registry_path,
+            localized_registry_path,
+            icon_path
+        };
+
+        for (const std::u16string &path : known_paths) {
+            if (path.empty()) {
+                continue;
+            }
+
+            if (io->exist(path)) {
+                io->delete_entry(path);
+            }
+        }
+    }
+
+    static bool is_safe_legacy_app_directory(const std::u16string &app_directory,
+                                             const drive_number app_drive) {
+        if ((app_drive == drive_z) || (app_directory.size() < 18)) {
+            return false;
+        }
+
+        static const std::u16string expected_prefix = u":\\system\\apps\\";
+
+        if ((app_directory.size() < expected_prefix.size() + 2)
+                || (app_directory[1] != u':')
+                || (app_directory.substr(1, expected_prefix.size()) != expected_prefix)) {
+            return false;
+        }
+
+        const std::u16string app_folder_name =
+                app_directory.substr(expected_prefix.size() + 1);
+
+        if (app_folder_name.empty() || (app_folder_name.back() != u'\\')) {
+            return false;
+        }
+
+        const std::u16string folder_without_trailing_separator =
+                app_folder_name.substr(0, app_folder_name.size() - 1);
+
+        return !folder_without_trailing_separator.empty()
+                && (folder_without_trailing_separator.find(u'\\') == std::u16string::npos)
+                && (folder_without_trailing_separator != u".")
+                && (folder_without_trailing_separator != u"..");
+    }
+
+    static bool delete_legacy_app_directory(io_system *io,
+                                            const std::u16string &app_directory,
+                                            const drive_number app_drive) {
+        if (!is_safe_legacy_app_directory(app_directory, app_drive)) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "AppDelete refused unsafe legacy app directory {}",
+                      common::ucs2_to_utf8(app_directory));
+            return false;
+        }
+
+        const std::optional<std::u16string> raw_app_directory =
+                io->get_raw_path(app_directory);
+
+        if (!raw_app_directory.has_value()) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "AppDelete could not resolve raw path for {}",
+                      common::ucs2_to_utf8(app_directory));
+            return false;
+        }
+
+        common::delete_folder(common::ucs2_to_utf8(raw_app_directory.value()));
+
+        if (io->exist(app_directory)) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "AppDelete legacy app directory still exists after deletion: {}",
+                      common::ucs2_to_utf8(app_directory));
+            return false;
+        }
+
+        return true;
+    }
+
+    static void add_unique_export_uid(std::vector<std::uint32_t> &uids,
+                                      const std::uint32_t uid) {
+        if ((uid != 0) && (std::find(uids.begin(), uids.end(), uid) == uids.end())) {
+            uids.push_back(uid);
+        }
+    }
+
+    static std::u16string uid_as_hex_directory(const std::uint32_t uid) {
+        char uid_buffer[9] = {};
+        std::snprintf(uid_buffer, sizeof(uid_buffer), "%08x", uid);
+        return common::utf8_to_ucs2(uid_buffer);
+    }
+
+    static std::u16string app_directory_leaf(const std::u16string &app_directory) {
+        if (app_directory.empty()) {
+            return {};
+        }
+
+        std::u16string path = app_directory;
+        while (!path.empty() && (path.back() == u'\\')) {
+            path.pop_back();
+        }
+
+        const std::size_t separator = path.find_last_of(u'\\');
+        if (separator == std::u16string::npos) {
+            return path;
+        }
+
+        return path.substr(separator + 1);
+    }
+
+    static std::string lowercase_ascii(std::string value) {
+        std::transform(value.begin(), value.end(), value.begin(), [](const unsigned char character) {
+            return static_cast<char>(std::tolower(character));
+        });
+        return value;
+    }
+
+    static bool filename_matches_export_token(const std::string &filename,
+                                              const std::string &token) {
+        if (token.size() < 4) {
+            return false;
+        }
+
+        if (filename == token) {
+            return true;
+        }
+
+        const std::string prefixes[] = {
+            token + ".",
+            token + "_",
+            token + "-"
+        };
+
+        for (const std::string &prefix : prefixes) {
+            if (filename.rfind(prefix, 0) == 0) {
+                return true;
+            }
+        }
+
+        return false;
+    }
+
+    static void add_app_export_path(io_system *io,
+                                    const std::u16string &path,
+                                    const drive_number app_drive,
+                                    std::vector<std::u16string> &seen_virtual_paths,
+                                    std::vector<std::string> &result) {
+        std::u16string normalized_path = normalize_app_package_path(path, app_drive);
+        if ((normalized_path.size() < 3) || (normalized_path[1] != u':')
+                || (normalized_path[0] == u'z')) {
+            return;
+        }
+
+        if (!io->exist(normalized_path)) {
+            return;
+        }
+
+        if (std::find(seen_virtual_paths.begin(), seen_virtual_paths.end(), normalized_path)
+                != seen_virtual_paths.end()) {
+            return;
+        }
+
+        const std::optional<std::u16string> raw_path = io->get_raw_path(normalized_path);
+        if (!raw_path.has_value()) {
+            return;
+        }
+
+        seen_virtual_paths.push_back(normalized_path);
+        result.push_back(common::ucs2_to_utf8(normalized_path));
+        result.push_back(common::ucs2_to_utf8(raw_path.value()));
+    }
+
+    static void add_matching_export_children(io_system *io,
+                                             const std::u16string &virtual_directory,
+                                             const drive_number app_drive,
+                                             const std::vector<std::string> &tokens,
+                                             std::vector<std::u16string> &seen_virtual_paths,
+                                             std::vector<std::string> &result) {
+        if (!io->exist(virtual_directory)) {
+            return;
+        }
+
+        const std::optional<std::u16string> raw_directory = io->get_raw_path(virtual_directory);
+        if (!raw_directory.has_value()) {
+            return;
+        }
+
+        const std::string raw_directory_utf8 = common::ucs2_to_utf8(raw_directory.value());
+        std::error_code error;
+        const std::filesystem::path filesystem_directory = std::filesystem::u8path(raw_directory_utf8);
+
+        if (!std::filesystem::is_directory(filesystem_directory, error) || error) {
+            return;
+        }
+
+        for (const std::filesystem::directory_entry &entry
+                : std::filesystem::directory_iterator(filesystem_directory, error)) {
+            if (error) {
+                break;
+            }
+
+            const std::string filename = entry.path().filename().string();
+            const std::string normalized_filename = lowercase_ascii(filename);
+
+            bool matched = false;
+            for (const std::string &token : tokens) {
+                if (filename_matches_export_token(normalized_filename, token)) {
+                    matched = true;
+                    break;
+                }
+            }
+
+            if (!matched) {
+                continue;
+            }
+
+            std::u16string virtual_child = virtual_directory;
+            if (!virtual_child.empty() && (virtual_child.back() != u'\\')) {
+                virtual_child.push_back(u'\\');
+            }
+            virtual_child += common::utf8_to_ucs2(filename);
+
+            if (entry.is_directory(error) && !error) {
+                virtual_child.push_back(u'\\');
+            }
+            error.clear();
+
+            add_app_export_path(io, virtual_child, app_drive, seen_virtual_paths, result);
+        }
+    }
+
+    std::vector<std::string> launcher::get_app_export_paths(std::uint32_t app_uid) {
+        std::vector<std::string> result;
+        std::vector<std::u16string> seen_virtual_paths;
+
+        if (!alserv) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to export app 0x{:X}: app list service is unavailable", app_uid);
+            return result;
+        }
+
+        apa_app_registry *registration = alserv->get_registration(app_uid);
+        if (!registration) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to export app 0x{:X}: app registration was not found", app_uid);
+            return result;
+        }
+
+        io_system *io = sys->get_io_system();
+        if (!io) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to export app 0x{:X}: I/O system is unavailable", app_uid);
+            return result;
+        }
+
+        const drive_number app_drive = registration->land_drive;
+        const std::u16string app_path = normalize_app_package_path(
+            registration->mandatory_info.app_path.to_std_string(nullptr), app_drive);
+        const std::u16string registry_path = normalize_app_package_path(
+            registration->rsc_path, app_drive);
+        const std::u16string localized_registry_path = normalize_app_package_path(
+            registration->localised_info_rsc_path, app_drive);
+        const std::u16string icon_path = normalize_app_package_path(
+            registration->icon_file_path, app_drive);
+        const std::u16string app_directory = parent_directory_with_separator(app_path);
+
+        if ((app_path.size() < 3) || (app_path[1] != u':') || (app_path[0] == u'z')) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to export app 0x{:X}: unsupported app path {}",
+                      app_uid, common::ucs2_to_utf8(app_path));
+            return result;
+        }
+
+        const bool has_private_legacy_app_directory =
+            is_safe_legacy_app_directory(app_directory, app_drive);
+
+        if (has_private_legacy_app_directory) {
+            add_app_export_path(io, app_directory, app_drive, seen_virtual_paths, result);
+        }
+        add_app_export_path(io, app_path, app_drive, seen_virtual_paths, result);
+        add_app_export_path(io, registry_path, app_drive, seen_virtual_paths, result);
+        add_app_export_path(io, localized_registry_path, app_drive, seen_virtual_paths, result);
+        add_app_export_path(io, icon_path, app_drive, seen_virtual_paths, result);
+
+        const package::object *matched_package = nullptr;
+        int highest_score = 0;
+        int highest_score_matches = 0;
+
+        manager::packages *package_manager = sys->get_packages();
+        if (package_manager) {
+            for (const auto &package_entry : *package_manager) {
+                const package::object &pkg = package_entry.second;
+                if (!pkg.is_removable) {
+                    continue;
+                }
+
+                int score = package_match_score_for_app(pkg, app_uid, app_path, registry_path,
+                                                        localized_registry_path, icon_path, app_drive);
+                if ((score == 0) && (pkg.uid == app_uid)) {
+                    score = 1;
+                }
+
+                if (score > highest_score) {
+                    highest_score = score;
+                    highest_score_matches = 1;
+                    matched_package = &pkg;
+                } else if ((score > 0) && (score == highest_score)) {
+                    highest_score_matches++;
+                }
+            }
+        }
+
+        if (highest_score_matches != 1) {
+            matched_package = nullptr;
+        }
+
+        std::vector<std::uint32_t> related_uids;
+        add_unique_export_uid(related_uids, app_uid);
+
+        if (matched_package) {
+            add_unique_export_uid(related_uids, matched_package->uid);
+
+            for (const epoc::uid sid : matched_package->sids) {
+                add_unique_export_uid(related_uids, sid);
+            }
+
+            for (const package::file_description &description : matched_package->file_descriptions) {
+                add_unique_export_uid(related_uids, description.sid);
+                add_app_export_path(io, description.target, app_drive,
+                                    seen_virtual_paths, result);
+            }
+        }
+
+        std::u16string app_folder_name;
+        if (has_private_legacy_app_directory) {
+            app_folder_name = app_directory_leaf(app_directory);
+        } else {
+            std::u16string app_filename = app_path;
+            const std::size_t separator = app_filename.find_last_of(u'\\');
+            if (separator != std::u16string::npos) {
+                app_filename = app_filename.substr(separator + 1);
+            }
+            const std::size_t extension = app_filename.find_last_of(u'.');
+            app_folder_name = (extension == std::u16string::npos)
+                ? app_filename : app_filename.substr(0, extension);
+        }
+
+        std::vector<char16_t> export_drives = { u'c', u'd', u'e', drive_to_char16(app_drive) };
+        std::sort(export_drives.begin(), export_drives.end());
+        export_drives.erase(std::unique(export_drives.begin(), export_drives.end()),
+                            export_drives.end());
+
+        std::vector<std::string> save_name_tokens;
+        const std::string app_folder_token = lowercase_ascii(common::ucs2_to_utf8(app_folder_name));
+        if (app_folder_token.size() >= 4) {
+            save_name_tokens.push_back(app_folder_token);
+        }
+
+        for (const std::uint32_t related_uid : related_uids) {
+            const std::string uid_token = lowercase_ascii(
+                common::ucs2_to_utf8(uid_as_hex_directory(related_uid)));
+            if (std::find(save_name_tokens.begin(), save_name_tokens.end(), uid_token)
+                    == save_name_tokens.end()) {
+                save_name_tokens.push_back(uid_token);
+            }
+        }
+
+        for (const char16_t drive_character : export_drives) {
+            if ((drive_character == u'z') || (drive_character < u'a') || (drive_character > u'y')) {
+                continue;
+            }
+
+            if (has_private_legacy_app_directory) {
+                std::u16string mirrored_app_directory;
+                mirrored_app_directory.push_back(drive_character);
+                mirrored_app_directory += app_directory.substr(1);
+                add_app_export_path(io, mirrored_app_directory, app_drive,
+                                    seen_virtual_paths, result);
+            }
+
+            for (const std::uint32_t related_uid : related_uids) {
+                std::u16string private_directory;
+                private_directory.push_back(drive_character);
+                private_directory += u":\\private\\";
+                private_directory += uid_as_hex_directory(related_uid);
+                private_directory.push_back(u'\\');
+                add_app_export_path(io, private_directory, app_drive,
+                                    seen_virtual_paths, result);
+
+                std::u16string shared_data_file;
+                shared_data_file.push_back(drive_character);
+                shared_data_file += u":\\system\\shareddata\\";
+                shared_data_file += uid_as_hex_directory(related_uid);
+                shared_data_file += u".ini";
+                add_app_export_path(io, shared_data_file, app_drive,
+                                    seen_virtual_paths, result);
+            }
+
+            std::u16string system_data_directory;
+            system_data_directory.push_back(drive_character);
+            system_data_directory += u":\\system\\data\\";
+            add_matching_export_children(io, system_data_directory, app_drive,
+                                         save_name_tokens, seen_virtual_paths, result);
+
+            std::u16string shared_data_directory;
+            shared_data_directory.push_back(drive_character);
+            shared_data_directory += u":\\system\\shareddata\\";
+            add_matching_export_children(io, shared_data_directory, app_drive,
+                                         save_name_tokens, seen_virtual_paths, result);
+        }
+
+        if (result.empty()) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to export app 0x{:X}: no exportable files were found", app_uid);
+        }
+
+        return result;
+    }
+
+    bool launcher::uninstall_app(std::uint32_t app_uid) {
+        if (!alserv) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to uninstall app 0x{:X}: app list service is unavailable", app_uid);
+            return false;
+        }
+
+        apa_app_registry *registration = alserv->get_registration(app_uid);
+        if (!registration) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to uninstall app 0x{:X}: app registration was not found", app_uid);
+            return false;
+        }
+
+        const drive_number app_drive = registration->land_drive;
+        const std::u16string app_path = normalize_app_package_path(
+            registration->mandatory_info.app_path.to_std_string(nullptr), app_drive);
+        const std::u16string registry_path = normalize_app_package_path(
+            registration->rsc_path, app_drive);
+        const std::u16string localized_registry_path = normalize_app_package_path(
+            registration->localised_info_rsc_path, app_drive);
+        const std::u16string icon_path = normalize_app_package_path(
+            registration->icon_file_path, app_drive);
+
+        manager::packages *package_manager = sys->get_packages();
+        if (!package_manager) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to uninstall app 0x{:X}: package manager is unavailable", app_uid);
+            return false;
+        }
+
+        std::uint32_t matched_package_uid = 0;
+        std::int32_t matched_package_index = 0;
+        int highest_score = 0;
+        int highest_score_matches = 0;
+
+        for (const auto &package_entry : *package_manager) {
+            const package::object &pkg = package_entry.second;
+            if (!pkg.is_removable) {
+                continue;
+            }
+
+            int score = package_match_score_for_app(pkg, app_uid, app_path, registry_path,
+                                                    localized_registry_path, icon_path, app_drive);
+
+            // Some packages use the same UID as their only app. This is a safe fallback,
+            // but an actual owned-file or folder match always has a much higher score.
+            if ((score == 0) && (pkg.uid == app_uid)) {
+                score = 1;
+            }
+
+            if (score > highest_score) {
+                highest_score = score;
+                highest_score_matches = 1;
+                matched_package_uid = pkg.uid;
+                matched_package_index = pkg.index;
+            } else if ((score > 0) && (score == highest_score)) {
+                highest_score_matches++;
+            }
+        }
+
+        if ((highest_score <= 0) || (highest_score_matches != 1)) {
+            io_system *io = sys->get_io_system();
+            const std::u16string app_directory = parent_directory_with_separator(app_path);
+
+            if (!delete_legacy_app_directory(io, app_directory, app_drive)) {
+                return false;
+            }
+
+            // Remove only known registration/icon files if they live outside the private
+            // app directory. The directory itself has already been deleted above.
+            delete_known_app_registry_files(io, app_path, registry_path,
+                                            localized_registry_path, icon_path);
+
+            alserv->rescan_registries(io);
+
+            if (alserv->get_registration(app_uid) != nullptr) {
+                LOG_ERROR(eka2l1::FRONTEND_UI,
+                          "AppDelete app 0x{:X} is still registered after deleting {}",
+                          app_uid, common::ucs2_to_utf8(app_directory));
+                return false;
+            }
+
+            LOG_INFO(eka2l1::FRONTEND_UI,
+                     "AppDelete: app 0x{:X} removed by guarded legacy cleanup",
+                     app_uid);
+            return true;
+        }
+
+        package::object *matched_package = package_manager->package(matched_package_uid,
+                                                                    matched_package_index);
+        if (!matched_package) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to uninstall app 0x{:X}: matched package 0x{:X}/{} disappeared",
+                      app_uid, matched_package_uid, matched_package_index);
+            return false;
+        }
+
+        const std::u16string matched_package_name = matched_package->package_name;
+
+        if (!package_manager->uninstall_package(*matched_package)) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "Unable to uninstall app 0x{:X}: package uninstall failed", app_uid);
+            return false;
+        }
+
+        // Old SIS-v1 registries can omit one or more application registry files from the
+        // uninstall list. Remove only the files that belong to the selected app registry.
+        io_system *io = sys->get_io_system();
+        delete_known_app_registry_files(io, app_path, registry_path,
+                                        localized_registry_path, icon_path);
+
+        // The package manager removes the registered files, but on some EKA1/S60 packages
+        // it leaves the now empty private application directory behind. Remove the exact
+        // guarded X:\\system\\apps\\<app>\\ directory as the final cleanup step.
+        const std::u16string app_directory = parent_directory_with_separator(app_path);
+        if (io->exist(app_directory)) {
+            if (!delete_legacy_app_directory(io, app_directory, app_drive)) {
+                LOG_ERROR(eka2l1::FRONTEND_UI,
+                          "AppDelete: could not remove app directory {} after package uninstall",
+                          common::ucs2_to_utf8(app_directory));
+                return false;
+            }
+        }
+
+        alserv->rescan_registries(io);
+
+        if (alserv->get_registration(app_uid) != nullptr) {
+            LOG_ERROR(eka2l1::FRONTEND_UI,
+                      "App 0x{:X} is still registered after package uninstall", app_uid);
+            return false;
+        }
+
+        LOG_INFO(eka2l1::FRONTEND_UI,
+                 "AppDelete: app 0x{:X} removed through package {}",
+                 app_uid, common::ucs2_to_utf8(matched_package_name));
+        return true;
     }
 
     void launcher::mount_sd_card(std::string &path) {

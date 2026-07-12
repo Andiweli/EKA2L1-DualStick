@@ -39,6 +39,11 @@
                 app:showAsAction="never" />
 
             <item
+                android:id="@+id/action_import_app_backup"
+                android:title="@string/import_app_menu"
+                app:showAsAction="never" />
+
+            <item
                 android:id="@+id/action_install_preconfigured_pack"
                 android:title="@string/install_preconfigured_pack_menu"
                 app:showAsAction="never" />

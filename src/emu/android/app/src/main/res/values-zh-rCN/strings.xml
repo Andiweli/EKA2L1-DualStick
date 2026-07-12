@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">删除应用</string>
+    <string name="delete_app_message">删除“%1$s”？应用及其存档数据将被移除。</string>
+    <string name="delete_app_completed">应用已删除。</string>
+    <string name="delete_app_failed">无法删除应用。</string>
+    <string name="action_context_export">导出</string>
+    <string name="export_app_completed">应用已导出：%1$s</string>
+    <string name="export_app_failed">无法导出应用。</string>
+    <string name="export_app_processing">正在导出应用和存档数据…</string>
+    <string name="import_app_action">导入</string>
+    <string name="import_app_checking">正在检查应用备份…</string>
+    <string name="import_app_completed">应用已导入：%1$s</string>
+    <string name="import_app_failed">无法导入应用。已恢复现有数据。</string>
+    <string name="import_app_invalid">所选文件不是有效的 EKA2L1 应用备份。</string>
+    <string name="import_app_menu">导入应用/游戏备份</string>
+    <string name="import_app_message">是否导入 %1$s（UID %2$s）及其存档数据？\n\n%3$d 个文件，%4$s\n此应用的现有文件将被覆盖。</string>
+    <string name="import_app_processing">正在导入应用和存档数据…</string>
+    <string name="import_app_title">导入应用</string>
 </resources>

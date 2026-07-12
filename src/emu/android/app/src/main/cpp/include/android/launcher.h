@@ -93,6 +93,8 @@ namespace eka2l1::android {
         bool does_rom_need_rpkg(const std::string &rom_path);
         std::vector<std::string> get_packages();
         void uninstall_package(std::uint32_t uid, std::int32_t ext_index);
+        bool uninstall_app(std::uint32_t app_uid);
+        std::vector<std::string> get_app_export_paths(std::uint32_t app_uid);
         void mount_sd_card(std::string &path);
         void load_config();
         void set_language(std::uint32_t language_id);

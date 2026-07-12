@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Șterge aplicația</string>
+    <string name="delete_app_message">Ștergi „%1$s”? Aplicația și datele sale salvate vor fi eliminate.</string>
+    <string name="delete_app_completed">Aplicația a fost ștearsă.</string>
+    <string name="delete_app_failed">Aplicația nu a putut fi ștearsă.</string>
+    <string name="action_context_export">Exportă</string>
+    <string name="export_app_completed">Aplicație exportată: %1$s</string>
+    <string name="export_app_failed">Aplicația nu a putut fi exportată.</string>
+    <string name="export_app_processing">Se exportă aplicația și datele salvate…</string>
+    <string name="import_app_action">Importă</string>
+    <string name="import_app_checking">Se verifică copia de siguranță a aplicației…</string>
+    <string name="import_app_completed">Aplicație importată: %1$s</string>
+    <string name="import_app_failed">Aplicația nu a putut fi importată. Datele existente au fost restaurate.</string>
+    <string name="import_app_invalid">Fișierul selectat nu este o copie de siguranță validă a unei aplicații EKA2L1.</string>
+    <string name="import_app_menu">Importă copia unei aplicații/unui joc</string>
+    <string name="import_app_message">Importezi %1$s (UID %2$s) împreună cu datele salvate?\n\n%3$d fișiere, %4$s\nFișierele existente ale acestei aplicații vor fi suprascrise.</string>
+    <string name="import_app_processing">Se importă aplicația și datele salvate…</string>
+    <string name="import_app_title">Importă aplicația</string>
 </resources>

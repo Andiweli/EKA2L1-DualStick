@@ -17,6 +17,10 @@
     <string name="mount_sd">MMC/SD-Karte mounten</string>
     <string name="no_devices_found">Keine Geräte gefunden</string>
     <string name="exit">Verlassen</string>
+    <string name="delete_app_title">App löschen</string>
+    <string name="delete_app_message">„%1$s“ löschen? Die App und ihre gespeicherten Daten werden entfernt.</string>
+    <string name="delete_app_completed">App gelöscht.</string>
+    <string name="delete_app_failed">App konnte nicht gelöscht werden.</string>
     <string name="rename">Umbenennen</string>
     <string name="save_log">Protokoll speichern</string>
     <string name="take_screenshot">Screenshot aufnehmen</string>
@@ -263,4 +267,20 @@
     <string name="install_ng_game_menu">N-Gage Spiel installieren</string>
     <string name="mount_sd_menu">Mounte N-Gage MMC/SD</string>
     <string name="save_log_menu">Protokoll speichern</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="action_context_export">Exportieren</string>
+    <string name="export_app_completed">App exportiert: %1$s</string>
+    <string name="export_app_failed">App konnte nicht exportiert werden.</string>
+    <string name="export_app_processing">App und Speicherdaten werden exportiert…</string>
+    <string name="import_app_action">Importieren</string>
+    <string name="import_app_checking">App-Sicherung wird geprüft…</string>
+    <string name="import_app_completed">App importiert: %1$s</string>
+    <string name="import_app_failed">App konnte nicht importiert werden. Bestehende Daten wurden wiederhergestellt.</string>
+    <string name="import_app_invalid">Die ausgewählte Datei ist keine gültige EKA2L1-App-Sicherung.</string>
+    <string name="import_app_menu">Spiel/App-Sicherung importieren</string>
+    <string name="import_app_message">%1$s (UID %2$s) inklusive Speicherdaten importieren?\n\n%3$d Dateien, %4$s\nVorhandene Dateien dieser App werden überschrieben.</string>
+    <string name="import_app_processing">App und Speicherdaten werden importiert…</string>
+    <string name="import_app_title">App importieren</string>
 </resources>

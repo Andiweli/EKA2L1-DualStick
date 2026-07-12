@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">アプリを削除</string>
+    <string name="delete_app_message">「%1$s」を削除しますか？アプリと保存データが削除されます。</string>
+    <string name="delete_app_completed">アプリを削除しました。</string>
+    <string name="delete_app_failed">アプリを削除できませんでした。</string>
+    <string name="action_context_export">エクスポート</string>
+    <string name="export_app_completed">アプリをエクスポートしました: %1$s</string>
+    <string name="export_app_failed">アプリをエクスポートできませんでした。</string>
+    <string name="export_app_processing">アプリと保存データをエクスポートしています…</string>
+    <string name="import_app_action">インポート</string>
+    <string name="import_app_checking">アプリのバックアップを確認しています…</string>
+    <string name="import_app_completed">アプリをインポートしました: %1$s</string>
+    <string name="import_app_failed">アプリをインポートできませんでした。既存のデータを復元しました。</string>
+    <string name="import_app_invalid">選択したファイルは有効なEKA2L1アプリのバックアップではありません。</string>
+    <string name="import_app_menu">アプリ/ゲームのバックアップをインポート</string>
+    <string name="import_app_message">保存データを含む%1$s（UID %2$s）をインポートしますか？\n\n%3$d個のファイル、%4$s\nこのアプリの既存ファイルは上書きされます。</string>
+    <string name="import_app_processing">アプリと保存データをインポートしています…</string>
+    <string name="import_app_title">アプリをインポート</string>
 </resources>

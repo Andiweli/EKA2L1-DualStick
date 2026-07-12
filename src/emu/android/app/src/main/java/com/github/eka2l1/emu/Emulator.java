@@ -826,6 +826,10 @@ public class Emulator {
 
     public static native void uninstallPackage(int uid, int extIndex);
 
+    public static native boolean uninstallApp(int appUid);
+
+    public static native String[] getAppExportPaths(int appUid);
+
     public static native void mountSdCard(String path);
 
     public static native int installNGageGame(String path);

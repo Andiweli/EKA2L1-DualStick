@@ -10,6 +10,12 @@
         android:id="@+id/action_context_rename"
         android:title="@string/action_context_rename" />
     <item
+        android:id="@+id/action_context_export"
+        android:title="@string/action_context_export" />
+    <item
+        android:id="@+id/action_context_delete"
+        android:title="@string/action_context_delete" />
+    <item
         android:id="@+id/action_context_settings"
         android:title="@string/settings" />
 </menu>

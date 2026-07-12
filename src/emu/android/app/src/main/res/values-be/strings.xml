@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Выдаліць праграму</string>
+    <string name="delete_app_message">Выдаліць «%1$s»? Праграма і яе захаваныя даныя будуць выдалены.</string>
+    <string name="delete_app_completed">Праграма выдалена.</string>
+    <string name="delete_app_failed">Не ўдалося выдаліць праграму.</string>
+    <string name="action_context_export">Экспартаваць</string>
+    <string name="export_app_completed">Праграма экспартаваная: %1$s</string>
+    <string name="export_app_failed">Не ўдалося экспартаваць праграму.</string>
+    <string name="export_app_processing">Экспарт праграмы і захаваных даных…</string>
+    <string name="import_app_action">Імпартаваць</string>
+    <string name="import_app_checking">Праверка рэзервовай копіі праграмы…</string>
+    <string name="import_app_completed">Праграма імпартаваная: %1$s</string>
+    <string name="import_app_failed">Не ўдалося імпартаваць праграму. Існыя даныя адноўлены.</string>
+    <string name="import_app_invalid">Выбраны файл не з’яўляецца сапраўднай рэзервовай копіяй праграмы EKA2L1.</string>
+    <string name="import_app_menu">Імпартаваць рэзервовую копію праграмы/гульні</string>
+    <string name="import_app_message">Імпартаваць %1$s (UID %2$s) разам з захаванымі данымі?\n\n%3$d файлаў, %4$s\nІсныя файлы гэтай праграмы будуць перазапісаны.</string>
+    <string name="import_app_processing">Імпарт праграмы і захаваных даных…</string>
+    <string name="import_app_title">Імпартаваць праграму</string>
 </resources>

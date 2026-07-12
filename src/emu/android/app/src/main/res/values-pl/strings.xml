@@ -263,4 +263,24 @@
     <string name="mount_sd_menu">Mount N-Gage MMC/SD</string>
     <string name="save_log_menu">Save log</string>
     <string name="rename_app_reset_hint">Leave empty to restore the original name</string>
+
+
+    <!-- EKA2L1 DualStick 0.1.5: app delete/export/import -->
+    <string name="delete_app_title">Usuń aplikację</string>
+    <string name="delete_app_message">Usunąć „%1$s”? Aplikacja i jej zapisane dane zostaną usunięte.</string>
+    <string name="delete_app_completed">Aplikacja została usunięta.</string>
+    <string name="delete_app_failed">Nie udało się usunąć aplikacji.</string>
+    <string name="action_context_export">Eksportuj</string>
+    <string name="export_app_completed">Wyeksportowano aplikację: %1$s</string>
+    <string name="export_app_failed">Nie udało się wyeksportować aplikacji.</string>
+    <string name="export_app_processing">Eksportowanie aplikacji i zapisanych danych…</string>
+    <string name="import_app_action">Importuj</string>
+    <string name="import_app_checking">Sprawdzanie kopii zapasowej aplikacji…</string>
+    <string name="import_app_completed">Zaimportowano aplikację: %1$s</string>
+    <string name="import_app_failed">Nie udało się zaimportować aplikacji. Przywrócono istniejące dane.</string>
+    <string name="import_app_invalid">Wybrany plik nie jest prawidłową kopią zapasową aplikacji EKA2L1.</string>
+    <string name="import_app_menu">Importuj kopię aplikacji/gry</string>
+    <string name="import_app_message">Zaimportować %1$s (UID %2$s) wraz z zapisanymi danymi?\n\n%3$d plików, %4$s\nIstniejące pliki tej aplikacji zostaną nadpisane.</string>
+    <string name="import_app_processing">Importowanie aplikacji i zapisanych danych…</string>
+    <string name="import_app_title">Importuj aplikację</string>
 </resources>
