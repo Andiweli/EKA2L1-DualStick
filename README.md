@@ -11,6 +11,8 @@ Android-focused fork of [**EKA2L1**](https://github.com/EKA2L1/EKA2L1), the Symb
 ![Architecture](https://img.shields.io/badge/architecture-32bit/64bit-orange)
 ![AI](https://img.shields.io/badge/AI-assisted%20coding-6e7781)
 ![Controller](https://img.shields.io/badge/Controls-Touch/Controller-blueviolet)
+[![Support via PayPal](https://img.shields.io/badge/Support%20via-PayPal-0070BA?logo=paypal\&logoColor=white)](https://paypal.me/andiweli)
+
 
 > [!NOTE]
 > This fork focuses specifically on **Android** and on adding proper support for **two analog sticks**, with the goal of improving controls and playability for Symbian and N-Gage games on modern Android handhelds and devices.
@@ -66,6 +68,18 @@ At the moment the emulator supports:
 Compatibility for games and software that can — and cannot — run on the emulator can be checked here:
 
 👉 **[Compatibility List](https://github.com/EKA2L1/Compatibility-List)**
+
+---
+
+## ❤️ Support
+
+If you enjoy this project and would like to support my work, you can make a small contribution via PayPal.
+
+Your support helps me spend more time maintaining existing projects, fixing bugs, improving compatibility, and working on new features.
+
+[![Support via PayPal](https://img.shields.io/badge/Support%20via-PayPal-0070BA?logo=paypal\&logoColor=white)](https://paypal.me/andiweli)
+
+Thank you for your support!
 
 ---
 
