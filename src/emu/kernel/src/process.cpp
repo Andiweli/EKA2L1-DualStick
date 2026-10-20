@@ -210,6 +210,7 @@ namespace eka2l1::kernel {
         , parent_process_(nullptr)
         , time_delay_(0)
         , setting_inheritence_(true)
+        , eka1_even_tick_count_(true)
         , generation_(0)
         , uid_change_callbacks(is_process_uid_type_change_callback_elem_free, make_process_uid_type_change_callback_elem_free) {
         obj_type = kernel::object_type::process;
@@ -601,6 +602,9 @@ namespace eka2l1::kernel {
         } else {
             time_delay_ = 0;
         }
+
+        // Some titles need this without a setting file, so always ask
+        eka1_even_tick_count_ = config::should_mask_eka1_tick_count(std::get<2>(uids), individual_setting);
     }
 
     kernel::process *process::get_final_setting_process() {
@@ -621,6 +625,14 @@ namespace eka2l1::kernel {
 
     void process::set_time_delay(const std::uint32_t delay) {
         time_delay_ = delay;
+    }
+
+    bool process::should_mask_eka1_tick_count() const {
+        if (parent_process_ && parent_process_->setting_inheritence_) {
+            return parent_process_->should_mask_eka1_tick_count();
+        }
+
+        return eka1_even_tick_count_;
     }
 
     // NOTE: These two use global directory ASID (0) if no memory implementation exist or if it's kernel process.

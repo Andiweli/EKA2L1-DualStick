@@ -36,6 +36,7 @@ import java.io.File;
 import java.io.FileInputStream;
 import java.io.FileWriter;
 import java.io.IOException;
+import java.io.InputStream;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Map;
@@ -58,8 +59,12 @@ public class AppDataStore extends PreferenceDataStore {
         if (configFile.exists()) {
             try {
                 FileInputStream fis = new FileInputStream(configFile);
-                configMap = yaml.load(fis);
+                Map<String, Object> loaded = yaml.load(fis);
                 fis.close();
+                // An empty file loads as null
+                if (loaded != null) {
+                    configMap = loaded;
+                }
             } catch (IOException e) {
                 e.printStackTrace();
             }
@@ -162,6 +167,28 @@ public class AppDataStore extends PreferenceDataStore {
 
     public void putArrayList(String key, ArrayList<?> values) {
         configMap.put(key, values);
+    }
+
+    /**
+     * Add the keys of another YAML document that this store does not have yet.
+     * Values already in the store are kept.
+     *
+     * @return true if at least one key was added.
+     */
+    public boolean putMissingFrom(InputStream stream) {
+        Map<String, Object> other = yaml.load(stream);
+        if (other == null) {
+            return false;
+        }
+
+        boolean added = false;
+        for (Map.Entry<String, Object> entry : other.entrySet()) {
+            if (!configMap.containsKey(entry.getKey())) {
+                configMap.put(entry.getKey(), entry.getValue());
+                added = true;
+            }
+        }
+        return added;
     }
 
     public void save() {

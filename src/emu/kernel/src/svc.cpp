@@ -2902,10 +2902,12 @@ namespace eka2l1::epoc {
         ntimer *timing = kern->get_ntimer();
         std::uint32_t res = static_cast<std::uint32_t>((timing->microseconds() / DEFAULT_TICK_PERIOD));
 
-        if (kern->is_eka1()) {
-            // TODO: This is unverified mask used for compatible with Worms War party
-            // At least because the check is pretty non-sense that I think it's intentional behaviour.
-            // Two checks: if tick count is odd and then the actual check for unrelated category. Lol
+        // TODO: This is unverified mask used for compatible with Worms War party
+        // At least because the check is pretty non-sense that I think it's intentional behaviour.
+        // Two checks: if tick count is odd and then the actual check for unrelated category. Lol
+        // Games that compute their timestep from it (Ashen) see zero elapsed time on every other
+        // frame though, so they can opt out (see config::should_mask_eka1_tick_count).
+        if (kern->is_eka1() && kern->crr_process()->should_mask_eka1_tick_count()) {
             res &= TICK_MASK;
         }
 

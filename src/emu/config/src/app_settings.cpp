@@ -37,13 +37,40 @@ namespace eka2l1::config {
         , screen_rotation(0)
         , screen_upscale(-1.0f)
         , screen_upscale_method(0)
-        , child_inherit_setting(false) {
+        , child_inherit_setting(false)
+        , t9_bypass_hack(false) {
+    }
+
+    static const char *EKA1_EVEN_TICK_COUNT_KEY = "eka1-even-tick-count";
+
+    // Titles that need every 64 Hz EKA1 tick. Their setting file can still turn the mask back on.
+    static constexpr epoc::uid UNMASKED_EKA1_TICK_COUNT_APPS[] = {
+        0x101FD3E9 // Ashen (N-Gage)
+    };
+
+    bool should_mask_eka1_tick_count(const epoc::uid app_uid, const app_setting *setting) {
+        if (setting && setting->eka1_even_tick_count.has_value()) {
+            return setting->eka1_even_tick_count.value();
+        }
+
+        for (const epoc::uid unmasked_uid : UNMASKED_EKA1_TICK_COUNT_APPS) {
+            if (unmasked_uid == app_uid) {
+                return false;
+            }
+        }
+
+        return true;
     }
 
     static void serialize_app_setting(YAML::Emitter &emitter, const app_setting &setting) {
 #define SETTING(name, variable, default_var) emitter << YAML::Key << #name << YAML::Value << setting.variable;
 #include <config/app_settings.inl>
 #undef SETTING
+
+        // Only written when set, so the built-in default for the app keeps working
+        if (setting.eka1_even_tick_count.has_value()) {
+            emitter << YAML::Key << EKA1_EVEN_TICK_COUNT_KEY << YAML::Value << setting.eka1_even_tick_count.value();
+        }
     }
 
     static void deserialize_app_setting(YAML::Node &node, app_setting &setting) {
@@ -59,6 +86,16 @@ namespace eka2l1::config {
 #undef SETTING
         if (setting.fps == 0) {
             setting.fps = 1;
+        }
+
+        setting.eka1_even_tick_count.reset();
+
+        try {
+            if (node[EKA1_EVEN_TICK_COUNT_KEY]) {
+                setting.eka1_even_tick_count = node[EKA1_EVEN_TICK_COUNT_KEY].as<bool>();
+            }
+        } catch (std::exception &e) {
+            // Leave it empty, the built-in default for the app is used
         }
     }
 

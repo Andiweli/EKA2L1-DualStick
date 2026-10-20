@@ -31,6 +31,7 @@ import android.content.res.Configuration;
 import android.content.res.TypedArray;
 import android.graphics.Rect;
 import android.graphics.RectF;
+import android.hardware.input.InputManager;
 import android.os.Build;
 import android.os.Bundle;
 import android.util.LongSparseArray;
@@ -84,6 +85,7 @@ import java.io.IOException;
 import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.Map;
 import java.util.Objects;
@@ -106,6 +108,21 @@ public class EmulatorActivity extends AppCompatActivity {
     private final Semaphore permissionsLauncherDone = new Semaphore(0);
     private final LongSparseArray<Boolean> activeInputStates = new LongSparseArray<>();
     private final SparseIntArray mappedKeyPressCounts = new SparseIntArray();
+    // A controller that disconnects while a stick or button is held never sends the release
+    private final InputManager.InputDeviceListener inputDeviceListener = new InputManager.InputDeviceListener() {
+        @Override
+        public void onInputDeviceAdded(int deviceId) {
+        }
+
+        @Override
+        public void onInputDeviceRemoved(int deviceId) {
+            releaseMappedInputsOfDevice(deviceId);
+        }
+
+        @Override
+        public void onInputDeviceChanged(int deviceId) {
+        }
+    };
 
     private Toolbar toolbar;
     private OverlayView overlayView;
@@ -272,7 +289,16 @@ public class EmulatorActivity extends AppCompatActivity {
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        ((InputManager) getSystemService(Context.INPUT_SERVICE))
+                .registerInputDeviceListener(inputDeviceListener, null);
+    }
+
+    @Override
     protected void onPause() {
+        ((InputManager) getSystemService(Context.INPUT_SERVICE))
+                .unregisterInputDeviceListener(inputDeviceListener);
         releaseAllMappedInputs();
         super.onPause();
     }
@@ -288,6 +314,10 @@ public class EmulatorActivity extends AppCompatActivity {
         super.onWindowFocusChanged(hasFocus);
         if (hasFocus) {
             hideSystemUI();
+        } else {
+            // A menu, dialog or the notification shade now gets the input, so the
+            // releases of anything held right now would never reach us
+            releaseAllMappedInputs();
         }
     }
 
@@ -588,6 +618,21 @@ public class EmulatorActivity extends AppCompatActivity {
         }
         mappedKeyPressCounts.clear();
         activeInputStates.clear();
+    }
+
+    private void releaseMappedInputsOfDevice(int deviceId) {
+        // The state key holds the device ID in its upper and the input code in its lower 32 bits
+        ArrayList<Integer> heldInputCodes = new ArrayList<>();
+        for (int i = 0; i < activeInputStates.size(); i++) {
+            long stateKey = activeInputStates.keyAt(i);
+            if ((int) (stateKey >> 32) == deviceId) {
+                heldInputCodes.add((int) stateKey);
+            }
+        }
+
+        for (int inputCode : heldInputCodes) {
+            updateMappedInputState(deviceId, inputCode, false);
+        }
     }
 
     private boolean shouldSuppressDpadKeyEvent(KeyEvent event) {

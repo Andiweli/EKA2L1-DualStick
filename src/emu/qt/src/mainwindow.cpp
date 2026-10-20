@@ -1358,6 +1358,12 @@ void main_window::on_app_setting_changed() {
     }
 
     eka2l1::config::app_setting setting;
+
+    // Keep the settings this dialog does not edit, such as the compatibility hacks
+    if (eka2l1::config::app_setting *existing = emulator_state_.app_settings->get_setting(info->app_uid_)) {
+        setting = *existing;
+    }
+
     setting.fps = scr->refresh_rate;
     setting.time_delay = info->associated_->get_time_delay();
     setting.child_inherit_setting = info->associated_->get_child_inherit_setting();

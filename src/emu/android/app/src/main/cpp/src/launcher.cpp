@@ -99,6 +99,34 @@ namespace eka2l1::android {
         return draw_image_rect;
     }
 
+    // The game screen sits inside the skin, so unlike a background the skin has to stay fully visible.
+    // Fit it inside the surface, leaving bars at the sides or at the top and bottom, instead of covering it.
+    static eka2l1::rect calculate_skin_draw_rect(const eka2l1::vec2 &swapchain_size,
+                                                 const int skin_width,
+                                                 const int skin_height) {
+        eka2l1::rect draw_skin_rect;
+        draw_skin_rect.size = swapchain_size;
+
+        if (skin_width <= 0 || skin_height <= 0 || swapchain_size.x <= 0 || swapchain_size.y <= 0) {
+            return draw_skin_rect;
+        }
+
+        const float skin_aspect_ratio = static_cast<float>(skin_width) / static_cast<float>(skin_height);
+        const float swapchain_aspect_ratio = static_cast<float>(swapchain_size.x) / static_cast<float>(swapchain_size.y);
+
+        if (swapchain_aspect_ratio > skin_aspect_ratio) {
+            draw_skin_rect.size.y = swapchain_size.y;
+            draw_skin_rect.size.x = static_cast<int>(swapchain_size.y * skin_aspect_ratio);
+            draw_skin_rect.top.x = (swapchain_size.x - draw_skin_rect.size.x) / 2;
+        } else {
+            draw_skin_rect.size.x = swapchain_size.x;
+            draw_skin_rect.size.y = static_cast<int>(swapchain_size.x / skin_aspect_ratio);
+            draw_skin_rect.top.y = (swapchain_size.y - draw_skin_rect.size.y) / 2;
+        }
+
+        return draw_skin_rect;
+    }
+
     launcher::launcher(eka2l1::system *sys)
         : sys(sys)
         , conf(sys->get_config())
@@ -638,6 +666,9 @@ namespace eka2l1::android {
         return false;
     }
 
+    static bool is_safe_legacy_app_directory(const std::u16string &app_directory,
+                                             const drive_number app_drive);
+
     static int package_match_score_for_app(const package::object &pkg,
                                            const std::uint32_t app_uid,
                                            const std::u16string &app_path,
@@ -650,6 +681,10 @@ namespace eka2l1::android {
         bool app_directory_matched = false;
 
         const std::u16string app_directory = parent_directory_with_separator(app_path);
+
+        // Newer apps live in \system\programs\ (\sys\bin\) or the drive root. Every package has
+        // files there, so the folder says nothing about ownership and must not be scored.
+        const bool has_private_app_directory = is_safe_legacy_app_directory(app_directory, app_drive);
 
         if (std::find(pkg.sids.begin(), pkg.sids.end(), app_uid) != pkg.sids.end()) {
             score += 800;
@@ -683,7 +718,7 @@ namespace eka2l1::android {
             // EKA1/SIS-v1 packages do not always expose the application's UID as package UID
             // or file SID. The application's private folder under \system\apps\ is therefore
             // the safest additional ownership signal. Only score it once per package.
-            if (!app_directory_matched
+            if (has_private_app_directory && !app_directory_matched
                     && path_is_inside_directory_ignoring_drive(target, app_directory)) {
                 score += 400;
                 app_directory_matched = true;
@@ -1233,8 +1268,10 @@ namespace eka2l1::android {
         // The package manager removes the registered files, but on some EKA1/S60 packages
         // it leaves the now empty private application directory behind. Remove the exact
         // guarded X:\\system\\apps\\<app>\\ directory as the final cleanup step.
+        // Newer apps live in X:\\system\\programs\\ (\\sys\\bin\\) or the drive root, which are
+        // shared with other apps and always stay, so they have no such directory to remove.
         const std::u16string app_directory = parent_directory_with_separator(app_path);
-        if (io->exist(app_directory)) {
+        if (is_safe_legacy_app_directory(app_directory, app_drive) && io->exist(app_directory)) {
             if (!delete_legacy_app_directory(io, app_directory, app_drive)) {
                 LOG_ERROR(eka2l1::FRONTEND_UI,
                           "AppDelete: could not remove app directory {} after package uninstall",
@@ -1340,8 +1377,12 @@ namespace eka2l1::android {
             }
         }
 
+        const bool skin_mode = (scale_type_ == SCREEN_SCALE_TYPE_FIT_WITH_SKIN);
+
         if (background_img_ != 0) {
-            eka2l1::rect draw_image_rect = calculate_background_draw_rect(swapchain_size, background_width, background_height, keep_bg_aspect_);
+            eka2l1::rect draw_image_rect = skin_mode
+                ? calculate_skin_draw_rect(swapchain_size, background_width, background_height)
+                : calculate_background_draw_rect(swapchain_size, background_width, background_height, keep_bg_aspect_);
 
             builder.set_feature(eka2l1::drivers::graphics_feature::blend, true);
             builder.blend_formula(eka2l1::drivers::blend_equation::add, eka2l1::drivers::blend_equation::add,
@@ -1358,15 +1399,15 @@ namespace eka2l1::android {
             eka2l1::vec2 size = crr_mode.size;
             src.size = size;
 
-            const bool use_skin_frame = (scale_type_ == SCREEN_SCALE_TYPE_FIT_WITH_SKIN) && (background_img_ != 0)
+            const bool use_skin_frame = skin_mode && (background_img_ != 0)
                 && (background_width > 0) && (background_height > 0);
 
             eka2l1::vec2 available_size = swapchain_size;
             eka2l1::vec2 available_top(0, 0);
 
             if (use_skin_frame) {
-                const eka2l1::rect skin_draw_rect = calculate_background_draw_rect(
-                    swapchain_size, background_width, background_height, true);
+                const eka2l1::rect skin_draw_rect = calculate_skin_draw_rect(
+                    swapchain_size, background_width, background_height);
 
                 available_top.x = skin_draw_rect.top.x + static_cast<int>(skin_draw_rect.size.x * SKIN_SCREEN_LEFT_NORM);
                 available_top.y = skin_draw_rect.top.y + static_cast<int>(skin_draw_rect.size.y * SKIN_SCREEN_TOP_NORM);
@@ -1412,8 +1453,9 @@ namespace eka2l1::android {
             height = height * scale_ratio_ / 100;
 
             if (use_skin_frame) {
-                x = available_top.x + (available_size.x - width) / 2;
-                y = available_top.y + (available_size.y - height) / 2;
+                // x and y are unsigned, a scale ratio above 100% must not push them below zero
+                x = static_cast<std::uint32_t>(std::max(0.0f, available_top.x + (available_size.x - width) / 2));
+                y = static_cast<std::uint32_t>(std::max(0.0f, available_top.y + (available_size.y - height) / 2));
             } else {
                 switch (gravity_) {
                     case 0: // left

@@ -488,9 +488,12 @@ final class AppImportManager {
                         throw new IOException("An imported file conflicts with an existing directory");
                     }
                     file.originalExisted = true;
-                    file.backup = new File(rollbackRoot,
+                    File backup = new File(rollbackRoot,
                             String.format(Locale.US, "%08d.bak", backupIndex++));
-                    copyFile(file.target, file.backup);
+                    copyFile(file.target, backup);
+                    // Only a complete copy may be restored. If this copy fails, nothing has
+                    // been overwritten yet, so the rollback must leave the original alone.
+                    file.backup = backup;
                 }
             }
 

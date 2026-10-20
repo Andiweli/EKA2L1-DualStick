@@ -181,6 +181,7 @@ namespace eka2l1::kernel {
 
         std::uint32_t time_delay_;
         bool setting_inheritence_;
+        bool eka1_even_tick_count_;
 
         std::int32_t generation_;
 
@@ -389,6 +390,12 @@ namespace eka2l1::kernel {
 
         std::uint32_t get_time_delay() const;
         void set_time_delay(const std::uint32_t delay);
+
+        /**
+         * @brief       Check if the EKA1 tick count given to this process should only be even.
+         * @see         config::should_mask_eka1_tick_count
+         */
+        bool should_mask_eka1_tick_count() const;
 
         /**
          * @brief       Get the process where we should inherit settings from.

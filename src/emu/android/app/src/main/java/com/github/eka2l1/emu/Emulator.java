@@ -198,7 +198,7 @@ public class Emulator {
                 emulatorDir + "resources/skins/ngage_qd_landscape_skin.png");
 
         updateFolder("patch", shouldUpdate);
-        copyFolder("compat", shouldUpdate);
+        updateCompatFolder(shouldUpdate);
         copyFolder("scripts", shouldUpdate);
 
         setDirectory(emulatorDir);
@@ -229,6 +229,48 @@ public class Emulator {
         File patchFolder = new File(emulatorDir, folderName);
         if (shouldUpdate || !patchFolder.exists()) {
             FileUtils.copyAssetFolder(context, folderName, emulatorDir + folderName);
+        }
+    }
+
+    // The per-game setting files are also written by the game settings screen, so an update
+    // must not replace them. Missing presets are copied, existing ones only get new keys.
+    private static void updateCompatFolder(boolean shouldUpdate) {
+        File compatFolder = new File(compatDir);
+        if (!shouldUpdate && compatFolder.exists()) {
+            return;
+        }
+        compatFolder.mkdirs();
+
+        String[] presets;
+        try {
+            presets = context.getAssets().list("compat");
+        } catch (IOException e) {
+            e.printStackTrace();
+            return;
+        }
+        if (presets == null) {
+            return;
+        }
+
+        for (String preset : presets) {
+            String assetPath = "compat/" + preset;
+            File userFile = new File(compatFolder, preset);
+
+            if (!preset.endsWith(".yml") || !userFile.exists()) {
+                FileUtils.copyAssetFile(context, assetPath, userFile.getPath());
+                continue;
+            }
+
+            try (InputStream presetStream = context.getAssets().open(assetPath)) {
+                String uid = preset.substring(0, preset.length() - ".yml".length());
+                AppDataStore userStore = AppDataStore.getAppStore(uid);
+                if (userStore.putMissingFrom(presetStream)) {
+                    userStore.save();
+                }
+            } catch (Exception e) {
+                // Leave the user's file as it is if either side can't be read
+                e.printStackTrace();
+            }
         }
     }
 

@@ -21,6 +21,7 @@
 
 #include <cstdint>
 #include <map>
+#include <optional>
 #include <string>
 
 namespace eka2l1::epoc {
@@ -46,8 +47,25 @@ namespace eka2l1::config {
         // Designed for ONE (N-Gage)
         bool t9_bypass_hack;
 
+        // Report only even EKA1 tick counts. Empty when the setting file does not say,
+        // so the built-in default for the app is used (see should_mask_eka1_tick_count)
+        std::optional<bool> eka1_even_tick_count;
+
         explicit app_setting();
     };
+
+    /**
+     * @brief       Check if the EKA1 tick count given to an app should have its lowest bit cleared.
+     *
+     * The mask is kept for compatibility (Worms World Party), but games that compute their timestep
+     * from the tick count, such as Ashen, see zero elapsed time on every other frame with it.
+     *
+     * @param       app_uid         The UID3 of the app.
+     * @param       setting         The setting loaded for this app. Can be null.
+     *
+     * @returns     The value from the setting if it has one, else the built-in default for the app.
+     */
+    bool should_mask_eka1_tick_count(const epoc::uid app_uid, const app_setting *setting);
 
     class app_settings {
         std::map<epoc::uid, app_setting> settings_;
